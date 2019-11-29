@@ -67,7 +67,6 @@ public class PlayScreen implements Screen {
                         || b1.getBoard(k, i) == 25)
                     shape.rect((int) (k * 77.625 + 100), (int) (i * 77.625 + 40), 99, 99);
 
-
         //Zar butonu
         shape.setColor(Color.RED);
         shape.rect(400,400,140,80);
