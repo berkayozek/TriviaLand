@@ -1,10 +1,9 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.Board;
 import com.mygdx.game.Die;
 import com.mygdx.game.TriviaLand;
-import com.badlogic.gdx.graphics.GL20;
 
 public class PlayScreen implements Screen {
 
@@ -95,7 +93,6 @@ public class PlayScreen implements Screen {
             move = (float) die.getDie1();
             isDie = true;
             System.out.println("Dokundun " + Gdx.input.getX() + " " + die.getDie1() );
-
         }
 
     }
