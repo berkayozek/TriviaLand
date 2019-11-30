@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Board;
 import com.mygdx.game.Die;
 import com.mygdx.game.TriviaLand;
@@ -26,6 +32,9 @@ public class PlayScreen implements Screen {
     private float move = 8;
     private BitmapFont font;
     private boolean isDie = false;
+    private TextButton button;
+    private TextButtonStyle style;
+    private Stage stage;
 
     public PlayScreen(TriviaLand game){
         this.game = game;
@@ -39,6 +48,21 @@ public class PlayScreen implements Screen {
         Texture texture = new Texture("Hat.png");
         splash = new Sprite(texture);
         splash.setSize(50,50);
+        style = new TextButtonStyle();
+        style.font = font;
+        stage = new Stage(new ExtendViewport(800, 920));
+        Gdx.input.setInputProcessor(stage);
+        button = new TextButton("Zar At",style);
+        button.setPosition(420,460);
+        button.addListener(new ClickListener(){
+            public void clicked(InputEvent e,float x, float y){
+                die.roll();
+                move = (float) die.getDie1();
+                isDie = true;
+                System.out.println("Dokundun " + Gdx.input.getX() + " " + die.getDie1() );
+            }
+        });
+        stage.addActor(button);
     }
 
     @Override
@@ -67,34 +91,25 @@ public class PlayScreen implements Screen {
 
         //Zar butonu
         shape.setColor(Color.RED);
-        shape.rect(400,400,140,80);
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+
         shape.end();
         splash.setCenter((int) (hatX * 77.625 + 130), (int) (hatY * 74 + 79));
 
 
         batch.begin();
         splash.draw(batch);
-        font.draw(batch,"Zar",420,460);
         if (isDie)
             font.draw(batch,String.valueOf(die.getDie1()),300,250);
         batch.end();
 
-        if (hatX-move>0.1f){
-            hatX-=1f*delta;
+        if (hatX-move>0.55f){
+            hatX-=10f*delta;
         }
 
         if (Gdx.input.isTouched())
             System.out.println(Gdx.input.getX() + "  " + Gdx.input.getY());
-
-        //if (Gdx.input.getX())
-        if (Gdx.input.isTouched() && (Gdx.input.getX()>400 && Gdx.input.getX()<540 && Gdx.input.getY()>320 && Gdx.input.getY()<400)){
-            //move = (float) ((Gdx.input.getX()-130)/77.625);
-            die.roll();
-            move = (float) die.getDie1();
-            isDie = true;
-            System.out.println("Dokundun " + Gdx.input.getX() + " " + die.getDie1() );
-        }
-
     }
 
     @Override
