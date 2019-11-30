@@ -1,17 +1,26 @@
 package com.mygdx.game.Game;
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 
 public class User {
 	private String name;
 	private int money;
-	private ArrayList<City> cities = new ArrayList<City>();
+	private ArrayList<City> cities = new ArrayList<>();
 	private ArrayList<Card> cards = new ArrayList<>();
 	private int jailCount;
-	private int move = 1;
-	private int moveCount=1;
+	private int move = 0;
+	private int moveCount=0;
 	private int userX = 8;
-	private int userY = 8;
+	private int userY = 0;
+
+
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	private Vector2 position = new Vector2(790,90);
 	public boolean isDrawable = true;
 	private int pos;
 	private Boolean isBot;
