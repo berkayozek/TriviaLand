@@ -15,8 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.mygdx.game.Board;
-import com.mygdx.game.Die;
+import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
 
 public class PlayScreen implements Screen {
@@ -62,6 +61,7 @@ public class PlayScreen implements Screen {
                 System.out.println("Dokundun " + Gdx.input.getX() + " " + die.getDie1() );
             }
         });
+        stage.addActor(button);
         stage.addActor(button);
     }
 

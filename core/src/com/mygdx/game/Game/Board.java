@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.Game;
 
 public class Board {
         private int board[][] = new int [9][9];
