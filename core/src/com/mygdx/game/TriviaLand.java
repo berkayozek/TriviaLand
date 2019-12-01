@@ -18,7 +18,7 @@ public class TriviaLand extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		setScreen(new PlayScreen(this));
-
+		//TODO Oyun Ekranları arasında geçiş buradan yapılacak
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -21,12 +22,16 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
 
+import java.util.ArrayList;
+
 public class PlayScreen implements Screen {
 
     private Board b1 = new Board();
     private TriviaLand game;
     private Sprite splash;
+    private ArrayList<Sprite> citiesSprite;
     private SpriteBatch batch;
+    private ArrayList<Texture> citiesImage;
     private Die die;
     ShapeRenderer shape = new ShapeRenderer();
     private User user;
@@ -38,6 +43,8 @@ public class PlayScreen implements Screen {
     private TextButtonStyle style;
     private Stage stage;
     private float count = 0;
+    private float fontsize = 1f;
+    private boolean isHoover = false;
 
     public PlayScreen(TriviaLand game){
         this.game = game;
@@ -51,13 +58,14 @@ public class PlayScreen implements Screen {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         Texture texture = new Texture("Hat.png");
         splash = new Sprite(texture);
-        splash.setSize(50,50);
+        splash.setSize(35,35);
         style = new TextButtonStyle();
         style.font = font;
         stage = new Stage(new ExtendViewport(800, 920));
         Gdx.input.setInputProcessor(stage);
         button = new TextButton("Zar At",style);
         button.setPosition(420,460);
+        button.setTransform(true);
         button.addListener(new ClickListener(){
             public void clicked(InputEvent e,float x, float y){
                 if (user.getMove()==user.getMoveCount()) {
@@ -66,8 +74,28 @@ public class PlayScreen implements Screen {
                     user.setMove(user.getMove() + die.getDie1());
                 }
             }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                isHoover = true;
+                button.getLabel().setColor(Color.SALMON);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                isHoover = false;
+                button.getLabel().setColor(Color.WHITE);
+            }
         });
 
+        citiesImage = new ArrayList<>();
+        citiesSprite = new ArrayList<>();
+
+        citiesImage.add(new Texture("Istanbul.png"));
+        for (int i=0;i<7;i++) {
+            citiesSprite.add(new Sprite(citiesImage.get(0)));
+            citiesSprite.get(i).setSize(70, 99);
+        }
         stage.addActor(button);
     }
 
@@ -101,8 +129,10 @@ public class PlayScreen implements Screen {
         stage.draw();
 
         shape.end();
-        splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+99) + jumpVariable);
+        splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+125) + jumpVariable);
 
+        for (int i=0;i<citiesSprite.size();i++)
+            citiesSprite.get(i).setCenter((int) ((i+2) * 74 + 90), (int) (0 * 74 + 90));
 
         //User Zıplama Efekti
         if (isJump) {
@@ -118,7 +148,10 @@ public class PlayScreen implements Screen {
 
 
         batch.begin();
+        for (int i=0;i<citiesSprite.size();i++)
+            citiesSprite.get(i).draw(batch);
         splash.draw(batch);
+
         if (isDie)
             font.draw(batch,String.valueOf(die.getDie1()),300,250);
         batch.end();
@@ -173,6 +206,18 @@ public class PlayScreen implements Screen {
         if (user.getMoveCount()>32 && user.getMove()>32 ) {
             user.setMoveCount(user.getMove()-32);
             user.setMove(user.getMove()-32);
+        }
+
+        if (isHoover){
+          if (fontsize<1.25f) {
+              fontsize += 0.05f;
+          }
+              button.setScale(fontsize);
+        } else {
+            if (fontsize>1f) {
+                fontsize -= 0.05f;
+            }
+            button.setScale(fontsize);
         }
     }
 

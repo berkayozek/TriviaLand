@@ -1,7 +1,7 @@
 package com.mygdx.game.Game;
 
 public class Card {
-
+	//TODO Extreme card ve Card'ı tek bir super card classın altında toplayalım (LuckyCard extends Cards ve ExtremeCard extends Cards olsun)
 	private String name;
 	private User User;
 	private boolean isUsable;

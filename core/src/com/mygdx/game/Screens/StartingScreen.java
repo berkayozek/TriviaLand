@@ -18,7 +18,7 @@ public class StartingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        //TODO Starting Scenes yapılarak ana menü ve oyun arasında geçişler sağlanacak
     }
 
     @Override

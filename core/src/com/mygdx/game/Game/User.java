@@ -14,13 +14,6 @@ public class User {
 	private int moveCount=0;
 	private int userX = 8;
 	private int userY = 0;
-
-
-	public Vector2 getPosition() {
-		return position;
-	}
-
-	private Vector2 position = new Vector2(790,90);
 	public boolean isDrawable = true;
 	private int pos;
 	private Boolean isBot;
