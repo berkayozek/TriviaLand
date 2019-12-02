@@ -31,7 +31,7 @@ public class Cities {
 		// GO TO JAILL 1
 		cities.add(new City("Eskisehir", null, 2, 2000, 150));
 		// LUCKY CARD 3
-		cities.add(new City("K�r�kkale", null, 4, 1800, 150));
+		cities.add(new City("Kırıkkalee", null, 4, 1800, 150));
 		cities.add(new City("Izmir", null, 5, 3200, 300));
 		// TAX 6
 		cities.add(new City("Denizli", null, 7, 800, 100));

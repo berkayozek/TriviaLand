@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class PlayScreen implements Screen {
 
     private Board b1 = new Board();
+    private Cities cities = new Cities();
     private TriviaLand game;
     private Sprite splash;
     private ArrayList<Sprite> citiesSprite;
@@ -125,11 +126,13 @@ public class PlayScreen implements Screen {
 
         //Zar butonu
         shape.setColor(Color.RED);
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
+
 
         shape.end();
         splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+125) + jumpVariable);
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
 
         for (int i=0;i<citiesSprite.size();i++)
             citiesSprite.get(i).setCenter((int) ((i+2) * 74 + 90), (int) (0 * 74 + 90));
@@ -152,6 +155,12 @@ public class PlayScreen implements Screen {
             citiesSprite.get(i).draw(batch);
         splash.draw(batch);
 
+        /*for (int i=0;i<9;i++)
+            for (int k=0;k<9;k++)
+                if(b1.getBoard(k,i)!=0)
+                    font.draw(batch,cities.getCities().get(i).getName(),(int) (k * 77.625 + 100), (int) (i * 74 + 69));
+        */
+        //TODO şehir satın alma yapılacak.
         if (isDie)
             font.draw(batch,String.valueOf(die.getDie1()),300,250);
         batch.end();
@@ -175,8 +184,8 @@ public class PlayScreen implements Screen {
 
             }
         }
-
-        count += delta;
+        if (user.getMove()>user.getMoveCount())
+            count += delta;
         //Move Functions
         if (count>0.5) {
             if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0 && user.getMove() > user.getMoveCount()) {
