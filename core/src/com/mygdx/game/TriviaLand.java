@@ -18,7 +18,7 @@ public class TriviaLand extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new StartingScreen(this));
+		setScreen(new PlayScreen(this));
 	}
 
 	@Override

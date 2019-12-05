@@ -2,7 +2,9 @@ package com.mygdx.game.Game;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class User {
 	private String name;
@@ -16,6 +18,7 @@ public class User {
 	private int userY = 0;
 	public boolean isDrawable = true;
 	private int pos;
+	private Vector2 userPos = new Vector2();
 	private Boolean isBot;
 	private static int userCounter = 0;
 	private int userNo;
@@ -28,6 +31,12 @@ public class User {
 		money = 15000;
 		jailCount = 0;
 		pos = 1;
+		userPos.x = 769;
+		userPos.y = 129;
+	}
+
+	public Vector2 getUserPos() {
+		return userPos;
 	}
 
 	public int getPos() {

@@ -46,10 +46,11 @@ public class PlayScreen implements Screen {
     private float count = 0;
     private float fontsize = 1f;
     private boolean isHoover = false;
+    private float userPosCouter = 0;
 
-    public PlayScreen(TriviaLand game){
+    public PlayScreen(TriviaLand game) {
         this.game = game;
-        user = new User("Player 1",false);
+        user = new User("Player 1", false);
     }
 
     @Override
@@ -59,17 +60,17 @@ public class PlayScreen implements Screen {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         Texture texture = new Texture("Hat.png");
         splash = new Sprite(texture);
-        splash.setSize(35,35);
+        splash.setSize(35, 35);
         style = new TextButtonStyle();
         style.font = font;
         stage = new Stage(new ExtendViewport(800, 920));
         Gdx.input.setInputProcessor(stage);
-        button = new TextButton("Zar At",style);
-        button.setPosition(420,460);
+        button = new TextButton("Zar At", style);
+        button.setPosition(420, 460);
         button.setTransform(true);
-        button.addListener(new ClickListener(){
-            public void clicked(InputEvent e,float x, float y){
-                if (user.getMove()==user.getMoveCount()) {
+        button.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y) {
+                if (user.getMove() == user.getMoveCount()) {
                     die.roll();
                     isDie = true;
                     user.setMove(user.getMove() + die.getDie1());
@@ -93,7 +94,7 @@ public class PlayScreen implements Screen {
         citiesSprite = new ArrayList<>();
 
         citiesImage.add(new Texture("Istanbul.png"));
-        for (int i=0;i<7;i++) {
+        for (int i = 0; i < 7; i++) {
             citiesSprite.add(new Sprite(citiesImage.get(0)));
             citiesSprite.get(i).setSize(70, 99);
         }
@@ -102,7 +103,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.WHITE);
@@ -129,47 +130,46 @@ public class PlayScreen implements Screen {
 
 
         shape.end();
-        splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+125) + jumpVariable);
+        splash.setCenter(user.getUserPos().x, user.getUserPos().y + jumpVariable);
+        //splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+125) + jumpVariable);
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        for (int i=0;i<citiesSprite.size();i++)
-            citiesSprite.get(i).setCenter((int) ((i+2) * 74 + 90), (int) (0 * 74 + 90));
+        for (int i = 0; i < citiesSprite.size(); i++)
+            citiesSprite.get(i).setCenter((int) ((i + 2) * 74 + 90), (int) (0 * 74 + 90));
 
         //User Zıplama Efekti
         if (isJump) {
-            jumpVariable += 5f*delta;
-            if (jumpVariable>200f*delta)
+            jumpVariable += 5f * delta;
+            if (jumpVariable > 200f * delta)
                 isJump = false;
-        }
-        else {
-            jumpVariable -= 5f*delta;
-            if (jumpVariable<0)
+        } else {
+            jumpVariable -= 5f * delta;
+            if (jumpVariable < 0)
                 isJump = true;
         }
 
 
         batch.begin();
-        for (int i=0;i<citiesSprite.size();i++)
+        for (int i = 0; i < citiesSprite.size(); i++)
             citiesSprite.get(i).draw(batch);
         splash.draw(batch);
 
         /*for (int i=0;i<9;i++)
             for (int k=0;k<9;k++)
                 if(b1.getBoard(k,i)!=0)
-                    font.draw(batch,cities.getCities().get(i).getName(),(int) (k * 77.625 + 100), (int) (i * 74 + 69));
+                    font.draw(batch,cities.getCities().get(i).getValue,(int) (k * 77.625 + 100), (int) (i * 74 + 69));
         */
         //TODO şehir satın alma yapılacak.
         if (isDie)
-            font.draw(batch,String.valueOf(die.getDie1()),300,250);
+            font.draw(batch, String.valueOf(die.getDie1()), 300, 250);
         batch.end();
 
 
-
         //gerideyse
-        if (user.getMoveCount()>user.getMove()) {
-            if (count>1) {
+        if (user.getMoveCount() > user.getMove()) {
+            if (count > 1) {
                 if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 0) {
                     user.setUserX(user.getUserX() + 1);
                 } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 8) {
@@ -184,10 +184,10 @@ public class PlayScreen implements Screen {
 
             }
         }
-        if (user.getMove()>user.getMoveCount())
+        if (user.getMove() > user.getMoveCount())
             count += delta;
         //Move Functions
-        if (count>0.5) {
+        /*if (count>0.5) {
             if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0 && user.getMove() > user.getMoveCount()) {
                 user.setUserX(user.getUserX() - 1);
                 user.setMoveCount(user.getMoveCount() + 1);
@@ -207,23 +207,60 @@ public class PlayScreen implements Screen {
             }
             count = 0;
         }
+        */
+        System.out.println(user.getMoveCount() + "  " + user.getMove());
 
-        if (user.getUserX() == 8 && user.getUserY() == 8 && user.getMove()<user.getMoveCount())
+        if (user.getMove() > user.getMoveCount()) {
+            if (user.getUserPos().x > 148 && user.getUserX() <= 769 && user.getUserPos().y <= 129) {
+                if (userPosCouter < 77.625) {
+                    userPosCouter += 50f * delta;
+                    user.getUserPos().x -= 50f * delta;
+                    System.out.println(user.getUserPos().x);
+                    System.out.println(userPosCouter);
+                }
+            } else if (user.getUserPos().y >= 129 && user.getUserPos().y < 721 && user.getUserPos().x <= 148 && user.getMove() > user.getMoveCount()) {
+                if (userPosCouter < 74) {
+                    userPosCouter += 50f * delta;
+                    user.getUserPos().y += 50f * delta;
+                }
+            } else if (user.getUserPos().x >= 148 && user.getUserPos().x < 769 && user.getUserPos().y >= 721) {
+                if (userPosCouter < 77.625) {
+                    userPosCouter += 50f * delta;
+                    user.getUserPos().x += 50f * delta;
+                }
+            } else if ((int)user.getUserPos().y > 129 && (int) user.getUserPos().y <= 721 && user.getUserPos().x >= 769 && user.getMove() > user.getMoveCount()) {
+                if (userPosCouter < 74.00) {
+                    userPosCouter += 50f * delta;
+                    user.getUserPos().y -= 50f * delta;
+                }
+            }
+
+            if (userPosCouter >= 74.00) {
+                user.setMoveCount(user.getMoveCount() + 1);
+                userPosCouter = 0f;
+            }
+        }
+
+        if (true)
+            System.out.println(user.getUserPos().x + "  " + user.getUserPos().y);
+
+
+        if (user.getUserX() == 8 && user.getUserY() == 8 && user.getMove() < user.getMoveCount())
             user.setMoveCount(1);
 
         //substracting value for preventing big number
-        if (user.getMoveCount()>32 && user.getMove()>32 ) {
-            user.setMoveCount(user.getMove()-32);
-            user.setMove(user.getMove()-32);
+        if (user.getMoveCount() > 32 && user.getMove() > 32) {
+            user.setMoveCount(user.getMove() - 32);
+            user.setMove(user.getMove() - 32);
         }
 
-        if (isHoover){
-          if (fontsize<1.25f) {
-              fontsize += 0.05f;
-          }
-              button.setScale(fontsize);
+        if (isHoover) {
+            if (fontsize < 1.25f) {
+                fontsize += 0.05f;
+            }
+            button.setScale(fontsize);
         } else {
-            if (fontsize>1f) {
+            if (fontsize > 1f) {
                 fontsize -= 0.05f;
             }
             button.setScale(fontsize);
