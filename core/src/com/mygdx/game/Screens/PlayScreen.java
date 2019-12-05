@@ -47,6 +47,7 @@ public class PlayScreen implements Screen {
     private float fontsize = 1f;
     private boolean isHoover = false;
     private float userPosCouter = 0;
+    private int cardCount = 0;
 
     public PlayScreen(TriviaLand game) {
         this.game = game;
@@ -208,41 +209,58 @@ public class PlayScreen implements Screen {
             count = 0;
         }
         */
-        System.out.println(user.getMoveCount() + "  " + user.getMove());
 
         if (user.getMove() > user.getMoveCount()) {
             if (user.getUserPos().x > 148 && user.getUserX() <= 769 && user.getUserPos().y <= 129) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += 50f * delta;
                     user.getUserPos().x -= 50f * delta;
-                    System.out.println(user.getUserPos().x);
-                    System.out.println(userPosCouter);
+                }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserX(user.getUserX()-1);
                 }
             } else if (user.getUserPos().y >= 129 && user.getUserPos().y < 721 && user.getUserPos().x <= 148 && user.getMove() > user.getMoveCount()) {
                 if (userPosCouter < 74) {
                     userPosCouter += 50f * delta;
                     user.getUserPos().y += 50f * delta;
                 }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserY(user.getUserY()+1);
+                }
             } else if (user.getUserPos().x >= 148 && user.getUserPos().x < 769 && user.getUserPos().y >= 721) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += 50f * delta;
                     user.getUserPos().x += 50f * delta;
+                }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserX(user.getUserX()+1);
                 }
             } else if ((int)user.getUserPos().y > 129 && (int) user.getUserPos().y <= 721 && user.getUserPos().x >= 769 && user.getMove() > user.getMoveCount()) {
                 if (userPosCouter < 74.00) {
                     userPosCouter += 50f * delta;
                     user.getUserPos().y -= 50f * delta;
                 }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserY(user.getUserY()-1);
+                }
             }
 
-            if (userPosCouter >= 74.00) {
-                user.setMoveCount(user.getMoveCount() + 1);
-                userPosCouter = 0f;
-            }
+
         }
 
-        if (true)
-            System.out.println(user.getUserPos().x + "  " + user.getUserPos().y);
+        if (user.getUserX() == 4 && user.getUserY() == 0 && cardCount < 1){
+            System.out.println("Kart");
+            cardCount++;
+        }
+
 
 
         if (user.getUserX() == 8 && user.getUserY() == 8 && user.getMove() < user.getMoveCount())
@@ -253,6 +271,7 @@ public class PlayScreen implements Screen {
             user.setMoveCount(user.getMove() - 32);
             user.setMove(user.getMove() - 32);
         }
+
 
         if (isHoover) {
             if (fontsize < 1.25f) {
