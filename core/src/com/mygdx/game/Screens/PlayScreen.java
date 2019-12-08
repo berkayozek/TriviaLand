@@ -269,7 +269,7 @@ public class PlayScreen implements Screen {
 
         }
 
-        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6||user.getUserX() == 2 && user.getUserY() == 0 ||user.getUserX() == 4 && user.getUserY() == 0 ||user.getUserX() == 5 && user.getUserY() == 0 ||user.getUserX() == 3 && user.getUserY() == 0 ||user.getUserX() == 6 && user.getUserY() == 0 ||user.getUserX() == 7 && user.getUserY() == 0||user.getUserX() == 1 && user.getUserY() == 0    ) && cardCount < 1 && user.getMove() == user.getMoveCount()) {
+        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) && cardCount < 1 && user.getMove() == user.getMoveCount()) {
 
             c= cards.drawCard(user);
             user.isDrawable = false;
