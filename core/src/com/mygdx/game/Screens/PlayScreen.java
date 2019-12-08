@@ -49,6 +49,7 @@ public class PlayScreen implements Screen {
     private CardDeck cards=new CardDeck();
     private float userPosCouter = 0;
     private int cardCount = 0;
+    private Card c;
 
     public PlayScreen(TriviaLand game) {
         this.game = game;
@@ -152,7 +153,6 @@ public class PlayScreen implements Screen {
                 isJump = true;
         }
 
-
         batch.begin();
         for (int i = 0; i < citiesSprite.size(); i++)
             citiesSprite.get(i).draw(batch);
@@ -166,10 +166,20 @@ public class PlayScreen implements Screen {
         //TODO şehir satın alma yapılacak.
         if (isDie)
             font.draw(batch, String.valueOf(die.getDie1()), 300, 250);
+        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) &&  user.getMove() == user.getMoveCount()){
+            font.getData().setScale(0.25f,0.25f);
+
+            font.draw(batch,  c.toString(), 200, 550);
+
+
+
+        }
+        font.getData().setScale(1f,1f);
         batch.end();
 
 
         //gerideyse
+
         if (user.getMoveCount() > user.getMove()) {
             if (count > 1) {
 
@@ -259,11 +269,14 @@ public class PlayScreen implements Screen {
 
         }
 
-        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6  ) && cardCount < 1 && user.getMove() == user.getMoveCount()){
-            cards.drawCard(user);
-            user.isDrawable=false;
+        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6||user.getUserX() == 2 && user.getUserY() == 0 ||user.getUserX() == 4 && user.getUserY() == 0 ||user.getUserX() == 5 && user.getUserY() == 0 ||user.getUserX() == 3 && user.getUserY() == 0 ||user.getUserX() == 6 && user.getUserY() == 0 ||user.getUserX() == 7 && user.getUserY() == 0||user.getUserX() == 1 && user.getUserY() == 0    ) && cardCount < 1 && user.getMove() == user.getMoveCount()) {
+
+            c= cards.drawCard(user);
+            user.isDrawable = false;
             cardCount++;
         }
+
+
 
 
 

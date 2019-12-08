@@ -50,9 +50,9 @@ public class CardDeck {
 
 	}
 
-	public String drawCard(User user) {
+	public Card drawCard(User user) {
 		int selectedCard = (int) (Math.random() * 20 + 1);
-		System.out.println(cardArray.get(selectedCard - 1));
+		System.out.println(cardArray.get(selectedCard - 1).toString());
 		if (cardArray.get(selectedCard - 1).equals(card1)) {
 			c1(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card2)) {
@@ -106,8 +106,8 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card20)) {
 			c20(user);
 		}
-		
-		return cardArray.get(selectedCard - 1).toString();
+
+		return (Card)cardArray.get(selectedCard - 1);
 
 	}
 
