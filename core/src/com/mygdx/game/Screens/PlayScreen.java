@@ -43,11 +43,11 @@ public class PlayScreen implements Screen {
     private TextButton button;
     private TextButtonStyle style;
     private Stage stage;
-    private float count = 0;
     private float fontsize = 1f;
     private boolean isHoover = false;
     private CardDeck cards=new CardDeck();
     private float userPosCouter = 0;
+    private float speed = 50f;
     private int cardCount = 0;
     private Card c;
 
@@ -134,7 +134,6 @@ public class PlayScreen implements Screen {
 
         shape.end();
         splash.setCenter(user.getUserPos().x, user.getUserPos().y + jumpVariable);
-        //splash.setCenter((int)(user.getUserX()*77.625+150), (int)(user.getUserY()*74+125) + jumpVariable);
 
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
@@ -153,36 +152,39 @@ public class PlayScreen implements Screen {
                 isJump = true;
         }
 
+
         batch.begin();
         for (int i = 0; i < citiesSprite.size(); i++)
             citiesSprite.get(i).draw(batch);
         splash.draw(batch);
 
-        /*for (int i=0;i<9;i++)
-            for (int k=0;k<9;k++)
-                if(b1.getBoard(k,i)!=0)
-                    font.draw(batch,cities.getCities().get(i).getValue,(int) (k * 77.625 + 100), (int) (i * 74 + 69));
-        */
-        //TODO şehir satın alma yapılacak.
+        font.setColor(Color.WHITE);
+        font.getData().setScale(1f,1f);
+
         if (isDie)
             font.draw(batch, String.valueOf(die.getDie1()), 300, 250);
+
+        font.setColor(Color.BLACK);
+        font.getData().setScale(0.25f,0.25f);
+        for (int k=8;k>=0;k--)
+            for (int i=0;i<9;i++)
+                for (City c : cities.getCities())
+                    if (b1.getBoard(i, k) != 0)
+                        if (b1.getBoard(k, i) == c.getPos()) {
+                            font.draw(batch, c.getName(), k * 80 + 120, i * 80 + 100);
+                        }
+
         if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) &&  user.getMove() == user.getMoveCount()){
             font.getData().setScale(0.25f,0.25f);
-
+            font.setColor(Color.WHITE);
             font.draw(batch,  c.toString(), 200, 550);
-
-
-
         }
-        font.getData().setScale(1f,1f);
+
         batch.end();
 
 
         //gerideyse
-
         if (user.getMoveCount() > user.getMove()) {
-            if (count > 1) {
-
                 if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 0) {
                     user.setUserX(user.getUserX() + 1);
                 } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 8) {
@@ -194,90 +196,63 @@ public class PlayScreen implements Screen {
                 } else if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0) {
                     user.setUserX(user.getUserX() + 1);
                 }
-
-            }
         }
-        if (user.getMove() > user.getMoveCount())
-            count += delta;
+
         //Move Functions
-        /*if (count>0.5) {
-            if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0 && user.getMove() > user.getMoveCount()) {
-                user.setUserX(user.getUserX() - 1);
-                user.setMoveCount(user.getMoveCount() + 1);
+        if (user.getMove()> user.getMoveCount()) {
+            if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0) {
+                if (userPosCouter < 77.625) {
+                    userPosCouter += speed * delta;
+                    user.getUserPos().x -= speed * delta;
+                }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserX(user.getUserX() - 1);
+                }
                 user.isDrawable = true;
-            } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 0 && user.getMove() > user.getMoveCount()) {
-                user.setUserY(user.getUserY() + 1);
-                user.setMoveCount(user.getMoveCount() + 1);
+            } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 0) {
+                if (userPosCouter < 74) {
+                    userPosCouter += speed * delta;
+                    user.getUserPos().y += speed * delta;
+                }
+                if (userPosCouter >= 74) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserY(user.getUserY() + 1);
+                }
                 user.isDrawable = true;
-            } else if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 8 && user.getMove() > user.getMoveCount()) {
-                user.setUserX(user.getUserX() + 1);
-                user.setMoveCount(user.getMoveCount() + 1);
+            } else if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 8) {
+                if (userPosCouter < 77.625) {
+                    userPosCouter += speed * delta;
+                    user.getUserPos().x += speed * delta;
+                }
+                if (userPosCouter >= 77.625) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserX(user.getUserX() + 1);
+                }
                 user.isDrawable = true;
             } else if (user.getUserY() > 0 && user.getUserY() <= 8 && user.getUserX() == 8 && user.getMove() > user.getMoveCount()) {
-                user.setUserY(user.getUserY() - 1);
-                user.setMoveCount(user.getMoveCount() + 1);
+                if (userPosCouter < 74.00) {
+                    userPosCouter += speed * delta;
+                    user.getUserPos().y -= speed * delta;
+                }
+                if (userPosCouter >= 74) {
+                    user.setMoveCount(user.getMoveCount() + 1);
+                    userPosCouter = 0f;
+                    user.setUserY(user.getUserY() - 1);
+                }
                 user.isDrawable = true;
             }
-            count = 0;
-        }
-        */
-
-        if (user.getMove() > user.getMoveCount()) {
-            cardCount=0;
-            if (user.getUserPos().x > 148 && user.getUserX() <= 769 && user.getUserPos().y <= 129) {
-                if (userPosCouter < 77.625) {
-                    userPosCouter += 50f * delta;
-                    user.getUserPos().x -= 50f * delta;
-                }
-                if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
-                    userPosCouter = 0f;
-                    user.setUserX(user.getUserX()-1);
-                }
-            } else if (user.getUserPos().y >= 129 && user.getUserPos().y < 721 && user.getUserPos().x <= 148 && user.getMove() > user.getMoveCount()) {
-                if (userPosCouter < 74) {
-                    userPosCouter += 50f * delta;
-                    user.getUserPos().y += 50f * delta;
-                }
-                if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
-                    userPosCouter = 0f;
-                    user.setUserY(user.getUserY()+1);
-                }
-            } else if (user.getUserPos().x >= 148 && user.getUserPos().x < 769 && user.getUserPos().y >= 721) {
-                if (userPosCouter < 77.625) {
-                    userPosCouter += 50f * delta;
-                    user.getUserPos().x += 50f * delta;
-                }
-                if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
-                    userPosCouter = 0f;
-                    user.setUserX(user.getUserX()+1);
-                }
-            } else if ((int)user.getUserPos().y > 129 && (int) user.getUserPos().y <= 721 && user.getUserPos().x >= 769 && user.getMove() > user.getMoveCount()) {
-                if (userPosCouter < 74.00) {
-                    userPosCouter += 50f * delta;
-                    user.getUserPos().y -= 50f * delta;
-                }
-                if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
-                    userPosCouter = 0f;
-                    user.setUserY(user.getUserY()-1);
-                }
-            }
-
-
         }
 
         if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) && cardCount < 1 && user.getMove() == user.getMoveCount()) {
 
-            c= cards.drawCard(user);
+            c = cards.drawCard(user);
             user.isDrawable = false;
             cardCount++;
         }
-
-
-
 
 
 
@@ -289,6 +264,9 @@ public class PlayScreen implements Screen {
             user.setMoveCount(user.getMove() - 32);
             user.setMove(user.getMove() - 32);
         }
+
+        //şehir satın alma
+        //TODO şehir satın alma yapılacak.
 
 
         if (isHoover) {
