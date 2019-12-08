@@ -113,7 +113,7 @@ public class CardDeck {
 
 	public void c1(User User) {
 
-		User.setMoney(card1.getUser().getMoney() - 200);
+		User.setMoney(User.getMoney() - 200);
 
 	}
 
@@ -146,7 +146,7 @@ public class CardDeck {
 
 	public void c6(User User) {
 
-		User.setMoney(card6.getUser().getMoney() - 200);
+		User.setMoney(User.getMoney() - 200);
 	}
 
 	public void c7(User user) {

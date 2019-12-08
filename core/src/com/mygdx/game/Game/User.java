@@ -45,6 +45,7 @@ public class User {
 
 	public void setPos(int newPos) {
 		pos = newPos;
+
 	}
 
 	public void move(int number) {
@@ -112,6 +113,7 @@ public class User {
 
 	public void setMove(int move) {
 		this.move = move;
+
 	}
 
 	public int getMoveCount() {
@@ -120,6 +122,7 @@ public class User {
 
 	public void setMoveCount(int moveCount) {
 		this.moveCount = moveCount;
+
 	}
 
 	public void setUserX(int userX) {

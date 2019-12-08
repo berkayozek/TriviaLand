@@ -6,6 +6,7 @@ import com.mygdx.game.TriviaLand;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = TriviaLand.WIDTH;
 		config.height = TriviaLand.HEIGHT;
