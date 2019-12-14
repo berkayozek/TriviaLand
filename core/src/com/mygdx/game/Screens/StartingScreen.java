@@ -82,7 +82,7 @@ public class StartingScreen implements Screen {
         public void clicked(InputEvent event, float x, float y) {
 
 
-            switchScreen(new PlayScreen(game,playerNumber));
+            switchScreen(new whoStartFirstScreen(game,playerNumber));
         }
 
         @Override

@@ -52,16 +52,10 @@ public class PlayScreen implements Screen {
     private ArrayList<User> usersArray=new ArrayList<User>();
     private Card c;
 
-    public PlayScreen(TriviaLand game,int i) {
+    public PlayScreen(TriviaLand game,ArrayList<User> users ) {
         this.game = game;
-        int p=1;
-       while (i>0) {
-
-           newUser = new User("Player "+Integer.toString(p), false);
-           usersArray.add(user);
-           i--;
-           p++;
-       }
+        usersArray=users;
+        user = new User("berkay",false);
     }
 
 

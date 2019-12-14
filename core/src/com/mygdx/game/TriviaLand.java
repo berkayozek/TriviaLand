@@ -19,7 +19,7 @@ public class TriviaLand extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new whoStartFirstScreen(this));
+		setScreen(new StartingScreen(this));
 	}
 
 	@Override
