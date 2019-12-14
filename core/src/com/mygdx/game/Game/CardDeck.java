@@ -1,8 +1,11 @@
 package com.mygdx.game.Game;
 
+import com.sun.tools.javac.util.List;
+
 import java.util.ArrayList;
 
 public class CardDeck {
+	//TODO KARTLARDA ELİNDE TUTULACAKLAR AYARLANACAK, TELEPORT YERİ HESAPLANACAK
 ///////////////ELİNDE TUTULAMAYAN KARTLARTI SİLMEYİ DENE//////////////////
 	ArrayList cardArray = new ArrayList<Card>();
 	Card card1 = new Card("Card1", false, "You have to pay bills.(200TL)");
@@ -49,8 +52,8 @@ public class CardDeck {
 		cardArray.add(card20);
 
 	}
-
-	public Card drawCard(User user) {
+//user.get(0),user.get(1)
+	public Card drawCard(User user,ArrayList UserArray) {
 		int selectedCard = (int) (Math.random() * 20 + 1);
 		System.out.println(cardArray.get(selectedCard - 1).toString());
 		if (cardArray.get(selectedCard - 1).equals(card1)) {
@@ -72,18 +75,22 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card7)) {
 			c7(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card8)) {
-			///////// User degisecek///////////////////////////////////////////
-			User selectedUser = null;
-			c8(user, selectedUser);
+			User selectedUser=null;
+			int i=(int)(Math.random()*(UserArray.size()+1));
+
+			while(UserArray.get(i).equals(user)){
+				selectedUser = (User)UserArray.get(i);
+			}
+
+
+
+			c8(user,selectedUser );
 		} else if (cardArray.get(selectedCard - 1).equals(card9)) {
 			c9(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card10)) {
-			///////// User degisecek/////////////////////////////////////////
-			User otherUser1 = null;
-			User otherUser2 = null;
 
-			User otherUser3 = null;
-			c10(user, otherUser1, otherUser2, otherUser3);
+
+			c10(user,UserArray);
 		} else if (cardArray.get(selectedCard - 1).equals(card11)) {
 			c11(user);
 
@@ -125,16 +132,20 @@ public class CardDeck {
 
 	public void c3(User User) {
 
-		User.setPos(8);
+		User.getUserPos().x=156;
+		User.getUserPos().y=129;
+		User.setUserX(0);
+		User.setUserY(0);
 		User.setJailCount(3);
-		card3.setUser(null);
 
 	}
 
 	public void c4(User User) {
+		User.getUserPos().x=156;//teleport yeri hesaplanacak
+		User.getUserPos().y=129;// teleport yeri hesaplanacak
+		User.setUserX(0);
+		User.setUserY(8);
 
-		card4.setUser(User);
-		card4.getUser().setPos(9);
 	}
 
 	public void c5(User User) {
@@ -165,13 +176,18 @@ public class CardDeck {
 		////// BUTONLARDAN SONRA/////////////
 	}
 
-	public void c10(User user1, User user2, User user3, User user4) {
+	public void c10(User user1,ArrayList<User> UserArray) {
+		ArrayList <User> list = UserArray;
+		int prize = 0;
+		int i = UserArray.size()-1;
+		while (i>=0){
+			if(!UserArray.get(i).equals(user1)) {
+				list.get(i).setMoney(list.get(i).getMoney() - 250);
+				prize+=250;
+			}
 
-		user1.setMoney(user1.getMoney() + 1000);
-		user2.setMoney(user2.getMoney() - 250);
-		user3.setMoney(user3.getMoney() - 250);
-		user4.setMoney(user4.getMoney() - 250);
-
+		}
+		user1.setMoney(user1.getMoney() + prize);
 	}
 
 	public void c11(User user) {

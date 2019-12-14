@@ -18,6 +18,7 @@ import com.mygdx.game.TriviaLand;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -52,6 +53,7 @@ public class whoStartFirstScreen implements Screen {
             userArrayList.add(new User("Player "+Integer.toString(p), false));
             i--;
             p++;
+
         }
     }
 
@@ -71,7 +73,11 @@ public class whoStartFirstScreen implements Screen {
             }
             userArrayList.set(j+1,u);
         }
+        Collections.reverse(userArrayList);
 
+       for(int i=0;i<userArrayList.size();i++){
+           System.out.println(userArrayList.get(i).getName());
+       }
 
         return userArrayList;
     }
