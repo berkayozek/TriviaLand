@@ -13,7 +13,7 @@ public class ExtremeCardDeck {
 	Card ecd4 = new Card("Card4", false, " You swap your money with the person you want");
 	Card ecd5 = new Card("Card5", false, "You win lottery.Get your money from bank.");
 	Card ecd6 = new Card("Card6", false, "You lost fifty percent of money.");
-	Card ecd7 = new Card("Card7", true, "Decrease rent of all properties that you have fifty percent. ");
+	Card ecd7 = new Card("Card7", true, "Decrease rent of all properties that you have fifty percent.");
 
 	public ExtremeCardDeck() {
 
@@ -48,8 +48,9 @@ public class ExtremeCardDeck {
 	}
 
 	public void ecd1(User user) {
-
+       // TODO: 14.12.2019 teleport kısmı
 		// butonlardan sonra ışınlama
+
 
 	}
 

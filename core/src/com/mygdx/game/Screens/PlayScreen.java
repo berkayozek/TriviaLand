@@ -200,13 +200,6 @@ public class PlayScreen implements Screen {
 
         font.setColor(Color.BLACK);
         font.getData().setScale(0.25f,0.25f);
-        for (int k=8;k>=0;k--)
-            for (int i=0;i<9;i++)
-                for (City c : cities.getCities())
-                    if (b1.getBoard(i, k) != 0)
-                        if (b1.getBoard(k, i) == c.getPos()) {
-                            font.draw(batch, "" + c.getPos(), k * 80 + 120, i * 80 + 100);
-                        }
 
         if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0
                 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2

@@ -1,9 +1,5 @@
 package com.mygdx.game.Game;
 
-import com.badlogic.gdx.math.Vector2;
-
-import java.util.Vector;
-
 public class City {
 	private int pos;
 
@@ -13,7 +9,11 @@ public class City {
 	private int hireCount = 1;
 	private int hire;
 
+
 	public City(String name, User user, int pos, int price, int hire) {
+
+
+
 		this.name = name;
 		this.user = user;
 		this.price = price;
@@ -83,6 +83,24 @@ public class City {
 
 	}
 
+
+	public void payTax(User user) {
+
+		if(user.getMoney()<hire){
+			this.user.setMoney(this.user.getMoney() + user.getMoney());
+			user.setMoney(0);
+		}
+		else{
+			user.setMoney(user.getMoney() - hire);
+			this.user.setMoney(this.user.getMoney() + hire);
+		}
+
+
+	}
+
+	public void teleport(User user ){
+
+	}
 	public Boolean isBoosted() {
 		if (this.pos == 8 || this.pos == 16 || this.pos == 24 || this.pos == 32) {
 			return true;
@@ -90,5 +108,7 @@ public class City {
 			return false;
 		}
 	}
+
+
 
 }

@@ -125,7 +125,7 @@ public class CardDeck {
 
 	public void c3(User User) {
 
-		User.setPos(25);
+		User.setPos(8);
 		User.setJailCount(3);
 		card3.setUser(null);
 
@@ -185,12 +185,12 @@ public class CardDeck {
 	}
 
 	public void c13(User user) {
-
-		//user.setUserX(8);
-		//user.setUserY(8);
-		//user.setMoveCount(1);
-		//user.setMove(1);
-
+/*
+		user.setUserX(8);
+		user.setUserY(8);
+		user.setMoveCount(1);
+		user.setMove(1);
+*/
 	}
 
 	public void c14(User user) {
