@@ -52,8 +52,8 @@ public class CardDeck {
 		cardArray.add(card20);
 
 	}
-//user.get(0),user.get(1)
-	public Card drawCard(User user,ArrayList UserArray) {
+
+	public Card drawCard(User user, ArrayList<User> UserArray) {
 		int selectedCard = (int) (Math.random() * 20 + 1);
 		System.out.println(cardArray.get(selectedCard - 1).toString());
 		if (cardArray.get(selectedCard - 1).equals(card1)) {
@@ -88,9 +88,12 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card9)) {
 			c9(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card10)) {
+			///////// User degisecek/////////////////////////////////////////
+			User otherUser1 = null;
+			User otherUser2 = null;
 
-
-			c10(user,UserArray);
+			User otherUser3 = null;
+			c10(user, otherUser1, otherUser2, otherUser3);
 		} else if (cardArray.get(selectedCard - 1).equals(card11)) {
 			c11(user);
 
@@ -176,18 +179,13 @@ public class CardDeck {
 		////// BUTONLARDAN SONRA/////////////
 	}
 
-	public void c10(User user1,ArrayList<User> UserArray) {
-		ArrayList <User> list = UserArray;
-		int prize = 0;
-		int i = UserArray.size()-1;
-		while (i>=0){
-			if(!UserArray.get(i).equals(user1)) {
-				list.get(i).setMoney(list.get(i).getMoney() - 250);
-				prize+=250;
-			}
+	public void c10(User user1, User user2, User user3, User user4) {
 
-		}
-		user1.setMoney(user1.getMoney() + prize);
+		user1.setMoney(user1.getMoney() + 1000);
+		user2.setMoney(user2.getMoney() - 250);
+		user3.setMoney(user3.getMoney() - 250);
+		user4.setMoney(user4.getMoney() - 250);
+
 	}
 
 	public void c11(User user) {
