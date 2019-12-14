@@ -36,6 +36,7 @@ public class PlayScreen implements Screen {
     private Die die;
     ShapeRenderer shape = new ShapeRenderer();
     private User user;
+    private User newUser;
     private float jumpVariable = 0;
     private boolean isJump = true;
     private BitmapFont font;
@@ -48,16 +49,26 @@ public class PlayScreen implements Screen {
     private CardDeck cards=new CardDeck();
     private float userPosCouter = 0;
     private float speed = 50f;
-    private int cardCount = 0;
+    private ArrayList<User> usersArray=new ArrayList<User>();
     private Card c;
 
-    public PlayScreen(TriviaLand game) {
+    public PlayScreen(TriviaLand game,int i) {
         this.game = game;
-        user = new User("Player 1", false);
+        int p=1;
+       while (i>0) {
+
+           newUser = new User("Player "+Integer.toString(p), false);
+           usersArray.add(user);
+           i--;
+           p++;
+       }
     }
+
+
 
     @Override
     public void show() {
+        System.out.println(usersArray.size());
         batch = new SpriteBatch();
         die = new Die();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -247,11 +258,11 @@ public class PlayScreen implements Screen {
             }
         }
 
-        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) && cardCount < 1 && user.getMove() == user.getMoveCount()) {
+        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) && user.getCardCount() < 1 && user.getMove() == user.getMoveCount()) {
 
             c = cards.drawCard(user);
             user.isDrawable = false;
-            cardCount++;
+            user.setCardCount(1);
         }
 
 

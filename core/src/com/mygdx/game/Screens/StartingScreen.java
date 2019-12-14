@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -29,12 +30,18 @@ public class StartingScreen implements Screen {
     private TextButton exit;
     private TextButtonStyle textButtonStyle;
     private Stage stage;
-
+    private Button increaseButton;
+    private Button decreaseButton;
+    private int playerNumber=1;
 
     public boolean StartingScreen = true;
 
     public StartingScreen(TriviaLand game){
         this.game = game;
+    }
+
+    public int getPlayerNumber(){
+        return playerNumber;
     }
 
     @Override
@@ -47,12 +54,35 @@ public class StartingScreen implements Screen {
     textButtonStyle.font = font;
     start = new TextButton("START",textButtonStyle);
     exit = new TextButton("EXIT",textButtonStyle);
+    decreaseButton=new TextButton("-",textButtonStyle);
+    increaseButton=new TextButton("+",textButtonStyle);
+
     start.setPosition(300,450);
     exit.setPosition(300,150);
+    increaseButton.setPosition(800,450);
+    decreaseButton.setPosition(800,150);
+    increaseButton.addListener(new ClickListener(){
+        public void clicked(InputEvent event, float x,float y){
+            if(playerNumber>0 && playerNumber<4){
+                playerNumber++;
+
+            }
+        }
+        });
+    decreaseButton.addListener(new ClickListener(){
+          public void clicked(InputEvent event, float x,float y){
+              if(playerNumber>1 && playerNumber<=4){
+                  playerNumber--;
+
+              }
+          }
+        });
     start.addListener(new ClickListener(){
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            switchScreen(new PlayScreen(game));
+
+
+            switchScreen(new PlayScreen(game,playerNumber));
         }
 
         @Override
@@ -83,6 +113,8 @@ public class StartingScreen implements Screen {
     });
     stage.addActor(start);
     stage.addActor(exit);
+    stage.addActor(increaseButton);
+    stage.addActor(decreaseButton);
     stage.getRoot().getColor().a = 0;
     stage.getRoot().addAction(fadeIn(3f));
     }
@@ -100,6 +132,7 @@ public class StartingScreen implements Screen {
 
         batch.begin();
             font.draw(batch,"TriviaLand",280,600);
+            font.draw(batch,Integer.toString(playerNumber),700,300);
         batch.end();
     }
 

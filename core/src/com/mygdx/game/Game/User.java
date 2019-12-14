@@ -22,7 +22,7 @@ public class User {
 	private Boolean isBot;
 	private static int userCounter = 0;
 	private int userNo;
-
+	private int cardCount = 0;
 	public User(String name, Boolean isBot) {
 		userCounter++;
 		userNo = userCounter;
@@ -123,6 +123,14 @@ public class User {
 	public void setMoveCount(int moveCount) {
 		this.moveCount = moveCount;
 
+	}
+
+	public void setCardCount(int i){
+		cardCount=i;
+	}
+
+	public int getCardCount(){
+		return cardCount;
 	}
 
 	public void setUserX(int userX) {

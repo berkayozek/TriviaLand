@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Screens.PlayScreen;
 import com.mygdx.game.Screens.StartingScreen;
+import com.mygdx.game.Screens.whoStartFirstScreen;
 
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class TriviaLand extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		setScreen(new whoStartFirstScreen(this));
 	}
 
 	@Override
