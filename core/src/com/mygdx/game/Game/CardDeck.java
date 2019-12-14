@@ -78,8 +78,8 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card9)) {
 			c9(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card10)) {
-			///////// User degisecek/////////////////////////////////////////
-			User otherUser1 = null;
+				///////// User degisecek/////////////////////////////////////////
+				User otherUser1 = null;
 			User otherUser2 = null;
 
 			User otherUser3 = null;

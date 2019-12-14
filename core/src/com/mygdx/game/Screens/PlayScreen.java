@@ -74,6 +74,7 @@ public class PlayScreen implements Screen {
         userSprite = new ArrayList<>();
         for (int i=0;i<usersArray.size();i++) {
             userImage.add(new Texture("Hat.png"));
+            userImage.get(userImage.size()-1).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             userSprite.add(new Sprite(userImage.get(i)));
             userSprite.get(i).setSize(35,35);
         }
@@ -122,10 +123,12 @@ public class PlayScreen implements Screen {
         citiesImage = new ArrayList<>();
         citiesSprite = new ArrayList<>();
 
-        citiesImage.add(new Texture("Istanbul.png"));
-        for (int i = 0; i < 7; i++) {
+        //TODO şehirlerin png leri yapılacak
+        citiesImage.add(new Texture("Trabzon.png"));
+        citiesImage.get(0).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        for (int i = 0; i < 1; i++) {
             citiesSprite.add(new Sprite(citiesImage.get(0)));
-            citiesSprite.get(i).setSize(70, 99);
+            citiesSprite.get(i).setSize(99, 70);
         }
         stage.addActor(button);
         stage.addActor(buyButton);
@@ -167,7 +170,7 @@ public class PlayScreen implements Screen {
         stage.draw();
 
         for (int i = 0; i < citiesSprite.size(); i++)
-            citiesSprite.get(i).setCenter((int) ((i + 2) * 74 + 90), (int) (0 * 74 + 90));
+            citiesSprite.get(i).setCenter((int) ((0) * 74 + 148), (int) (i+2 * 74 + 105));
 
 
         //User Zıplama Efekti
