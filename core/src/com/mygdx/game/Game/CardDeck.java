@@ -88,12 +88,8 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card9)) {
 			c9(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card10)) {
-			///////// User degisecek/////////////////////////////////////////
-			User otherUser1 = null;
-			User otherUser2 = null;
 
-			User otherUser3 = null;
-			c10(user, otherUser1, otherUser2, otherUser3);
+			c10(user, UserArray);
 		} else if (cardArray.get(selectedCard - 1).equals(card11)) {
 			c11(user);
 
@@ -179,13 +175,15 @@ public class CardDeck {
 		////// BUTONLARDAN SONRA/////////////
 	}
 
-	public void c10(User user1, User user2, User user3, User user4) {
+	public void c10(User user1, ArrayList<User> users) {
+		int prize=0;
+		for (int i=0;i<users.size();i++){
+			if (users.get(i)!=user1)
+				users.get(i).setMoney(users.get(i).getMoney()-250);
+			prize += 250;
+		}
 
-		user1.setMoney(user1.getMoney() + 1000);
-		user2.setMoney(user2.getMoney() - 250);
-		user3.setMoney(user3.getMoney() - 250);
-		user4.setMoney(user4.getMoney() - 250);
-
+		user1.setMoney(user1.getMoney() + prize);
 	}
 
 	public void c11(User user) {
