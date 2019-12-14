@@ -1,5 +1,9 @@
 package com.mygdx.game.Game;
 
+import com.badlogic.gdx.math.Vector2;
+
+import java.util.Vector;
+
 public class City {
 	private int pos;
 
@@ -10,8 +14,6 @@ public class City {
 	private int hire;
 
 	public City(String name, User user, int pos, int price, int hire) {
-		this.pos = pos;
-
 		this.name = name;
 		this.user = user;
 		this.price = price;

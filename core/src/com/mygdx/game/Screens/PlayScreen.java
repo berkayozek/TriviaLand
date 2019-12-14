@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
@@ -31,31 +32,34 @@ public class PlayScreen implements Screen {
     private TriviaLand game;
     private Sprite splash;
     private ArrayList<Sprite> citiesSprite;
+    private ArrayList<Sprite> userSprite;
     private SpriteBatch batch;
     private ArrayList<Texture> citiesImage;
+    private ArrayList<Texture> userImage;
     private Die die;
-    ShapeRenderer shape = new ShapeRenderer();
-    private User user;
-    private User newUser;
+    private ShapeRenderer shape = new ShapeRenderer();
     private float jumpVariable = 0;
     private boolean isJump = true;
     private BitmapFont font;
     private boolean isDie = false;
     private TextButton button;
+    private TextButton buyButton;
     private TextButtonStyle style;
     private Stage stage;
     private float fontsize = 1f;
     private boolean isHoover = false;
     private CardDeck cards=new CardDeck();
     private float userPosCouter = 0;
-    private float speed = 50f;
-    private ArrayList<User> usersArray=new ArrayList<User>();
+    private float speed = 100f;
+    private boolean userCanBuy = false;
+    private ArrayList<User> usersArray;
     private Card c;
+    private boolean isMoving = false;
+    private int whoIsRound = 0;
 
-    public PlayScreen(TriviaLand game,ArrayList<User> users ) {
+    public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
-        usersArray=users;
-        user = new User("b",false);
+        this.usersArray = users;
     }
 
 
@@ -66,23 +70,40 @@ public class PlayScreen implements Screen {
         batch = new SpriteBatch();
         die = new Die();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        Texture texture = new Texture("Hat.png");
-        splash = new Sprite(texture);
-        splash.setSize(35, 35);
+        userImage = new ArrayList<>();
+        userSprite = new ArrayList<>();
+        for (int i=0;i<usersArray.size();i++) {
+            userImage.add(new Texture("Hat.png"));
+            userSprite.add(new Sprite(userImage.get(i)));
+            userSprite.get(i).setSize(35,35);
+        }
         style = new TextButtonStyle();
         style.font = font;
         stage = new Stage(new ExtendViewport(800, 920));
         Gdx.input.setInputProcessor(stage);
+        buyButton = new TextButton("Satın Al",style);
+        buyButton.setPosition(300,260);
+        buyButton.setVisible(userCanBuy);
+        buyButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (userCanBuy) {
+                    cities.getCities().get(usersArray.get(whoIsRound).getMove()).setUser(usersArray.get(whoIsRound));
+                    usersArray.get(whoIsRound).getCities().add(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
+                }
+            }
+        });
         button = new TextButton("Zar At", style);
         button.setPosition(420, 460);
         button.setTransform(true);
         button.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                if (user.getMove() == user.getMoveCount()) {
+                if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
                     die.roll();
                     isDie = true;
-                    user.setMove(user.getMove() + die.getDie1());
-                }
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getDie1());
+                    isMoving = true;
+               }
             }
 
             @Override
@@ -107,6 +128,7 @@ public class PlayScreen implements Screen {
             citiesSprite.get(i).setSize(70, 99);
         }
         stage.addActor(button);
+        stage.addActor(buyButton);
     }
 
     @Override
@@ -138,13 +160,15 @@ public class PlayScreen implements Screen {
 
 
         shape.end();
-        splash.setCenter(user.getUserPos().x, user.getUserPos().y + jumpVariable);
-
         stage.act(Gdx.graphics.getDeltaTime());
+        for (int i=0;i<userSprite.size();i++)
+            userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y + jumpVariable);
+
         stage.draw();
 
         for (int i = 0; i < citiesSprite.size(); i++)
             citiesSprite.get(i).setCenter((int) ((i + 2) * 74 + 90), (int) (0 * 74 + 90));
+
 
         //User Zıplama Efekti
         if (isJump) {
@@ -161,13 +185,18 @@ public class PlayScreen implements Screen {
         batch.begin();
         for (int i = 0; i < citiesSprite.size(); i++)
             citiesSprite.get(i).draw(batch);
-        splash.draw(batch);
+
+        for (int i = 0 ; i < userSprite.size() ; i++)
+            userSprite.get(i).draw(batch);
+
 
         font.setColor(Color.WHITE);
         font.getData().setScale(1f,1f);
 
         if (isDie)
             font.draw(batch, String.valueOf(die.getDie1()), 300, 250);
+
+        if (userCanBuy)
 
         font.setColor(Color.BLACK);
         font.getData().setScale(0.25f,0.25f);
@@ -176,10 +205,14 @@ public class PlayScreen implements Screen {
                 for (City c : cities.getCities())
                     if (b1.getBoard(i, k) != 0)
                         if (b1.getBoard(k, i) == c.getPos()) {
-                            font.draw(batch, c.getName(), k * 80 + 120, i * 80 + 100);
+                            font.draw(batch, "" + c.getPos(), k * 80 + 120, i * 80 + 100);
                         }
 
-        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) &&  user.getMove() == user.getMoveCount()){
+        if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0
+                && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2
+                && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8
+                && usersArray.get(whoIsRound).getUserY() == 6)
+                &&  usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
             font.getData().setScale(0.25f,0.25f);
             font.setColor(Color.WHITE);
             font.draw(batch,  c.toString(), 200, 550);
@@ -189,90 +222,109 @@ public class PlayScreen implements Screen {
 
 
         //gerideyse
-        if (user.getMoveCount() > user.getMove()) {
-                if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 0) {
-                    user.setUserX(user.getUserX() + 1);
-                } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 8) {
-                    user.setUserY(user.getUserY() + 1);
-                } else if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 8) {
-                    user.setUserX(user.getUserX() - 1);
-                } else if (user.getUserY() > 0 && user.getUserY() <= 8 && user.getUserX() == 0) {
-                    user.setUserY(user.getUserY() - 1);
-                } else if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0) {
-                    user.setUserX(user.getUserX() + 1);
+
+        if (usersArray.get(whoIsRound).getMoveCount() > usersArray.get(whoIsRound).getMove()) {
+                if (usersArray.get(whoIsRound).getUserX() >= 0 && usersArray.get(whoIsRound).getUserX() < 8 && usersArray.get(whoIsRound).getUserY() == 0) {
+                    usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() + 1);
+                } else if (usersArray.get(whoIsRound).getUserY() >= 0 && usersArray.get(whoIsRound).getUserY() < 8 && usersArray.get(whoIsRound).getUserX() == 8) {
+                    usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() + 1);
+                } else if (usersArray.get(whoIsRound).getUserX() > 0 && usersArray.get(whoIsRound).getUserX() <= 8 && usersArray.get(whoIsRound).getUserY() == 8) {
+                    usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() - 1);
+                } else if (usersArray.get(whoIsRound).getUserY() > 0 && usersArray.get(whoIsRound).getUserY() <= 8 && usersArray.get(whoIsRound).getUserX() == 0) {
+                    usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() - 1);
+                } else if (usersArray.get(whoIsRound).getUserX() > 0 && usersArray.get(whoIsRound).getUserX() <= 8 && usersArray.get(whoIsRound).getUserY() == 0) {
+                    usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() + 1);
                 }
         }
 
         //Move Functions
-        if (user.getMove()> user.getMoveCount()) {
-            if (user.getUserX() > 0 && user.getUserX() <= 8 && user.getUserY() == 0) {
+        if (usersArray.get(whoIsRound).getMove()> usersArray.get(whoIsRound).getMoveCount()) {
+            if (usersArray.get(whoIsRound).getUserX() > 0 && usersArray.get(whoIsRound).getUserX() <= 8 && usersArray.get(whoIsRound).getUserY() == 0) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += speed * delta;
-                    user.getUserPos().x -= speed * delta;
+                    usersArray.get(whoIsRound).getUserPos().x -= speed * delta;
                 }
                 if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
+                    usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() + 1);
                     userPosCouter = 0f;
-                    user.setUserX(user.getUserX() - 1);
+                    usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() - 1);
                 }
-                user.isDrawable = true;
-            } else if (user.getUserY() >= 0 && user.getUserY() < 8 && user.getUserX() == 0) {
+                usersArray.get(whoIsRound).isDrawable = true;
+            } else if (usersArray.get(whoIsRound).getUserY() >= 0 && usersArray.get(whoIsRound).getUserY() < 8 && usersArray.get(whoIsRound).getUserX() == 0) {
                 if (userPosCouter < 74) {
                     userPosCouter += speed * delta;
-                    user.getUserPos().y += speed * delta;
+                    usersArray.get(whoIsRound).getUserPos().y += speed * delta;
                 }
                 if (userPosCouter >= 74) {
-                    user.setMoveCount(user.getMoveCount() + 1);
+                    usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() + 1);
                     userPosCouter = 0f;
-                    user.setUserY(user.getUserY() + 1);
+                    usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() + 1);
                 }
-                user.isDrawable = true;
-            } else if (user.getUserX() >= 0 && user.getUserX() < 8 && user.getUserY() == 8) {
+                usersArray.get(whoIsRound).isDrawable = true;
+            } else if (usersArray.get(whoIsRound).getUserX() >= 0 && usersArray.get(whoIsRound).getUserX() < 8 && usersArray.get(whoIsRound).getUserY() == 8) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += speed * delta;
-                    user.getUserPos().x += speed * delta;
+                    usersArray.get(whoIsRound).getUserPos().x += speed * delta;
                 }
                 if (userPosCouter >= 77.625) {
-                    user.setMoveCount(user.getMoveCount() + 1);
+                    usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() + 1);
                     userPosCouter = 0f;
-                    user.setUserX(user.getUserX() + 1);
+                    usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() + 1);
                 }
-                user.isDrawable = true;
-            } else if (user.getUserY() > 0 && user.getUserY() <= 8 && user.getUserX() == 8 && user.getMove() > user.getMoveCount()) {
+                usersArray.get(whoIsRound).isDrawable = true;
+            } else if (usersArray.get(whoIsRound).getUserY() > 0 && usersArray.get(whoIsRound).getUserY() <= 8 && usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getMove() > usersArray.get(whoIsRound).getMoveCount()) {
                 if (userPosCouter < 74.00) {
                     userPosCouter += speed * delta;
-                    user.getUserPos().y -= speed * delta;
+                    usersArray.get(whoIsRound).getUserPos().y -= speed * delta;
                 }
                 if (userPosCouter >= 74) {
-                    user.setMoveCount(user.getMoveCount() + 1);
+                    usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() + 1);
                     userPosCouter = 0f;
-                    user.setUserY(user.getUserY() - 1);
+                    usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() - 1);
                 }
-                user.isDrawable = true;
+                usersArray.get(whoIsRound).isDrawable = true;
             }
         }
 
-        if ((user.getUserX() == 3 && user.getUserY() == 0 || user.getUserX() == 0 && user.getUserY() == 3||user.getUserX() == 2 && user.getUserY() == 8||user.getUserX() == 8 && user.getUserY() == 6) && user.getCardCount() < 1 && user.getMove() == user.getMoveCount()) {
+        if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
 
-            c = cards.drawCard(user);
-            user.isDrawable = false;
-            user.setCardCount(1);
+            c = cards.drawCard(usersArray.get(whoIsRound));
+            usersArray.get(whoIsRound).isDrawable = false;
+            usersArray.get(whoIsRound).setCardCount(1);
         }
 
 
 
-        if (user.getUserX() == 8 && user.getUserY() == 8 && user.getMove() < user.getMoveCount())
-            user.setMoveCount(1);
+        if (usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 0 && usersArray.get(whoIsRound).getMove() < usersArray.get(whoIsRound).getMoveCount())
+            usersArray.get(whoIsRound).setMoveCount(1);
 
         //substracting value for preventing big number
-        if (user.getMoveCount() > 32 && user.getMove() > 32) {
-            user.setMoveCount(user.getMove() - 32);
-            user.setMove(user.getMove() - 32);
+        if (usersArray.get(whoIsRound).getMoveCount() > 32 && usersArray.get(whoIsRound).getMove() > 32) {
+            usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() - 32);
+            usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() - 32);
+        }
+
+        System.out.println(usersArray.get(whoIsRound).getMoveCount());
+
+        if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving){
+            if (whoIsRound==usersArray.size()-1)
+                whoIsRound = 0;
+            else
+                whoIsRound++;
+
+            isMoving = false;
         }
 
         //şehir satın alma
         //TODO şehir satın alma yapılacak.
+            if (cities.getCities().get(usersArray.get(whoIsRound).getMove())!=null && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser() == null){
+                userCanBuy = true;
+                buyButton.setVisible(userCanBuy);
+                //System.out.println(cities.getCities().get(user.getMove()).getName());
+            }
 
+            if (usersArray.get(whoIsRound).getCities().size()!=0)
+                System.out.println(usersArray.get(whoIsRound).getCities().get(0).getName());
 
         if (isHoover) {
             if (fontsize < 1.25f) {
@@ -289,7 +341,12 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        Vector2 size = Scaling.fit.apply(920, 800, width, height);
+        int viewportX = (int)(width - size.x) / 2;
+        int viewportY = (int)(height - size.y) / 2;
+        int viewportWidth = (int)size.x;
+        int viewportHeight = (int)size.y;
+        Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
     }
 
     @Override

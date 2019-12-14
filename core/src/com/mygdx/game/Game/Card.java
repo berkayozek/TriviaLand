@@ -7,7 +7,6 @@ public class Card {
 	private boolean isUsable;
 	private int cardNumber;
 	private String cardDescription;
-
 	static int cardCounter = 1;
 
 	public Card(String name, boolean isUsable, String cD) {

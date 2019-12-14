@@ -17,7 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.mygdx.game.Game.User;
 import com.mygdx.game.TriviaLand;
+
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
