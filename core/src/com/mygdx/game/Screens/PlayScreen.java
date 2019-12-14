@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(TriviaLand game,ArrayList<User> users ) {
         this.game = game;
         usersArray=users;
-        user = new User("berkay",false);
+        user = new User("b",false);
     }
 
 
