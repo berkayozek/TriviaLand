@@ -26,7 +26,7 @@ import com.mygdx.game.TriviaLand;
 import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
-
+//TODO ÇOK OYUNCULUDA KART ÇEKİLİYOR AMA YAZDIRILMIYOR
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
@@ -284,7 +284,7 @@ public class PlayScreen implements Screen {
 
         if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
 
-            c = cards.drawCard(usersArray.get(whoIsRound));
+            c = cards.drawCard(usersArray.get(whoIsRound),usersArray);
             usersArray.get(whoIsRound).isDrawable = false;
             usersArray.get(whoIsRound).setCardCount(1);
         }
