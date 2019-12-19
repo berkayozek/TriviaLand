@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -20,8 +21,16 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
+import sun.tools.jconsole.Tab;
 
 import java.util.ArrayList;
+
+enum StatustStage{
+    DICE,
+    BUY,
+    CARD,
+    NEXTPLAYER;
+}
 
 public class PlayScreen implements Screen {
 //TODO ÇOK OYUNCULUDA KART ÇEKİLİYOR AMA YAZDIRILMIYOR
@@ -41,13 +50,13 @@ public class PlayScreen implements Screen {
     private BitmapFont font;
     private boolean isDie = false;
     private TextButton button;
-    private TextButton buyButton;
+    private TextButton buyButton,dontBuyButton;
     private TextButtonStyle style;
     private Stage stage;
     private float fontsize = 1f;
     private boolean isHoover = false;
     private CardDeck cards=new CardDeck();
-    private float userPosCouter = 0;
+    private float userPosCouter = 0,timer = 0f;
     private float speed = 100f;
     private boolean userCanBuy = false;
     private ArrayList<User> usersArray;
@@ -55,6 +64,8 @@ public class PlayScreen implements Screen {
     private boolean isMoving = false;
     private int whoIsRound = 0;
     private String citiesName = "";
+    private StatustStage stages = StatustStage.DICE;
+    private Table table = new Table();
 
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
@@ -81,9 +92,7 @@ public class PlayScreen implements Screen {
         style.font = font;
         stage = new Stage(new ExtendViewport(800, 920));
         Gdx.input.setInputProcessor(stage);
-        buyButton = new TextButton("Satın Al",style);
-        buyButton.setPosition(300,260);
-        buyButton.setVisible(userCanBuy);
+        buyButton = new TextButton("Satin Al",style);
         buyButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -93,15 +102,33 @@ public class PlayScreen implements Screen {
                     citiesName +=usersArray.get(whoIsRound).getCities().get(usersArray.get(whoIsRound).getCities().size()-1).getName();
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getPrice());
                     userCanBuy = false;
+                    stages = StatustStage.NEXTPLAYER;
                 }
             }
         });
+        dontBuyButton = new TextButton("X",style);
+        dontBuyButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (stages == StatustStage.BUY) {
+                    System.out.println("Tıkladın");
+                    userCanBuy = false;
+                    stages = StatustStage.NEXTPLAYER;
+                }else if (stages == StatustStage.CARD){
+                    stages = StatustStage.NEXTPLAYER;
+                }
+            }
+        });
+        table.setPosition(1100,400);
+        table.add(buyButton);
+        table.row();
+        table.add(dontBuyButton).padBottom(10);
         button = new TextButton("Zar At", style);
         button.setPosition(420, 460);
         button.setTransform(true);
         button.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
-                if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
+                if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
                     usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getDie1());
@@ -133,7 +160,7 @@ public class PlayScreen implements Screen {
             citiesSprite.get(i).setSize(99, 70);
         }
         stage.addActor(button);
-        stage.addActor(buyButton);
+        stage.addActor(table);
     }
 
     @Override
@@ -211,7 +238,7 @@ public class PlayScreen implements Screen {
                 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2
                 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8
                 && usersArray.get(whoIsRound).getUserY() == 6)
-                &&  usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+                &&  usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.CARD ){
             font.getData().setScale(0.50f,0.50f);
             font.setColor(Color.WHITE);
             font.draw(batch,  c.toString(), 200, 550);
@@ -271,10 +298,10 @@ public class PlayScreen implements Screen {
 
         //CARD Çekme
         if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
-
             c = cards.drawCard(usersArray.get(whoIsRound),usersArray);
             usersArray.get(whoIsRound).isDrawable = false;
             usersArray.get(whoIsRound).setCardCount(1);
+            stages = StatustStage.CARD;
         }
 
 
@@ -292,20 +319,48 @@ public class PlayScreen implements Screen {
 
         //şehir satın alma
         //TODO şehir satın alma yapılacak.
-        if (cities.getCities().get(usersArray.get(whoIsRound).getMove())!=null && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser() == null){
-            userCanBuy = true;
-            buyButton.setVisible(userCanBuy);
-            //System.out.println(cities.getCities().get(user.getMove()).getName())
-        }
+        if (usersArray.get(whoIsRound).getMove()<32)
+            if (cities.getCities().get(usersArray.get(whoIsRound).getMove())!=null && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser() == null){
+                userCanBuy = true;
+                buyButton.setVisible(userCanBuy);
+                //System.out.println(cities.getCities().get(user.getMove()).getName())
+            }
 
-        if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && !userCanBuy){
+        if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE){
+            stages = StatustStage.BUY;
+        }
+        else if(stages == StatustStage.BUY){
+            userCanBuy = true;
+            table.setVisible(true);
+        }
+        else if (stages == StatustStage.NEXTPLAYER){
+            if (whoIsRound==usersArray.size()-1)
+                whoIsRound = 0;
+            else
+                whoIsRound++;
+            isMoving = false;
+            stages = StatustStage.DICE;
+        }
+        else if (stages == StatustStage.CARD){
+            //Kart geldiği zaman 5 sn bekliyor sonra devam ediyor.
+            timer += delta;
+            if (timer>5) {
+                stages = StatustStage.NEXTPLAYER;
+                timer=0;
+            }
+        }
+        else if (stages != StatustStage.BUY)
+            table.setVisible(false);
+        System.out.println(stages.name());
+
+        /*if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && !userCanBuy){
             if (whoIsRound==usersArray.size()-1)
                 whoIsRound = 0;
             else
                 whoIsRound++;
 
             isMoving = false;
-        }
+        }*/
 
         if (isHoover) {
             if (fontsize < 1.25f) {
