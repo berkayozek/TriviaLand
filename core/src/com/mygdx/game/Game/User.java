@@ -16,13 +16,19 @@ public class User {
 	private int moveCount=0;
 	private int userX = 8;
 	private int userY = 0;
-	public boolean isDrawable = true;
+
 	private int pos;
 	private Vector2 userPos = new Vector2();
 	private Boolean isBot;
 	private static int userCounter = 0;
 	private int userNo;
+	public boolean isDrawable = true;
+	public boolean isDrawableExtreme=true;
 	private int cardCount = 0;
+
+
+
+	private int ExtremeCardCount = 0;
 	public User(String name, Boolean isBot) {
 		userCounter++;
 		userNo = userCounter;
@@ -151,5 +157,12 @@ public class User {
 
 	public void buy(City city){
 		Ucities.add(city);
+	}
+
+	public int getExtremeCardCount() {
+		return ExtremeCardCount;
+	}
+	public void setExtremeCardCount(int extremeCardCount) {
+		ExtremeCardCount = extremeCardCount;
 	}
 }

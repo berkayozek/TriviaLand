@@ -135,7 +135,7 @@ public class CardDeck {
 
 	public void c3(User User) {
 	///done
-		User.getUserPos().x=156;
+		User.getUserPos().x=148;
 		User.getUserPos().y=129;
 		User.setUserX(0);
 		User.setUserY(0);
@@ -144,7 +144,7 @@ public class CardDeck {
 	}
 
 	public void c4(User User) {
-		User.getUserPos().x=156;
+		User.getUserPos().x=148;
 		User.getUserPos().y=721;
 		User.setUserX(0);
 		User.setUserY(8);
@@ -218,7 +218,7 @@ public class CardDeck {
 	}
 
 	public void c16(User user) {
-		user.getUserPos().x = 156;
+		user.getUserPos().x = 148;
 		user.getUserPos().y = 721;
 		user.setUserX(0);
 		user.setUserY(8);
