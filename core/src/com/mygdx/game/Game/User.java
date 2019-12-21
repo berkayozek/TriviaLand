@@ -9,7 +9,7 @@ import java.util.Vector;
 public class User {
 	private String name;
 	private int money;
-	private ArrayList<City> cities = new ArrayList<>();
+	private ArrayList<City> Ucities = new ArrayList<>();
 	private ArrayList<Card> cards = new ArrayList<>();
 	private int jailCount;
 	private int move = 0;
@@ -75,11 +75,11 @@ public class User {
 	}
 
 	public ArrayList<City> getCities() {
-		return cities;
+		return Ucities;
 	}
 
 	public void setCities(ArrayList<City> cities) {
-		this.cities = cities;
+		this.Ucities = cities;
 	}
 
 	public ArrayList<Card> getCards() {
@@ -149,4 +149,7 @@ public class User {
 		return userY;
 	}
 
+	public void buy(City city){
+		Ucities.add(city);
+	}
 }
