@@ -9,10 +9,10 @@ public class ExtremeCardDeck {
 
 		private static ArrayList extremeCardArray = new ArrayList<ExtremeCard>();
 
-	ExtremeCard ecd1 = new ExtremeCard("Card1", false, " You will go to jail or teleport randomly. ");///////////YAPILDI İYİ YA DA KÖTÜ
+	ExtremeCard ecd1 = new ExtremeCard("Card1", false, " You will go to jail or teleport randomly. ");///////////DEĞİŞTİ!!!!!!!!   YAPILDI İYİ YA DA KÖTÜ
 	ExtremeCard ecd2 = new ExtremeCard("Card2", true, "You  increase rent of all properties of that you have  fifty percent ");////YAPILDI   İYİ
 	ExtremeCard ecd3 = new ExtremeCard("Card3", false, "You win fifty percent of your money");        /////YAPILDI    İYİ
-	ExtremeCard ecd4 = new ExtremeCard("Card4", false, " You swap your money with the person you want");////////////BUNU RANDOM BİRİSİYLE DEĞİŞTİRME YAPABİLİRİZ OYUNCUNUN SEÇMESİNE GEREK YOK
+	ExtremeCard ecd4 = new ExtremeCard("Card4", false, " You swap your money with the person randomly.");////////////DEĞİŞTİ!!!!!!!!!   BUNU RANDOM BİRİSİYLE DEĞİŞTİRME YAPTIM OYUNCUNUN SEÇMESİNE GEREK YOK
 	ExtremeCard ecd5 = new ExtremeCard("Card5", false, "You win lottery.Get your money from bank.(10.000TL)"); ////YAPILDI İYİ
 	ExtremeCard ecd6 = new ExtremeCard("Card6", false, "You lost fifty percent of money.");    /////////YAPILDI KÖTÜ
 	ExtremeCard ecd7 = new ExtremeCard("Card7", true, "Decrease rent of all properties that you have fifty percent.");		////////YAPILDI KÖTÜ
@@ -40,7 +40,7 @@ public class ExtremeCardDeck {
 		} else if (extremeCardArray.get(selectedCard - 1).equals(ecd3)) {
 			ecd3(user);
 		} else if (extremeCardArray.get(selectedCard - 1).equals(ecd4)) {
-			ecd4(user);
+			ecd4(user,UserArray);
 		} else if (extremeCardArray.get(selectedCard - 1).equals(ecd5)) {
 			ecd5(user);
 		} else if (extremeCardArray.get(selectedCard - 1).equals(ecd6)) {
@@ -318,9 +318,15 @@ public class ExtremeCardDeck {
 
 	}
 
-	public void ecd4(User user) {
+	public void ecd4(User user,ArrayList<User> UserArray) {
+		User u=UserArray.get((int)Math.random()*4+1);
+		while(user.equals(u)){
+			u=UserArray.get((int)Math.random()*4+1);
+		}
+		int temp=user.getMoney();
+		user.setMoney(u.getMoney());
+		u.setMoney(temp);
 
-		user.getMoney();
 
 	}
 
