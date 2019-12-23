@@ -52,12 +52,16 @@ public class PlayScreen implements Screen {
     private boolean isDie = false;
     private TextButton button;
     private TextButton buyButton,dontBuyButton;
+    private TextButton wantExtremeCard,dontWantExtremeCard;
+
     private TextButtonStyle style;
+
     private Stage stage;
     private float fontsize = 1f;
     private boolean isHoover = false;
     private CardDeck cards=new CardDeck();
     private ExtremeCardDeck extremecards=new ExtremeCardDeck();
+
     private float userPosCouter = 0,timer = 0f;
     private float speed = 100f;
     private boolean userCanBuy = false;
@@ -69,7 +73,7 @@ public class PlayScreen implements Screen {
     private String citiesName = "";
     static StatustStage stages = StatustStage.DICE;
     private Table table = new Table();
-
+    private Table table2=new Table();
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
         this.usersArray = users;
@@ -114,6 +118,8 @@ public class PlayScreen implements Screen {
                 }
             }
         });
+
+
         dontBuyButton = new TextButton(" End Turn",style);
         dontBuyButton.addListener(new ClickListener(){
             @Override
@@ -124,13 +130,51 @@ public class PlayScreen implements Screen {
                     stages = StatustStage.NEXTPLAYER;
                 }else if (stages == StatustStage.CARD){
                     stages = StatustStage.NEXTPLAYER;
+                }else if (stages == StatustStage.EXTREMECARD){
+                    stages = StatustStage.NEXTPLAYER;
                 }
             }
         });
+        wantExtremeCard=new TextButton("YES",style);
+
+            wantExtremeCard.addListener(new ClickListener(){
+                public void clicked(InputEvent event,float x, float y){
+                    usersArray.get(whoIsRound).setActiveExtremeCard(true);
+                    if(stages==StatustStage.EXTREMECARD &&usersArray.get(whoIsRound).getActiveExtremeCard()==true){
+
+
+                            ec = extremecards.drawExtremeCard(usersArray.get(whoIsRound), usersArray);
+                            usersArray.get(whoIsRound).isDrawableExtreme = false;
+                            usersArray.get(whoIsRound).setExtremeCardCount(1);
+
+                    }
+                }
+            });
+        dontWantExtremeCard= new TextButton("NO",style);
+
+        dontWantExtremeCard.addListener(new ClickListener(){
+            public void clicked(InputEvent event,float x, float y){
+                usersArray.get(whoIsRound).isDrawableExtreme = false;
+                usersArray.get(whoIsRound).setExtremeCardCount(1);
+                usersArray.get(whoIsRound).setActiveExtremeCard(false);
+                    stages = StatustStage.NEXTPLAYER;
+
+            }
+        });
+
+
+
+
         table.setPosition(1100,400);
         table.add(buyButton);
         table.row();
         table.add(dontBuyButton).padBottom(10);
+
+
+        table2.setPosition(1100,400);
+        table2.add(wantExtremeCard);
+        table2.add(dontWantExtremeCard).padRight(100);
+        table2.setVisible(false);
         button = new TextButton("ROLL", style);
         button.setPosition(420, 460);
         button.setTransform(true);
@@ -172,7 +216,12 @@ public class PlayScreen implements Screen {
             citiesSprite.get(i).setSize(99, 70);
         }
         stage.addActor(button);
+
+
+
+
         stage.addActor(table);
+        stage.addActor(table2);
     }
 
     @Override
@@ -256,15 +305,26 @@ public class PlayScreen implements Screen {
             font.draw(batch,  c.toString(), 200, 550);
 
         }
-        if ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 || ec==ExtremeCardDeck.getExtremeCardArray().get(0) )&& stages == StatustStage.EXTREMECARD && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+        if ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 || ec==ExtremeCardDeck.getExtremeCardArray().get(0) )  && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()&& usersArray.get(whoIsRound).getActiveExtremeCard()&&usersArray.get(whoIsRound).getShowExtremeCard()){
             font.getData().setScale(0.50f,0.50f);
             font.setColor(Color.WHITE);
             font.draw(batch,  ec.toString(), 200, 550);
 
         }
+        if ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 || ec==ExtremeCardDeck.getExtremeCardArray().get(0) ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD&& usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme) {
+            font.getData().setScale(0.25f,0.25f);
+            font.setColor(Color.WHITE);
+            font.draw(batch,"Do you want to draw Xtreme Card?\n(Attention:It is game changer.Be careful to decide.)",850,450);
+            wantExtremeCard.setVisible(true);
+            dontWantExtremeCard.setVisible(true);
+        }
+        else{
+            wantExtremeCard.setVisible(false);
+            dontWantExtremeCard.setVisible(false);
+        }
 
 
-        batch.end();
+            batch.end();
 
 
         //Move Functions
@@ -279,6 +339,7 @@ public class PlayScreen implements Screen {
                     userPosCouter = 0f;
                     usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() - 1);
                 }
+                usersArray.get(whoIsRound).setShowExtremeCard(true);
                 usersArray.get(whoIsRound).isDrawable = true;
                 usersArray.get(whoIsRound).setCardCount(0);
 
@@ -292,7 +353,9 @@ public class PlayScreen implements Screen {
                     userPosCouter = 0f;
                     usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() + 1);
                 }
+                usersArray.get(whoIsRound).setShowExtremeCard(true);
                 usersArray.get(whoIsRound).isDrawable = true;
+
                 usersArray.get(whoIsRound).setCardCount(0);
 
             } else if (usersArray.get(whoIsRound).getUserX() >= 0 && usersArray.get(whoIsRound).getUserX() < 8 && usersArray.get(whoIsRound).getUserY() == 8) {
@@ -305,6 +368,7 @@ public class PlayScreen implements Screen {
                     userPosCouter = 0f;
                     usersArray.get(whoIsRound).setUserX(usersArray.get(whoIsRound).getUserX() + 1);
                 }
+                usersArray.get(whoIsRound).setShowExtremeCard(true);
                 usersArray.get(whoIsRound).isDrawable = true;
                 usersArray.get(whoIsRound).setCardCount(0);
 
@@ -318,6 +382,7 @@ public class PlayScreen implements Screen {
                     userPosCouter = 0f;
                     usersArray.get(whoIsRound).setUserY(usersArray.get(whoIsRound).getUserY() - 1);
                 }
+                usersArray.get(whoIsRound).setShowExtremeCard(true);
                 usersArray.get(whoIsRound).isDrawable = true;
                 usersArray.get(whoIsRound).setCardCount(0);
 
@@ -333,14 +398,10 @@ public class PlayScreen implements Screen {
 
         }
 
-
         //TODO EXTREME KARTI SEÇİP SEÇMEMEK OYUNUCUN ELİNDE OLACAK
         /////////EXTREMECARD
-        if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 )&& usersArray.get(whoIsRound).getExtremeCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
-            ec = extremecards.drawExtremeCard(usersArray.get(whoIsRound) ,usersArray);
-            usersArray.get(whoIsRound).isDrawableExtreme = false;
-            usersArray.get(whoIsRound).setExtremeCardCount(1);
-            stages = StatustStage.EXTREMECARD;
+        if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
+            stages=StatustStage.EXTREMECARD;
 
         }
 
@@ -404,12 +465,14 @@ public class PlayScreen implements Screen {
         else if (stages == StatustStage.EXTREMECARD) {
             //Kart geldiği zaman 5 sn bekliyor sonra devam ediyor.
 
+            table2.setVisible(true);
 
             timer += delta;
 
             if (timer > 5) {
                 stages = StatustStage.NEXTPLAYER;
                 timer = 0;
+                usersArray.get(whoIsRound).setShowExtremeCard(false);
 
             }
         }
@@ -424,7 +487,10 @@ public class PlayScreen implements Screen {
 
             isMoving = false;
         }*/
+        else if (stages != StatustStage.EXTREMECARD) {
+            table2.setVisible(false);
 
+        }
         if (isHoover) {
             if (fontsize < 1.25f) {
                 fontsize += 0.05f;

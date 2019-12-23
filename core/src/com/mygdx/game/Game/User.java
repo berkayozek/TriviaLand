@@ -25,9 +25,12 @@ public class User {
 	public boolean isDrawable = true;
 	public boolean isDrawableExtreme=true;
 	private int cardCount = 0;
+	public boolean activeExtremeCard= Boolean.parseBoolean(null);
 
 
 
+
+	private boolean showExtremeCard=true;
 	private int ExtremeCardCount = 0;
 	public User(String name, Boolean isBot) {
 		userCounter++;
@@ -164,5 +167,19 @@ public class User {
 	}
 	public void setExtremeCardCount(int extremeCardCount) {
 		ExtremeCardCount = extremeCardCount;
+	}
+	public boolean getActiveExtremeCard() {
+		return activeExtremeCard;
+	}
+
+	public void setActiveExtremeCard(boolean activeExtremeCard) {
+		this.activeExtremeCard = activeExtremeCard;
+	}
+	public boolean getShowExtremeCard() {
+		return showExtremeCard;
+	}
+
+	public void setShowExtremeCard(boolean showExtremeCard) {
+		this.showExtremeCard = showExtremeCard;
 	}
 }
