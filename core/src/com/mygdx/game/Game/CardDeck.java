@@ -10,6 +10,7 @@ public class CardDeck {
 
 
 	//TODO KARTLARDA ELİNDE TUTULACAKLAR AYARLANACAK, IŞINLANMALARDA KART YAZDIRILAMIYOR
+	//TODO Jail veya Işınlandığı zaman Moveları arttırmamız lazım.
 ///////////////ELİNDE TUTULAMAYAN KARTLARTI SİLMEYİ DENE//////////////////
 	private static ArrayList cardArray = new ArrayList<Card>();
 	Card card1 = new Card("Card1", false, "You have to pay bills.(200TL)");  ////YAPILDI

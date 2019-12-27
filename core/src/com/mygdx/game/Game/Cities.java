@@ -22,7 +22,7 @@ public class Cities {
 		cities.add(null);//lucky card
 		cities.add(new City("Van", null, 6, 1800, 150));
 		cities.add(new City("Hakkari", null, 7, 700, 100));
-		cities.add(null); // go to jail
+		cities.add(null); // jail
 		cities.add(new City("Trabzon", null, 9, 2500, 200));
 		cities.add(new City("Rize", null, 10, 1800, 250));
 		cities.add(null);//lucky card
@@ -30,7 +30,7 @@ public class Cities {
 		cities.add(null);//extream
 		cities.add(new City("Tax",new User("admin2",false),14,0,1000));//tax
 		cities.add(new City("Ankara", null, 15, 3500, 300));
-		cities.add(null);//go to jail
+		cities.add(null);//teleport
 		cities.add(new City("Eskisehir", null, 17, 2000, 150));
 		cities.add(null);//lucky card
 		cities.add(new City("Kırıkkale", null, 19, 1800, 150));
@@ -38,7 +38,7 @@ public class Cities {
 		cities.add(new City("Tax",new User("admin3",false),21,0,1000));//tax
 		cities.add(new City("Denizli", null, 22, 800, 100));
 		cities.add(new City("Mugla", null, 23, 1200, 150));
-		cities.add(null);//teleport
+		cities.add(null);//Go to jail
 		cities.add(new City("Adana", null, 25, 2800, 250));
 		cities.add(null);//lucky
 		cities.add(new City("Antalya", null, 27, 3200, 300));

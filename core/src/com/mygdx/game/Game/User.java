@@ -16,7 +16,6 @@ public class User {
 	private int moveCount=0;
 	private int userX = 8;
 	private int userY = 0;
-
 	private int pos;
 	private Vector2 userPos = new Vector2();
 	private Boolean isBot;
@@ -26,11 +25,6 @@ public class User {
 	public boolean isDrawableExtreme=true;
 	private int cardCount = 0;
 	public boolean activeExtremeCard= Boolean.parseBoolean(null);
-
-
-
-
-	private boolean showExtremeCard=true;
 	private int ExtremeCardCount = 0;
 	public User(String name, Boolean isBot) {
 		userCounter++;
@@ -174,12 +168,5 @@ public class User {
 
 	public void setActiveExtremeCard(boolean activeExtremeCard) {
 		this.activeExtremeCard = activeExtremeCard;
-	}
-	public boolean getShowExtremeCard() {
-		return showExtremeCard;
-	}
-
-	public void setShowExtremeCard(boolean showExtremeCard) {
-		this.showExtremeCard = showExtremeCard;
 	}
 }

@@ -1,19 +1,13 @@
 package com.mygdx.game.Game;
-
+//TODO City'nin kiraları ayarlanması lazım
 public class City {
 	private int pos;
-
 	private String name;
 	private User user = null;
 	private int price;
-	private int hireCount = 1;
 	private int hire;
 
-
 	public City(String name, User user, int pos, int price, int hire) {
-
-
-
 		this.name = name;
 		this.user = user;
 		this.price = price;
@@ -54,26 +48,23 @@ public class City {
 		}
 	}
 
-	public void built() {
+	public void built(int hireCount) {
 
 		if (hireCount == 1) {
-			hireCount++;
 			hire *= 2;
+			user.setMoney((int) (user.getMoney() - price*(0.50)));
 			// ev
 		}
-		if (hireCount == 2) {
-			hireCount++;
+		else if (hireCount == 2) {
 			hire *= 3;
+			user.setMoney((int) (user.getMoney() - price*(0.75)));
 			// ev
 		}
-		if (hireCount == 3) {
-			hireCount++;
-			hire *= 3;
+		else if (hireCount == 3) {
+			hire *= 4;
+			user.setMoney((int) (user.getMoney() - price*(1.25)));
 			// otel
 
-		}
-		if (hireCount == 4) {
-			System.out.println("You can't build no more.");
 		}
 	}
 
