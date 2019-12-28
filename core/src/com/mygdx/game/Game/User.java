@@ -8,6 +8,10 @@ import java.util.Vector;
 
 public class User {
 	private String name;
+
+
+
+	private int number=0;
 	private int money;
 	private ArrayList<City> Ucities = new ArrayList<>();
 	private ArrayList<Card> cards = new ArrayList<>();
@@ -168,5 +172,12 @@ public class User {
 
 	public void setActiveExtremeCard(boolean activeExtremeCard) {
 		this.activeExtremeCard = activeExtremeCard;
+	}
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
 	}
 }

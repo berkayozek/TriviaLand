@@ -58,11 +58,12 @@ public class whoStartFirstScreen implements Screen {
     }
 
     public ArrayList<User> whoStartFirst(){
-
+        int a=1;
         int n = dies.size();
-        for (int i=1; i<n; ++i)
+        for (int i=0; i<n; ++i)
         {
             User u=userArrayList.get(i);
+            u.setNumber(a);
             int key = dies.get(i);
             int j = i-1;
 
@@ -72,6 +73,7 @@ public class whoStartFirstScreen implements Screen {
                 j = j-1;
             }
             userArrayList.set(j+1,u);
+           a++;
         }
         Collections.reverse(userArrayList);
 
@@ -80,6 +82,7 @@ public class whoStartFirstScreen implements Screen {
        }
 
         return userArrayList;
+
     }
 
 
