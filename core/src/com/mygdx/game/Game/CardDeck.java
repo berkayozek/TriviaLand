@@ -14,25 +14,25 @@ public class CardDeck {
 ///////////////ELİNDE TUTULAMAYAN KARTLARTI SİLMEYİ DENE//////////////////
 	private static ArrayList cardArray = new ArrayList<Card>();
 	Card card1 = new Card("Card1", false, "You have to pay bills.(200TL)");  ////YAPILDI
-	Card card2 = new Card("Card2", true, "You will pay double rent in the next city.");
+	Card card2 = new Card("Card2", true, "You will pay double rent\n in the next city.");
 	Card card3 = new Card("Card3", false, "Go to Jail."); /////YAPILDI
 	Card card4 = new Card("Card4", false, "Go to Teleport");//YAPILDI
-	Card card5 = new Card("Card5", false, "You win lottery.Get your money from bank."); ////YAPILDI
-	Card card6 = new Card("Card6", false, "You have to pay bills.(200TL)");   ////YAPILDI
-	Card card7 = new Card("Card7", true, "You can get out of jail ");
-	Card card8 = new Card("card8", false, "Random player give you 500 TL");   ///YAPILDI
+	Card card5 = new Card("Card5", false, "You win lottery.\nGet your money from bank."); ////YAPILDI
+	Card card6 = new Card("Card6", false, "You have to pay bills.\n(200TL)");   ////YAPILDI
+	Card card7 = new Card("Card7", false, "You can get out of jail ");			///////YAPILDI
+	Card card8 = new Card("card8", false, "Random player give you \n500 TL");   ///YAPILDI
 	Card card9 = new Card("card9", false, "You can demolish one hotel ");
-	Card card10 = new Card("card10", false, "It's your birthday,all players give you (250TL)");    ///YAPILDI
-	Card card11 = new Card("card11", false, "You can  increase rent charge of one city (+100TL)");
-	Card card12 = new Card("card12", false, "You can build one house to one of your cities");
+	Card card10 = new Card("card10", false, "It's your birthday,all\n players give you (250TL)");    ///YAPILDI
+	Card card11 = new Card("card11", false, "You can  increase rent\n charge of one city (+100TL)");
+	Card card12 = new Card("card12", false, "You can build one house\n to one of your cities");
 	Card card13 = new Card("card13", false, "Go to Start.");							////////YAPILDI
-	Card card14 = new Card("card14", false, "You can steal a property from the player of your choice");
+	Card card14 = new Card("card14", false, "You can steal a property\n from the player of your choice");
 	Card card15 = new Card("card15", false, "You can take extra 200 TL ");				////YAPILDI
 	Card card16 = new Card("card16", false, "Go to Teleport");				             ////YAPILDI
 	Card card17 = new Card("card17", false, "Roll dice again.");						///YAPILDI
 	Card card18 = new Card("card18", false, "Go to Start.");                           ///// YAPILDI
 	Card card19 = new Card("card19", false, "Roll dice again.");						////YAPILDI
-	Card card20 = new Card("card20", true, "Say no. You are able to don't pay the rent once.");
+	Card card20 = new Card("card20", true, "Say no. You are able to \ndon't pay the rent once.");
 
 	public CardDeck() {
 		cardArray.add(card1);
@@ -165,8 +165,7 @@ public class CardDeck {
 	}
 
 	public void c7(User user) {
-		card7.setUser(user);
-		card7.getUser().getCards().add(card7);
+		user.setJailCount(user.getJailCount()-3);
 	}
 
 	public void c8(User user, User user2) {

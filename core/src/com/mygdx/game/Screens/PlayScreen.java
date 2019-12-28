@@ -240,7 +240,7 @@ public class PlayScreen implements Screen {
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 isHoover = false;
-                button.getLabel().setColor(Color.WHITE);
+                button.getLabel().setColor(Color.RED);
             }
         });
 
