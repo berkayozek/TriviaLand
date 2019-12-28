@@ -354,17 +354,21 @@ public class PlayScreen implements Screen {
             font.draw(batch,  c.toString(), 200, 550);
 
         }
-        if (stages == StatustStage.EXTREMECARD && showExtreme){
+        if (stages == StatustStage.EXTREMECARD && showExtreme ){
             timer += delta;
             if (timer<5) {
                 font.getData().setScale(0.50f, 0.50f);
                 font.setColor(Color.WHITE);
                 font.draw(batch, ec.toString(), 200, 550);
+
             }
             if (timer > 5) {
                 stages = StatustStage.NEXTPLAYER;
+                showExtreme=false;
                 timer = 0;
+
             }
+
         }
         if ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 || ec==ExtremeCardDeck.getExtremeCardArray().get(0) ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD&& usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme) {
             font.getData().setScale(0.25f,0.25f);
@@ -522,7 +526,7 @@ public class PlayScreen implements Screen {
 
         }
         else if (stages == StatustStage.EXTREMECARD)
-            table2.setVisible(true);
+                    table2.setVisible(true);
 
         if (stages == StatustStage.RENT && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMove() ){
             usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());

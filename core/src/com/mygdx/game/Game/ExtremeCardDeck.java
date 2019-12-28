@@ -16,7 +16,7 @@ public class ExtremeCardDeck {
 	ExtremeCard ecd5 = new ExtremeCard("Card5", false, "You win lottery.Get your money from bank.(10.000TL)"); ////YAPILDI İYİ
 	ExtremeCard ecd6 = new ExtremeCard("Card6", false, "You lost fifty percent of money.");    /////////YAPILDI KÖTÜ
 	ExtremeCard ecd7 = new ExtremeCard("Card7", true, "Decrease rent of all properties that you have fifty percent.");		////////YAPILDI KÖTÜ
-	ExtremeCard ecd8 = new ExtremeCard("Card6", false, "You lost fifty percent of money.");				///////// YAPILDI    KÖTÜ
+	ExtremeCard ecd8 = new ExtremeCard("Card8", false, "You lost fifty percent of money.");				///////// YAPILDI    KÖTÜ
 
 	public ExtremeCardDeck() {
 
@@ -319,13 +319,14 @@ public class ExtremeCardDeck {
 	}
 
 	public void ecd4(User user,ArrayList<User> UserArray) {
-		User u=UserArray.get((int)Math.random()*4+1);
-		while(user.equals(u)){
-			u=UserArray.get((int)Math.random()*4+1);
+		int a=(int)(Math.random()*UserArray.size()+1)-1;
+
+		while(user.equals(UserArray.get(a))){
+			a=(int)(Math.random()*UserArray.size()+1)-1;
 		}
 		int temp=user.getMoney();
-		user.setMoney(u.getMoney());
-		u.setMoney(temp);
+		user.setMoney(UserArray.get(a).getMoney());
+		UserArray.get(a).setMoney(temp);
 
 
 	}
