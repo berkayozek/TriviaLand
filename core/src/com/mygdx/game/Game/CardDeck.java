@@ -80,16 +80,11 @@ public class CardDeck {
 		} else if (cardArray.get(selectedCard - 1).equals(card7)) {
 			c7(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card8)) {
-			User selectedUser=null;
-			int i=(int)(Math.random()*(UserArray.size()+1));
-
-			while(UserArray.get(i).equals(user)){
-				selectedUser = (User)UserArray.get(i);
-			}
 
 
 
-			c8(user,selectedUser );
+
+			c8(user, UserArray );
 		} else if (cardArray.get(selectedCard - 1).equals(card9)) {
 			c9(user);
 		} else if (cardArray.get(selectedCard - 1).equals(card10)) {
@@ -168,10 +163,14 @@ public class CardDeck {
 		user.setJailCount(user.getJailCount()-3);
 	}
 
-	public void c8(User user, User user2) {
+	public void c8(User user, ArrayList<User> users) {
+	int random=(int) (Math.random()*users.size()+1)-1;
 
+	while(users.get(random).equals(user)){
+			random=(int) (Math.random()*users.size()+1);
+		}
 		user.setMoney(user.getMoney() + 500);
-		user2.setMoney(user2.getMoney() - 500);
+		users.get(random).setMoney(users.get(random).getMoney()-500);
 	}
 
 	public void c9(User user) {

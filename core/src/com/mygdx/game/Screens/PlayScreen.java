@@ -240,7 +240,7 @@ public class PlayScreen implements Screen {
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 isHoover = false;
-                button.getLabel().setColor(Color.RED);
+                button.getLabel().setColor(Color.WHITE);
             }
         });
 
@@ -288,7 +288,7 @@ public class PlayScreen implements Screen {
                     shape.rect((int) (k * 77.625 + 100), (int) (i * 77.625 + 40), 99, 99);
 
         //Zar butonu
-        shape.setColor(Color.WHITE);
+        shape.setColor(Color.RED);
 
         if (stages == StatustStage.CARD)
             shape.rect(cardx,300,400,350);

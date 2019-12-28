@@ -12,7 +12,7 @@ public class Cities {
 		this.tempUser = tempUser;
 	}
 
-	User tempUser;
+	User tempUser=new User("temp",false);
 
 	public ArrayList<City> getCities() {
 		return cities;
