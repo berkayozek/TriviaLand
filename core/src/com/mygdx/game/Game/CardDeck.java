@@ -135,7 +135,8 @@ public class CardDeck {
 		User.getUserPos().y=129;
 		User.setUserX(0);
 		User.setUserY(0);
-		User.setJailCount(3);
+		User.setJailCount(User.getJailCount()+3);
+		User.setInTheJail(true);
 
 	}
 

@@ -342,6 +342,19 @@ public class PlayScreen implements Screen {
         } if (usersArray.size()>=4){
             font.draw(batch,"Player" +usersArray.get(3).getNumber()+ "\n Money = " + usersArray.get(3).getMoney() + "\n" + "City: " ,1100,200);
         }
+        /////////Go to jail karesi{
+
+        if(usersArray.get(whoIsRound).getUserX()==8 &&usersArray.get(whoIsRound).getUserY()==8 &&usersArray.get(whoIsRound).getJailCount()==0 &&usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+            usersArray.get(whoIsRound).getUserPos().x=148;
+            usersArray.get(whoIsRound).getUserPos().y=129;
+            usersArray.get(whoIsRound).setUserX(0);
+            usersArray.get(whoIsRound).setUserY(0);
+            usersArray.get(whoIsRound).setJailCount( usersArray.get(whoIsRound).getJailCount()+3);
+            usersArray.get(whoIsRound).setInTheJail(true);
+
+
+        }
+
 
 
         if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0
@@ -391,7 +404,7 @@ public class PlayScreen implements Screen {
 
         //TODO MOVE FUNCTIONSDA  START CONDITION YOK OYUNCUNUN BİRİ STARTA GELDİĞİ AN OYUN DURUYOR
         //Move Functions
-        if (usersArray.get(whoIsRound).getMove()> usersArray.get(whoIsRound).getMoveCount()) {
+        if (usersArray.get(whoIsRound).getMove()> usersArray.get(whoIsRound).getMoveCount() ) {
             if (usersArray.get(whoIsRound).getUserX() > 0 && usersArray.get(whoIsRound).getUserX() <= 8 && usersArray.get(whoIsRound).getUserY() == 0) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += speed * delta;
@@ -467,7 +480,7 @@ public class PlayScreen implements Screen {
             usersArray.get(whoIsRound).setMoveCount(1);
 
         //substracting value for preventing big number
-        if (usersArray.get(whoIsRound).getMoveCount() > 32 && usersArray.get(whoIsRound).getMove() > 32) {
+        if (usersArray.get(whoIsRound).getMoveCount() >= 32 && usersArray.get(whoIsRound).getMove() >= 32) {
             usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() - 32);
             usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() - 32);
         }
@@ -476,7 +489,7 @@ public class PlayScreen implements Screen {
 
         //şehir satın alma
         if (usersArray.get(whoIsRound).getMove()<32)
-            if (cities.getCities().get(usersArray.get(whoIsRound).getMove())!=null && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser() == null){
+            if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())){
                 userCanBuy = true;
                 buyButton.setVisible(userCanBuy);
                 usersArray.get(whoIsRound).buy(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
@@ -537,9 +550,12 @@ public class PlayScreen implements Screen {
             upgradeTable.setVisible(true);
 
 
-        if (stages == StatustStage.DICE && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 0 && usersArray.get(whoIsRound).getJailCount()!=0){
+        if ((stages == StatustStage.DICE ) && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 0 && usersArray.get(whoIsRound).getJailCount()>0){
             usersArray.get(whoIsRound).setJailCount(usersArray.get(whoIsRound).getJailCount()-1);
+
             stages = StatustStage.NEXTPLAYER;
+
+
         }
         else if (stages != StatustStage.BUY)
             buyTable.setVisible(false);

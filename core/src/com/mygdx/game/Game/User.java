@@ -15,7 +15,10 @@ public class User {
 	private int money;
 	private ArrayList<City> Ucities = new ArrayList<>();
 	private ArrayList<Card> cards = new ArrayList<>();
-	private int jailCount;
+	private int jailCount = 0;
+
+
+	private boolean isInTheJail=false;
 	private int move = 0;
 	private int moveCount=0;
 	private int userX = 8;
@@ -36,7 +39,7 @@ public class User {
 		this.name = name;
 		this.isBot = isBot;
 		money = 15000;
-		jailCount = 0;
+
 		pos = 1;
 		userPos.x = 769;
 		userPos.y = 129;
@@ -180,4 +183,12 @@ public class User {
 	public void setNumber(int number) {
 		this.number = number;
 	}
+	public boolean isInTheJail() {
+		return isInTheJail;
+	}
+
+	public void setInTheJail(boolean inTheJail) {
+		isInTheJail = inTheJail;
+	}
+
 }
