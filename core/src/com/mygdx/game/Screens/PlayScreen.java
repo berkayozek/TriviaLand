@@ -498,11 +498,10 @@ public class PlayScreen implements Screen {
             stages = StatustStage.CARD;
         }
 
-        /////////EXTREMECARD
-        if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
-            stages = StatustStage.EXTREMECARD;
-        }
-        System.out.println(stages.name());
+
+
+
+
 
 
         if (usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 0 && usersArray.get(whoIsRound).getMove() < usersArray.get(whoIsRound).getMoveCount())
@@ -533,10 +532,20 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE){
             if (usersArray.get(whoIsRound).getCities().contains(cities.getCities().get(usersArray.get(whoIsRound).getMove())))
                 stages = StatustStage.UPGRADE;
-            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()) != null && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser() != null)
+
+
+            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser()) )
+
                 stages = StatustStage.RENT;
-            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()) != null)
+            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
                 stages = StatustStage.BUY;
+            else if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 )  ){
+                stages=StatustStage.EXTREMECARD;
+
+            }
+            else if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
+                stages = StatustStage.EXTREMECARD;
+            }
             else
                 stages = StatustStage.NEXTPLAYER;
         }
@@ -616,12 +625,12 @@ public class PlayScreen implements Screen {
         Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
     }
 
-    @Override
+
     public void pause() {
 
     }
 
-    @Override
+
     public void resume() {
 
     }
