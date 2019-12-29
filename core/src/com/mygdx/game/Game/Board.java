@@ -5,14 +5,13 @@ public class Board {
 
         public Board() {
 
-            for (int k=0;k<9;k++) {
-                board[k][0] = k+1;
-                board[8][k] = k+9;
-                board[k][8] = 25-k;
-                if(k!=0)
-                    board[0][k] = 33-k;
+            for (int k = 0; k < 9; k++) {
+                board[k][0] = 9 + k;
+                board[8][k] = 17 + k;
+                board[k][8] = 33 - k;
+                if (k != 0)
+                    board[0][k] = 9 - k;
             }
-
         }
 
         public int getBoard(int first,int second) {

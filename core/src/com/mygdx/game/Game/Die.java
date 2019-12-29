@@ -15,7 +15,7 @@ package com.mygdx.game.Game;
 
         public void roll() {
 
-            die1 =31;//(int) (Math.random() * 6 + 1);
+            die1 = (int) (Math.random() * 6 + 1);
 
             die2 = (int) (Math.random() * 6 + 1);
         }
