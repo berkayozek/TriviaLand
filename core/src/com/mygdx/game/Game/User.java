@@ -20,6 +20,10 @@ public class User {
 
 	private boolean isInTheJail=false;
 	private int move = 0;
+
+
+	private boolean doubleRent=false;
+	private boolean payRent=true;
 	private int moveCount=0;
 	private int userX = 8;
 	private int userY = 0;
@@ -192,5 +196,19 @@ public class User {
 	}
 
 
+	public boolean isPayRent() {
+		return payRent;
+	}
 
+	public void setPayRent(boolean payRent) {
+		this.payRent = payRent;
+	}
+
+	public boolean isDoubleRent() {
+		return doubleRent;
+	}
+
+	public void setDoubleRent(boolean doubleRent) {
+		this.doubleRent = doubleRent;
+	}
 }

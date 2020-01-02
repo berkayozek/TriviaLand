@@ -531,7 +531,16 @@ public class PlayScreen implements Screen {
             if (usersArray.get(whoIsRound).getCities().contains(cities.getCities().get(usersArray.get(whoIsRound).getMove())))
                 stages = StatustStage.UPGRADE;
             else if (!cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && !cities.getCities().get(usersArray.get(whoIsRound).getMove()).getName().equals("Lucky Card"))
-                stages = StatustStage.RENT;
+                if(usersArray.get(whoIsRound).isPayRent()){
+                    usersArray.get(whoIsRound).setPayRent(true);
+                    stages = StatustStage.RENT;
+                }
+                else{
+                    usersArray.get(whoIsRound).setPayRent(true);
+                    stages=StatustStage.NEXTPLAYER;
+                }
+
+
             else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
                 stages = StatustStage.BUY;
             else if(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
@@ -581,7 +590,16 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 && !isMoving)
             stages = StatustStage.TELEPORT;
         if (stages == StatustStage.RENT && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMove() ){
-            usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
+            if(usersArray.get(whoIsRound).isDoubleRent()){
+                usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire()*2);
+                usersArray.get(whoIsRound).setDoubleRent(false);
+
+            }
+            else{
+                usersArray.get(whoIsRound).setDoubleRent(false);
+                usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
+
+            }
             cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().setMoney(cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().getMoney() + cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
             stages = StatustStage.NEXTPLAYER;
         }
