@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class TriviaLand extends Game {
 	public static final int WIDTH = 1300;
 	public static final int HEIGHT = 800;
-
 	public SpriteBatch batch;
 
 	@Override
