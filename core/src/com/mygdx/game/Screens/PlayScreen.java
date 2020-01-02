@@ -228,9 +228,6 @@ public class PlayScreen implements Screen {
                     usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
-                    if(c!=null &&c.equals(CardDeck.getCardArray().get(18))  || c!=null && c.equals(CardDeck.getCardArray().get(16)) ){
-                        c=(Card) CardDeck.getCardArray().get(0);
-                    }
                }
             }
 
@@ -296,8 +293,8 @@ public class PlayScreen implements Screen {
         shape.setColor(Color.RED);
 
         //Zarın Değişmesi
-        diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
-        diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
+            diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
+             diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
 
         if (stages == StatustStage.CARD)
             shape.rect(cardx,300,400,350);
@@ -332,11 +329,17 @@ public class PlayScreen implements Screen {
 
         if (usersArray.size()>=2){
             font.draw(batch,"Player " + usersArray.get(0).getNumber() + "\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " ,900,780);
-            font.draw(batch,"Player " + usersArray.get(1).getNumber()  + "\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: " ,1100,780);
+
+            font.draw(batch,"Player " + usersArray.get(1).getNumber()  + "\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "  ,1100,780);
+
         } if (usersArray.size()>=3){
-            font.draw(batch,"Player " + usersArray.get(2).getNumber()  + "\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: " ,900,200);
+            int loc=150;
+            font.draw(batch,"Player " + usersArray.get(2).getNumber()  + "\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "  ,900,200);
+
         } if (usersArray.size()>=4){
-            font.draw(batch,"Player " + usersArray.get(3).getNumber()  + "\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: " ,1100,200);
+            font.draw(batch,"Player " + usersArray.get(3).getNumber()  + "\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "  ,1100,200);
+
+
         }
         /////////Go to jail karesi{
 
@@ -374,7 +377,7 @@ public class PlayScreen implements Screen {
                 timer = 0;
             }
         }
-        if ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 || ec==ExtremeCardDeck.getExtremeCardArray().get(0) ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD&& usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme) {
+        if (((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD) {
             font.getData().setScale(0.25f);
             font.setColor(Color.BLACK);
             font.draw(batch,"Do you want to draw Xtreme Card?\n(Attention:It is game changer.Be careful to decide.)",850,450);
@@ -433,6 +436,7 @@ public class PlayScreen implements Screen {
         //TODO MOVE FUNCTIONSDA  START CONDITION YOK OYUNCUNUN BİRİ STARTA GELDİĞİ AN OYUN DURUYOR
         //Move Functions
         if (usersArray.get(whoIsRound).getMove()> usersArray.get(whoIsRound).getMoveCount()) {
+            c= (Card) CardDeck.getCardArray().get(0);
             if (usersArray.get(whoIsRound).getUserX() > 0 && usersArray.get(whoIsRound).getUserX() <= 8 && usersArray.get(whoIsRound).getUserY() == 0) {
                 if (userPosCouter < 77.625) {
                     userPosCouter += speed * delta;
@@ -490,11 +494,11 @@ public class PlayScreen implements Screen {
         }
 
         //CARD Çekme
-        if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()) {
+        if (stages==StatustStage.CARD) {
             c = cards.drawCard(usersArray.get(whoIsRound),usersArray);
             usersArray.get(whoIsRound).isDrawable = false;
             usersArray.get(whoIsRound).setCardCount(1);
-            stages = StatustStage.CARD;
+
         }
 
 
@@ -530,11 +534,16 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.RENT;
             else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
                 stages = StatustStage.BUY;
-            else if((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() ==2 ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
+            else if(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
                 stages = StatustStage.EXTREMECARD;
             }
-            else
-                stages = StatustStage.NEXTPLAYER;
+            else if((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+                stages = StatustStage.CARD;
+            }
+
+            else if(!(c.equals(CardDeck.getCardArray().get(18)) || c.equals(CardDeck.getCardArray().get(16)))){
+                stages=StatustStage.NEXTPLAYER;
+            }
         }
         else if(stages == StatustStage.BUY){
             userCanBuy = true;
@@ -552,14 +561,18 @@ public class PlayScreen implements Screen {
             //Kart geldiği zaman 5 sn bekliyor sonra devam ediyor.
             timer += delta;
             if (timer>5) {
-                stages = StatustStage.NEXTPLAYER;
+
                 timer=0;
 
-                if(c.equals(CardDeck.getCardArray().get(18))){
-                    stages=StatustStage.DICE; }
-                if(c.equals(CardDeck.getCardArray().get(16))){
+
+
+                if(c.equals(CardDeck.getCardArray().get(18)) || c.equals(CardDeck.getCardArray().get(16))){
                     stages=StatustStage.DICE;
+
                 }
+
+                else
+                    stages = StatustStage.NEXTPLAYER;
             }
 
         }
