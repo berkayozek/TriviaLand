@@ -530,7 +530,7 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE){
             if (usersArray.get(whoIsRound).getCities().contains(cities.getCities().get(usersArray.get(whoIsRound).getMove())))
                 stages = StatustStage.UPGRADE;
-            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && !cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser()) )
+            else if (!cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && !cities.getCities().get(usersArray.get(whoIsRound).getMove()).getName().equals("Lucky Card"))
                 stages = StatustStage.RENT;
             else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
                 stages = StatustStage.BUY;

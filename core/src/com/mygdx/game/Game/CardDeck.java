@@ -59,7 +59,7 @@ public class CardDeck {
 	}
 
 	public Card drawCard(User user, ArrayList<User> UserArray) {
-		int selectedCard =17;//(int) (Math.random() * 20 + 1);
+		int selectedCard =(int) (Math.random() * 20 + 1);
 		System.out.println(cardArray.get(selectedCard - 1).toString());
 		if (cardArray.get(selectedCard - 1).equals(card1)) {
 			c1(user);
