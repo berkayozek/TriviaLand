@@ -74,7 +74,6 @@ public class PlayScreen implements Screen {
     private StatustStage stages = StatustStage.DICE;
     private Table buyTable = new Table();
     private Table upgradeTable = new Table();
-    private ArrayList<Table> userTables = new ArrayList<>();
     private String citiesName = "";
     private Table table2=new Table();
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
@@ -257,9 +256,6 @@ public class PlayScreen implements Screen {
         }
         diceSprite.add(new Sprite(diceImage.get(die.getDie1()-1)));
         diceSprite.add(new Sprite(diceImage.get(die.getDie2()-1)));
-        for (int i=0;i<usersArray.size();i++){
-
-        }
         stage.addActor(button);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
