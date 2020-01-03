@@ -265,7 +265,7 @@ public class PlayScreen implements Screen {
 
         diceSprite.get(0).setPosition(240,170);
         diceSprite.get(1).setPosition(380,170);
-
+//küçük bir degisiklik
 
         stage.addActor(button);
         stage.addActor(buyTable);
