@@ -129,16 +129,18 @@ public class whoStartFirstScreen implements Screen {
         buttons.get(0).addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (playerCount<PlayerNumber) {
-                    die.roll();
-                    d = die.getDie1();
-                   // System.out.println(d);
-                    dies.add(d);
-                    playerCount++;
-                }
-                if(playerCount==PlayerNumber){
-                    whoStartFirst();
-                    buttons.get(1).setVisible(true);
+                if (!userArrayList.get(playerCount).getLocation().equals("")) {
+                    if (playerCount < PlayerNumber) {
+                        die.roll();
+                        d = die.getDie1();
+                        // System.out.println(d);
+                        dies.add(d);
+                        playerCount++;
+                    }
+                    if (playerCount == PlayerNumber) {
+                        whoStartFirst();
+                        buttons.get(1).setVisible(true);
+                    }
                 }
             }
 
@@ -146,9 +148,7 @@ public class whoStartFirstScreen implements Screen {
         });
         buttons.get(1).addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
-
-
-                switchScreen(new PlayScreen(game,userArrayList));
+                    switchScreen(new PlayScreen(game,userArrayList));
             }
         });
 
