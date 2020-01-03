@@ -217,4 +217,13 @@ public class User {
 	public void setDoubleRent(boolean doubleRent) {
 		this.doubleRent = doubleRent;
 	}
+	public String toStringCities(){
+		String a="";
+
+		for(int i=0;i<Ucities.size();i++){
+			a+=Ucities.get(i).getName()+"("+Ucities.get(i).getHire()+")\n";
+		}
+
+		return a;
+	}
 }

@@ -219,6 +219,7 @@ public class CardDeck {
 		while(users.get(random).equals(user)){
 			random=(int) (Math.random()*users.size()+1);
 		}
+
 		user.getCities().add(users.get(random).getCities().get(users.get(random).getCities().size()-1));
 		users.get(random).getCities().remove(users.get(random).getCities().get(users.get(random).getCities().size()-1));
 
