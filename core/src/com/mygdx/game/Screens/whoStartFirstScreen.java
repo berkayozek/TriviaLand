@@ -28,11 +28,8 @@ public class whoStartFirstScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
-
     private Die die = new Die();
-
     private TextButtonStyle textButtonStyle;
-
     private TextButton Roll;
     private TextButton letsPlay;
 

@@ -94,7 +94,7 @@ public class PlayScreen implements Screen {
         userSprite = new ArrayList<>();
         diceSprite = new ArrayList<>();
         for (int i=0;i<usersArray.size();i++) {
-            userImage.add(new Texture("Hat.png"));
+            userImage.add(new Texture("Tokens/Hat.png"));
             userImage.get(userImage.size()-1).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             userSprite.add(new Sprite(userImage.get(i)));
             userSprite.get(i).setSize(35,35);
@@ -302,8 +302,11 @@ public class PlayScreen implements Screen {
                 u.getUserPos().y = 2000;
                 for (City c: cities.getCities())
                     for (City userc: u.getCities())
-                        if (c.getUser().equals(userc))
+                        if (c.getUser().equals(userc)) {
                             c.setUser(cities.getTempUser());
+                            c.resetCity();
+                            u.setMoney(0);
+                        }
             }
         if (stages == StatustStage.CARD)
             shape.rect(cardx,300,400,350);

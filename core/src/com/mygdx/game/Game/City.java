@@ -9,14 +9,14 @@ public class City {
 
 
 
-	private int hireCountt;
+	private int hireCount;
 
 	public City(String name, User user, int pos, int price, int hire) {
 		this.name = name;
 		this.user = user;
 		this.price = price;
 		this.hire = hire;
-		hireCountt=0;
+		hireCount=0;
 	}
 
 	public int getPos() {
@@ -54,7 +54,7 @@ public class City {
 	}
 
 	public void built(int hireCount) {
-
+	this.hireCount = hireCount;
 		if (hireCount == 1) {
 			hireCount=1;
 			hire *= 2;
@@ -73,6 +73,13 @@ public class City {
 			user.setMoney((int) (user.getMoney() - price*(1.25)));
 			// otel
 
+		}
+	}
+
+	public void resetCity(){
+		if (hireCount!=0) {
+			hire /= hireCount;
+			hireCount = 0;
 		}
 	}
 
@@ -97,9 +104,6 @@ public class City {
 
 	}
 
-	public void teleport(User user ){
-
-	}
 	public Boolean isBoosted() {
 		if (this.pos == 8 || this.pos == 16 || this.pos == 24 || this.pos == 32) {
 			return true;
@@ -108,12 +112,12 @@ public class City {
 		}
 	}
 
-	public int getHireCountt() {
-		return hireCountt;
+	public int getHireCount() {
+		return hireCount;
 	}
 
-	public void setHireCountt(int hireCountt) {
-		this.hireCountt = hireCountt;
+	public void setHireCount(int hireCountt) {
+		this.hireCount = hireCountt;
 	}
 
 }
