@@ -42,15 +42,12 @@ public class whoStartFirstScreen implements Screen {
     private Die die = new Die();
 
     private TextButtonStyle textButtonStyle;
-
     private TextButton Roll;
     private TextButton letsPlay;
-
-
     private int playerCount = 0;
     private int PlayerNumber = 0;
     private int d = 0;
-    ArrayList<User> userArrayList=new ArrayList<User>();
+    private ArrayList<User> userArrayList=new ArrayList<User>();
     private ArrayList<Integer>dies=new ArrayList<Integer>();
     public whoStartFirstScreen(TriviaLand game,int i){
         this.game=game;
@@ -108,6 +105,13 @@ public class whoStartFirstScreen implements Screen {
         letsPlay=new TextButton("Let's Play",textButtonStyle);
         textures.add(new Texture("buttons/roll.png"));
         textures.add(new Texture("buttons/letsplay.png"));
+        textures.add(new Texture("Tokens/Hat.png"));
+        textures.add(new Texture("Tokens/Car.png"));
+        textures.add(new Texture("Tokens/Dog.png"));
+        textures.add(new Texture("Tokens/Ship.png"));
+        textures.add(new Texture("Tokens/Shoes.png"));
+        textures.add(new Texture("Tokens/Something.png"));
+        textures.add(new Texture("Tokens/Something2.png"));
         Roll.setPosition(420,360);
         letsPlay.setPosition(420,160);
         for (int i=0;i<textures.size();i++){
@@ -115,6 +119,10 @@ public class whoStartFirstScreen implements Screen {
             texturesRegions.add(new TextureRegion(textures.get(i)));
             texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
             buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
+        }
+        for (int i=2;i<buttons.size();i++){
+            buttons.get(i).setSize(100,75);
+            buttons.get(i).setPosition(0+(i*125),100);
         }
         buttons.get(0).setPosition(400,370);
         buttons.get(1).setPosition(420,160);
@@ -130,7 +138,6 @@ public class whoStartFirstScreen implements Screen {
                 }
                 if(playerCount==PlayerNumber){
                     whoStartFirst();
-
                     buttons.get(1).setVisible(true);
                 }
             }
@@ -145,6 +152,62 @@ public class whoStartFirstScreen implements Screen {
             }
         });
 
+        buttons.get(2).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(2).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Hat.png");
+                }
+            }
+        });
+        buttons.get(3).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(3).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Car.png");
+                }
+            }
+        });
+        buttons.get(4).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(4).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Dog.png");
+                }
+            }
+        });
+        buttons.get(5).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(5).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Ship.png");
+                }
+            }
+        });
+        buttons.get(6).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(6).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Shoes.png");
+                }
+            }
+        });
+        buttons.get(7).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(7).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Something.png");
+                }
+            }
+        });
+        buttons.get(8).addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y) {
+                if (userArrayList.get(playerCount).getLocation().equals("")) {
+                    buttons.get(8).setVisible(false);
+                    userArrayList.get(playerCount).setLocation("Tokens/Something2.png");
+                }
+            }
+        });
 
         for (Button b : buttons)
             stage.addActor(b);
@@ -169,7 +232,6 @@ public class whoStartFirstScreen implements Screen {
         batch.begin();
 
             font.draw(batch,"Who Play First?",200,600);
-
 
            if(playerCount>0) {
                font.draw(batch,"Player " + playerCount,200,500);

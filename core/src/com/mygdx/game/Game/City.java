@@ -56,19 +56,19 @@ public class City {
 	public void built(int hireCount) {
 	this.hireCount = hireCount;
 		if (hireCount == 1) {
-			hireCount=1;
+			this.hireCount=1;
 			hire *= 2;
 			user.setMoney((int) (user.getMoney() - price*(0.50)));
 			// ev
 		}
 		else if (hireCount == 2) {
-			hireCount=2;
+			this.hireCount=2;
 			hire *= 3;
 			user.setMoney((int) (user.getMoney() - price*(0.75)));
 			// ev
 		}
 		else if (hireCount == 3) {
-			hireCount=3;
+			this.hireCount=3;
 			hire *= 4;
 			user.setMoney((int) (user.getMoney() - price*(1.25)));
 			// otel

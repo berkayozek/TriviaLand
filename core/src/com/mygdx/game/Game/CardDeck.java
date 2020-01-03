@@ -178,7 +178,7 @@ public class CardDeck {
 
 		int a= (int) (Math.random()*4+1);
 		int b= (int) (users.get(a).getCities().size()*Math.random()+1);
-		users.get(a).getCities().get(b).built(users.get(a).getCities().get(b).getHireCountt()-1);
+		users.get(a).getCities().get(b).built(users.get(a).getCities().get(b).getHireCount()-1);
 	}
 
 	public void c10(User user1, ArrayList<User> users) {
@@ -196,7 +196,7 @@ public class CardDeck {
 		int b= (int) (Math.random()*user.getCities().size()+1);
 
 		user.getCities().get(b).setHire(user.getCities().get(b).getHire()+100);
-		user.getCities().get(b).built(user.getCities().get(b).getHireCountt()+1);
+		user.getCities().get(b).built(user.getCities().get(b).getHireCount()+1);
 	}
 
 	public void c12(User user) {

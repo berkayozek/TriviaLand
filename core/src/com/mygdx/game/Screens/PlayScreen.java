@@ -94,7 +94,7 @@ public class PlayScreen implements Screen {
         userSprite = new ArrayList<>();
         diceSprite = new ArrayList<>();
         for (int i=0;i<usersArray.size();i++) {
-            userImage.add(new Texture("Tokens/Hat.png"));
+            userImage.add(new Texture(usersArray.get(i).getLocation()));
             userImage.get(userImage.size()-1).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             userSprite.add(new Sprite(userImage.get(i)));
             userSprite.get(i).setSize(35,35);

@@ -20,8 +20,6 @@ public class User {
 
 	private boolean isInTheJail=false;
 	private int move = 0;
-
-
 	private boolean doubleRent=false;
 	private boolean payRent=true;
 	private int moveCount=0;
@@ -35,6 +33,7 @@ public class User {
 	public boolean isDrawable = true;
 	public boolean isDrawableExtreme=true;
 	private int cardCount = 0;
+	private String location = "";
 	public boolean activeExtremeCard= Boolean.parseBoolean(null);
 	private int ExtremeCardCount = 0;
 	public User(String name, Boolean isBot) {
@@ -60,6 +59,13 @@ public class User {
 	public void setPos(int newPos) {
 		pos = newPos;
 
+	}
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public void move(int number) {
