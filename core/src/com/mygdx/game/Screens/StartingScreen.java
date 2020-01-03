@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,13 +16,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Game.User;
 import com.mygdx.game.TriviaLand;
+import org.w3c.dom.Text;
 
+
+import java.util.ArrayList;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -35,7 +43,14 @@ public class StartingScreen implements Screen {
     private Button increaseButton;
     private Button decreaseButton;
     private int playerNumber=1;
-
+    private Texture logoTexture,startImage;
+    private ArrayList<Texture> textures = new ArrayList<>();
+    private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
+    private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
+    private TextureRegion startRegion;
+    private TextureRegionDrawable startDrawable;
+    private Sprite logoSprite;
+    private ArrayList<Button> buttons;
     public boolean StartingScreen = true;
 
     public StartingScreen(TriviaLand game){
@@ -58,7 +73,21 @@ public class StartingScreen implements Screen {
     exit = new TextButton("EXIT",textButtonStyle);
     decreaseButton=new TextButton("-",textButtonStyle);
     increaseButton=new TextButton("+",textButtonStyle);
-
+    buttons = new ArrayList<>();
+    textures.add(new Texture("buttons/startbutton.png"));
+    textures.add(new Texture("buttons/exitbutton.png"));
+    for (int i=0;i<textures.size();i++){
+        textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        texturesRegions.add(new TextureRegion(textures.get(i)));
+        texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
+        buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
+    }
+    logoTexture = new Texture("logo.png");
+    logoTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+    logoSprite = new Sprite(logoTexture);
+    logoSprite.setPosition(500,200);
+    buttons.get(0).setPosition(300,450);
+    buttons.get(1).setPosition(300,150);
     start.setPosition(300,450);
     exit.setPosition(300,150);
     increaseButton.setPosition(800,450);
@@ -117,25 +146,26 @@ public class StartingScreen implements Screen {
     stage.addActor(exit);
     stage.addActor(increaseButton);
     stage.addActor(decreaseButton);
+    for (Button b : buttons)
+        stage.addActor(b);
     stage.getRoot().getColor().a = 0;
     stage.getRoot().addAction(fadeIn(3f));
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(Gdx.graphics.getDeltaTime());
-
+        logoSprite.setPosition(350,350);
+        logoSprite.setScale(1.25f);
         batch.begin();
-            stage.draw();
-        batch.end();
-
-        batch.begin();
-            font.draw(batch,"TriviaLand",280,600);
             font.draw(batch,Integer.toString(playerNumber),700,300);
+            logoSprite.draw(batch);
         batch.end();
+        stage.draw();
+
     }
 
     @Override
