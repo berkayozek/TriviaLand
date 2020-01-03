@@ -252,11 +252,21 @@ public class PlayScreen implements Screen {
         boardSprite = new Sprite(boardImage);
         //Zar Resmi
         for (int i=1;i<=6;i++){
-            diceImage.add(new Texture("Dice/" + i + ".jpg"));
+            diceImage.add(new Texture("Dice/" + i + ".png"));
             diceImage.get(i-1).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
         diceSprite.add(new Sprite(diceImage.get(die.getDie1()-1)));
         diceSprite.add(new Sprite(diceImage.get(die.getDie2()-1)));
+
+        boardSprite.setPosition(100,40);
+
+        diceSprite.get(0).setScale(0.3f);
+        diceSprite.get(1).setScale(0.3f);
+
+        diceSprite.get(0).setPosition(240,170);
+        diceSprite.get(1).setPosition(380,170);
+
+
         stage.addActor(button);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
@@ -319,9 +329,7 @@ public class PlayScreen implements Screen {
 
         stage.draw();
 
-        boardSprite.setPosition(100,40);
-        diceSprite.get(0).setPosition(350,270);
-        diceSprite.get(1).setPosition(475,270);
+
 
         camera.update();
         batch.begin();
