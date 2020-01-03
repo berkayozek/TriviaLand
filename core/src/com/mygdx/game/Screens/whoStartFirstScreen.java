@@ -33,10 +33,6 @@ public class whoStartFirstScreen implements Screen {
 
     private TextButtonStyle textButtonStyle;
 
-
-
-
-
     private TextButton Roll;
     private TextButton letsPlay;
 

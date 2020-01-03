@@ -293,9 +293,18 @@ public class PlayScreen implements Screen {
         shape.setColor(Color.RED);
 
         //Zarın Değişmesi
-            diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
-             diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
-
+        diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
+        diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
+        //Userın Parası Bitirse
+        for (User u : usersArray )
+            if (u.getMoney()<=0) {
+                u.getUserPos().x = 2000;
+                u.getUserPos().y = 2000;
+                for (City c: cities.getCities())
+                    for (City userc: u.getCities())
+                        if (c.getUser().equals(userc))
+                            c.setUser(cities.getTempUser());
+            }
         if (stages == StatustStage.CARD)
             shape.rect(cardx,300,400,350);
 
@@ -313,7 +322,6 @@ public class PlayScreen implements Screen {
         camera.update();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
-
         boardSprite.draw(batch);
         diceSprite.get(0).draw(batch);
         diceSprite.get(1).draw(batch);
