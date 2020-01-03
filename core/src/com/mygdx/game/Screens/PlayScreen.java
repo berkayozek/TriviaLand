@@ -111,10 +111,11 @@ public class PlayScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (userCanBuy && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())) {
                     cities.getCities().get(usersArray.get(whoIsRound).getMove()).setUser(usersArray.get(whoIsRound));
-                    usersArray.get(whoIsRound).getCities().add(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
-                    citiesName +=usersArray.get(whoIsRound).getCities().get(usersArray.get(whoIsRound).getCities().size()-1).getName();
+
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getPrice());
                     userCanBuy = false;
+                    usersArray.get(whoIsRound).buy(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
+                    citiesName = usersArray.get(whoIsRound).toStringCities();
                     stages = StatustStage.NEXTPLAYER;
                 }
             }
@@ -343,19 +344,21 @@ public class PlayScreen implements Screen {
 
 
         if (usersArray.size()>=2){
-            font.draw(batch,"Player " + usersArray.get(0).getNumber() + "\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " ,900,780);
+                font.draw(batch, "Player " + usersArray.get(0).getNumber() + "\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
 
-            font.draw(batch,"Player " + usersArray.get(1).getNumber()  + "\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "  ,1100,780);
+            font.draw(batch,"Player " + usersArray.get(1).getNumber()  + "\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "+usersArray.get(1).toStringCities()  ,1100,780);
 
         } if (usersArray.size()>=3){
             int loc=150;
-            font.draw(batch,"Player " + usersArray.get(2).getNumber()  + "\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "  ,900,200);
+            font.draw(batch,"Player " + usersArray.get(2).getNumber()  + "\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "+usersArray.get(2).toStringCities()  ,900,200);
 
         } if (usersArray.size()>=4){
-            font.draw(batch,"Player " + usersArray.get(3).getNumber()  + "\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "  ,1100,200);
+            font.draw(batch,"Player " + usersArray.get(3).getNumber()  + "\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "+usersArray.get(3).toStringCities()  ,1100,200);
 
 
         }
+
+
         /////////Go to jail karesi{
 
         if(usersArray.get(whoIsRound).getUserX()==8 &&usersArray.get(whoIsRound).getUserY()==8 &&usersArray.get(whoIsRound).getJailCount()==0 &&usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
@@ -533,7 +536,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())){
                 userCanBuy = true;
                 buyButton.setVisible(userCanBuy);
-                usersArray.get(whoIsRound).buy(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
+
 
                 //System.out.println(cities.getCities().get(user.getMove()).getName())
             }
