@@ -512,7 +512,7 @@ public class PlayScreen implements Screen {
         }
 
         //CARD Çekme
-        if (stages==StatustStage.CARD) {
+        if (stages==StatustStage.CARD && usersArray.get(whoIsRound).getCardCount()<1) {
             c = cards.drawCard(usersArray.get(whoIsRound),usersArray);
             usersArray.get(whoIsRound).isDrawable = false;
             usersArray.get(whoIsRound).setCardCount(1);
