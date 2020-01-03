@@ -2,14 +2,20 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.Game.Die;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -28,10 +34,18 @@ public class whoStartFirstScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
+    private Texture logoTexture,startImage;
+    private ArrayList<Texture> textures = new ArrayList<>();
+    private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
+    private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
+    private ArrayList<Button> buttons= new ArrayList<>();
     private Die die = new Die();
+
     private TextButtonStyle textButtonStyle;
+
     private TextButton Roll;
     private TextButton letsPlay;
+
 
     private int playerCount = 0;
     private int PlayerNumber = 0;
@@ -92,9 +106,19 @@ public class whoStartFirstScreen implements Screen {
         textButtonStyle.font = font;
         Roll=new TextButton("Roll",textButtonStyle);
         letsPlay=new TextButton("Let's Play",textButtonStyle);
+        textures.add(new Texture("buttons/roll.png"));
+        textures.add(new Texture("buttons/letsplay.png"));
         Roll.setPosition(420,360);
         letsPlay.setPosition(420,160);
-        Roll.addListener(new ClickListener(){
+        for (int i=0;i<textures.size();i++){
+            textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            texturesRegions.add(new TextureRegion(textures.get(i)));
+            texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
+            buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
+        }
+        buttons.get(0).setPosition(400,370);
+        buttons.get(1).setPosition(420,160);
+        buttons.get(0).addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (playerCount<PlayerNumber) {
@@ -106,13 +130,14 @@ public class whoStartFirstScreen implements Screen {
                 }
                 if(playerCount==PlayerNumber){
                     whoStartFirst();
-                    stage.addActor(letsPlay);
+
+                    buttons.get(1).setVisible(true);
                 }
             }
 
 
         });
-        letsPlay.addListener(new ClickListener(){
+        buttons.get(1).addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
 
 
@@ -120,18 +145,26 @@ public class whoStartFirstScreen implements Screen {
             }
         });
 
-        stage.addActor(Roll);
+
+        for (Button b : buttons)
+            stage.addActor(b);
+        buttons.get(1).setVisible(false);
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(3f));
+
     }
 
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0,0,0,0);
+        Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
 
+
         batch.begin();
             stage.draw();
+            font.setColor(Color.BLACK);
         batch.end();
         batch.begin();
 
