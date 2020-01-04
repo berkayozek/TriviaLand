@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -413,17 +412,18 @@ public class PlayScreen implements Screen {
         }
 
         font.getData().setScale(1f);
-
-        if (stages == StatustStage.TELEPORT){//TODO Tam ekrandayken Gdx.Input düzgün çalışmıyor o ayarlanması gerek
+        if (stages == StatustStage.TELEPORT){
             font.getData().setScale(0.5f);
             font.draw(batch,"Where do you want to go?",850,450);
-            if (Gdx.input.isTouched() && Gdx.input.getX()<820 && Gdx.input.getY()<769){//TODO X ve Y Daha düzgün hesaplanacak
+
+            Vector3 vector3 = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            if (Gdx.input.isTouched() && vector3.x<820 && vector3.y<769){//TODO X ve Y Daha düzgün hesaplanacak
                 //shape.rect((int) (k * 74 + 129), (int) (i * 77.625 + 40), 70, 99);
-                int x = Gdx.input.getX();
-                int y = 800-Gdx.input.getY();
+                int x = (int) vector3.x;
+                int y = (int) vector3.y;
                 if ((x>=100 && x<=199 && y>=40 && y<=139) || (x>=100 && x<=199 && y>=661 && y<=760) || (x>=721 && x<=820 && y>=40 && y<=139) || (x>=721 && x<=820 && y>=661 && y<=760)){
-                    x = (int) ((Gdx.input.getX()-100)/77.625);
-                    y = (int) ((800-Gdx.input.getY()-40)/77.625);
+                    x = (int) ((int) (vector3.x-100)/77.625);
+                    y = (int) ((int) (vector3.y-40)/77.625);
                     if (y==9)
                         y=8;
                     if (x==9)
@@ -432,12 +432,10 @@ public class PlayScreen implements Screen {
                         x=0;
                     if(y==1)
                         y=0;
-                    System.out.println(x + " " + y);
                 }
                 else {
-                    x = (int) ((Gdx.input.getX()-129)/74);
-                    y = (int) ((800-Gdx.input.getY()-69)/74);
-                    System.out.println(x + " " + y);
+                    x = (((int) vector3.x-129)/74);
+                    y = (((int) vector3.y-69)/74);
                 }
                 usersArray.get(whoIsRound).setUserX(x);
                 usersArray.get(whoIsRound).setUserY(y);
@@ -445,8 +443,6 @@ public class PlayScreen implements Screen {
                 usersArray.get(whoIsRound).getUserPos().y = (int)77.625*y+129;
                 usersArray.get(whoIsRound).setMove(b1.getBoard(y,x));
                 usersArray.get(whoIsRound).setMoveCount(b1.getBoard(y,x));
-
-                System.out.println("x " + x + " y " + y + " Move " + usersArray.get(whoIsRound).getMove());
                 stages = StatustStage.NEXTPLAYER;
             }
         }
