@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,10 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.Die;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.mygdx.game.Game.User;
@@ -40,15 +45,17 @@ public class whoStartFirstScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<Button> buttons= new ArrayList<>();
     private Die die = new Die();
-
+    private Boolean isClickEarly;
     private TextButtonStyle textButtonStyle;
     private TextButton Roll;
     private TextButton letsPlay;
-    private int playerCount = 0;
-    private int PlayerNumber = 0;
-    private int d = 0;
+    private int playerCount = 0,PlayerNumber = 0,d = 0;
+    private Label label;
+    private Label.LabelStyle labelStyle;
     private ArrayList<User> userArrayList=new ArrayList<User>();
     private ArrayList<Integer>dies=new ArrayList<Integer>();
+    private OrthographicCamera camera;
+    private Viewport viewport;
     public whoStartFirstScreen(TriviaLand game,int i){
         this.game=game;
         int p=1;
@@ -84,21 +91,24 @@ public class whoStartFirstScreen implements Screen {
        for(int i=0;i<userArrayList.size();i++){
            System.out.println(userArrayList.get(i).getName());
        }
-
         return userArrayList;
-
     }
-
-
-
-
-
 
     public void show() {
         batch = new SpriteBatch();
-        stage = new Stage(new ExtendViewport(800, 920));
+        stage = new Stage(new ExtendViewport(TriviaLand.WIDTH, TriviaLand.HEIGHT));
+        camera= new OrthographicCamera(TriviaLand.WIDTH,TriviaLand.HEIGHT);
+        camera.setToOrtho(false, TriviaLand.WIDTH, TriviaLand.HEIGHT);
+        viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
+        isClickEarly = false;
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font = font;
+        labelStyle.fontColor = Color.BLACK;
+        label = new Label("Berkay",labelStyle);
+        label.setAlignment(Align.center);
+        label.setPosition(0,800);
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
         Roll=new TextButton("Roll",textButtonStyle);
@@ -141,10 +151,11 @@ public class whoStartFirstScreen implements Screen {
                         whoStartFirst();
                         buttons.get(1).setVisible(true);
                     }
+                    isClickEarly = false;
                 }
+                else
+                    isClickEarly = true;
             }
-
-
         });
         buttons.get(1).addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
@@ -212,6 +223,7 @@ public class whoStartFirstScreen implements Screen {
         for (Button b : buttons)
             stage.addActor(b);
         buttons.get(1).setVisible(false);
+        stage.addActor(label);
         stage.getRoot().getColor().a = 0;
         stage.getRoot().addAction(fadeIn(3f));
 
@@ -219,32 +231,29 @@ public class whoStartFirstScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(camera.combined);
         stage.act(Gdx.graphics.getDeltaTime());
-
-
+        stage.setViewport(viewport);
         batch.begin();
-            stage.draw();
-            font.setColor(Color.BLACK);
+        stage.draw();
+        font.setColor(Color.BLACK);
         batch.end();
         batch.begin();
-
-            font.draw(batch,"Who Play First?",200,600);
-
-           if(playerCount>0) {
-               font.draw(batch,"Player " + playerCount,200,500);
-           }
-            font.draw(batch,Integer.toString(d),700,300);
-
+        font.draw(batch,"Who Play First?",200,600);
+        if(isClickEarly)
+            font.draw(batch,"Please Select Tokens First",200,500);
+        if(playerCount>0)
+            font.draw(batch,"Player " + playerCount,200,700);
+        font.draw(batch,Integer.toString(d),700,300);
         batch.end();
 
     }
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override

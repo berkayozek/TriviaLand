@@ -2,9 +2,7 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.game.Game.User;
 import com.mygdx.game.TriviaLand;
 import org.w3c.dom.Text;
@@ -47,6 +45,8 @@ public class StartingScreen implements Screen {
     private Sprite logoSprite;
     private ArrayList<Button> buttons;
     public boolean StartingScreen = true;
+    private OrthographicCamera camera;
+    private Viewport viewport;
 
     public StartingScreen(TriviaLand game){
         this.game = game;
@@ -59,7 +59,10 @@ public class StartingScreen implements Screen {
     @Override
     public void show() {
     batch = new SpriteBatch();
-    stage = new Stage(new ExtendViewport(800, 920));
+    stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+    camera= new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    viewport = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),camera);
     Gdx.input.setInputProcessor(stage);
     font = new BitmapFont(Gdx.files.internal("font.fnt"));
     textButtonStyle = new TextButtonStyle();
@@ -80,10 +83,10 @@ public class StartingScreen implements Screen {
     logoTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     logoSprite = new Sprite(logoTexture);
     logoSprite.setPosition(500,200);
-    buttons.get(0).setPosition(300,450);
-    buttons.get(1).setPosition(300,150);
-    buttons.get(2).setPosition(800,150);
-    buttons.get(3).setPosition(800,450);
+    buttons.get(0).setPosition(300,375);
+    buttons.get(1).setPosition(300,100);
+    buttons.get(2).setPosition(700,100);
+    buttons.get(3).setPosition(700,375);
     buttons.get(0).addListener(new ClickListener(){
         public void clicked(InputEvent event, float x, float y) {
             switchScreen(new whoStartFirstScreen(game,playerNumber));
@@ -157,8 +160,9 @@ public class StartingScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        batch.setProjectionMatrix(camera.combined);
         stage.act(Gdx.graphics.getDeltaTime());
+        stage.setViewport(viewport);
         logoSprite.setPosition(350,350);
         logoSprite.setScale(1.25f);
         batch.begin();
@@ -167,12 +171,13 @@ public class StartingScreen implements Screen {
             logoSprite.draw(batch);
         batch.end();
         stage.draw();
+        camera.update();
 
     }
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override

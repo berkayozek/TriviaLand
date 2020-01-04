@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
 
@@ -76,6 +78,7 @@ public class PlayScreen implements Screen {
     private Table upgradeTable = new Table();
     private String citiesName = "";
     private Table table2=new Table();
+    private Viewport viewport;
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
         this.usersArray = users;
@@ -84,8 +87,9 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         System.out.println(usersArray.size());
-        camera= new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera= new OrthographicCamera(TriviaLand.WIDTH, TriviaLand.HEIGHT);
+        camera.setToOrtho(false, TriviaLand.WIDTH, TriviaLand.HEIGHT);
+        viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
         batch = new SpriteBatch();
         die = new Die();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
@@ -101,7 +105,7 @@ public class PlayScreen implements Screen {
         }
         style = new TextButtonStyle();
         style.font = font;
-        stage = new Stage(new ExtendViewport(800, 920));
+        stage = new Stage(new ExtendViewport(TriviaLand.WIDTH, TriviaLand.HEIGHT));
         Gdx.input.setInputProcessor(stage);
         buyButton = new TextButton("Buy",style);
         buyButton.getLabel().setColor(Color.BLACK);
@@ -224,9 +228,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 30);
-
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 2);
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -328,9 +331,7 @@ public class PlayScreen implements Screen {
             userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y + jumpVariable);
 
         stage.draw();
-
-
-
+        stage.setViewport(viewport);
         camera.update();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
@@ -372,8 +373,6 @@ public class PlayScreen implements Screen {
             usersArray.get(whoIsRound).setUserY(0);
             usersArray.get(whoIsRound).setJailCount( usersArray.get(whoIsRound).getJailCount()+3);
             usersArray.get(whoIsRound).setInTheJail(true);
-
-
         }
 
         if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0
@@ -412,13 +411,12 @@ public class PlayScreen implements Screen {
         }
 
         font.getData().setScale(1f);
-        batch.end();
-        stage.draw();
 
+        System.out.println(stages.name());
         if (stages == StatustStage.TELEPORT){
             font.getData().setScale(0.5f);
             font.draw(batch,"Where do you want to go?",850,450);
-            if (Gdx.input.isTouched()){//TODO X ve Y Daha düzgün hesaplanacak
+            if (Gdx.input.isTouched() && Gdx.input.getX()<820 && Gdx.input.getY()<769){//TODO X ve Y Daha düzgün hesaplanacak
                 //shape.rect((int) (k * 74 + 129), (int) (i * 77.625 + 40), 70, 99);
                 int x = Gdx.input.getX();
                 int y = 800-Gdx.input.getY();
@@ -451,6 +449,9 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         }
+
+        batch.end();
+        stage.draw();
 
         if (stages == StatustStage.CARD && cardx<200)
             cardx += delta*100;
@@ -552,18 +553,17 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE){
             if (usersArray.get(whoIsRound).getCities().contains(cities.getCities().get(usersArray.get(whoIsRound).getMove())))
                 stages = StatustStage.UPGRADE;
-            else if (!cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && !cities.getCities().get(usersArray.get(whoIsRound).getMove()).getName().equals("Lucky Card"))
-                if(usersArray.get(whoIsRound).isPayRent()){
+            else    if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8)
+                stages = StatustStage.TELEPORT;
+            else if (!cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()) && !cities.getCities().get(usersArray.get(whoIsRound).getMove()).getName().equals("Lucky Card")) {
+                if (usersArray.get(whoIsRound).isPayRent()) {
                     usersArray.get(whoIsRound).setPayRent(true);
                     stages = StatustStage.RENT;
-                }
-                else{
+                } else {
                     usersArray.get(whoIsRound).setPayRent(true);
-                    stages=StatustStage.NEXTPLAYER;
+                    stages = StatustStage.NEXTPLAYER;
                 }
-
-
-            else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
+            }else if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).equals(cities.getTempUser()))
                 stages = StatustStage.BUY;
             else if(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getExtremeCardCount()<1 &&usersArray.get(whoIsRound).isDrawableExtreme){
                 stages = StatustStage.EXTREMECARD;
@@ -609,18 +609,14 @@ public class PlayScreen implements Screen {
         }
         else if (stages == StatustStage.EXTREMECARD)
             table2.setVisible(true);
-        if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 && !isMoving)
-            stages = StatustStage.TELEPORT;
         if (stages == StatustStage.RENT && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMove() ){
             if(usersArray.get(whoIsRound).isDoubleRent()){
                 usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire()*2);
                 usersArray.get(whoIsRound).setDoubleRent(false);
-
             }
             else{
                 usersArray.get(whoIsRound).setDoubleRent(false);
                 usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
-
             }
             cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().setMoney(cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().getMoney() + cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
             stages = StatustStage.NEXTPLAYER;
@@ -667,12 +663,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Vector2 size = Scaling.fit.apply(1300, 800, width, height);
-        int viewportX = (int)(width - size.x) / 2;
-        int viewportY = (int)(height - size.y) / 2;
-        int viewportWidth = (int)size.x;
-        int viewportHeight = (int)size.y;
-        Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        viewport.update(width, height);
     }
 
 

@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = TriviaLand.WIDTH;
 		config.height = TriviaLand.HEIGHT;
-		config.resizable = false;
+		config.resizable = true;
 		new LwjglApplication(new TriviaLand(), config);
 	}
 }
