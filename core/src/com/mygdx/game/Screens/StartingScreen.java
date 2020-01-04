@@ -15,12 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.*;
-import com.mygdx.game.Game.User;
 import com.mygdx.game.TriviaLand;
 import org.w3c.dom.Text;
 
@@ -60,9 +58,9 @@ public class StartingScreen implements Screen {
     public void show() {
     batch = new SpriteBatch();
     stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-    camera= new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    viewport = new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight(),camera);
+    camera= new OrthographicCamera(TriviaLand.WIDTH, TriviaLand.HEIGHT);
+    camera.setToOrtho(false, TriviaLand.WIDTH, TriviaLand.HEIGHT);
+    viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
     Gdx.input.setInputProcessor(stage);
     font = new BitmapFont(Gdx.files.internal("font.fnt"));
     textButtonStyle = new TextButtonStyle();

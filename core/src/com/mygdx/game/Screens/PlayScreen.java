@@ -68,7 +68,7 @@ public class PlayScreen implements Screen {
     private float userPosCouter = 0,timer = 0f,cardx;
     private float speed = 100f;
     private boolean userCanBuy = false;
-    private ArrayList<User> usersArray;
+    private ArrayList<User> usersArray,gameOverUsers;
     private Card c=(Card) CardDeck.getCardArray().get(0);
     private ExtremeCard ec=(ExtremeCard) ExtremeCardDeck.getExtremeCardArray().get(1);
     private boolean isMoving = false;
@@ -93,6 +93,7 @@ public class PlayScreen implements Screen {
         batch = new SpriteBatch();
         die = new Die();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        gameOverUsers = new ArrayList<>();
         userImage = new ArrayList<>();
         diceImage = new ArrayList<>();
         userSprite = new ArrayList<>();
@@ -228,7 +229,7 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 2);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 16);
                     //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
@@ -321,6 +322,7 @@ public class PlayScreen implements Screen {
                             c.resetCity();
                             u.setMoney(0);
                         }
+                gameOverUsers.add(u);
             }
         if (stages == StatustStage.CARD)
             shape.rect(cardx,300,400,350);
@@ -412,8 +414,7 @@ public class PlayScreen implements Screen {
 
         font.getData().setScale(1f);
 
-        System.out.println(stages.name());
-        if (stages == StatustStage.TELEPORT){
+        if (stages == StatustStage.TELEPORT){//TODO Tam ekrandayken Gdx.Input düzgün çalışmıyor o ayarlanması gerek
             font.getData().setScale(0.5f);
             font.draw(batch,"Where do you want to go?",850,450);
             if (Gdx.input.isTouched() && Gdx.input.getX()<820 && Gdx.input.getY()<769){//TODO X ve Y Daha düzgün hesaplanacak
@@ -532,6 +533,7 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount() > 32 && usersArray.get(whoIsRound).getMove() > 32) {
             usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() - 32);
             usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() - 32);
+            usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() + 500);
         }
 
 
@@ -581,27 +583,22 @@ public class PlayScreen implements Screen {
             buyTable.setVisible(true);
         }
         else if (stages == StatustStage.NEXTPLAYER){
-            if (whoIsRound==usersArray.size()-1)
-                whoIsRound = 0;
-            else
                 whoIsRound++;
-            isMoving = false;
-            stages = StatustStage.DICE;
+            if (whoIsRound > usersArray.size() - 1)
+                whoIsRound = 0;
+                if (!gameOverUsers.contains(usersArray.get(whoIsRound))) {
+                    stages = StatustStage.DICE;
+                    isMoving = false;
+                }
         }
         else if (stages == StatustStage.CARD && cardx>200){
             //Kart geldiği zaman 5 sn bekliyor sonra devam ediyor.
             timer += delta;
             if (timer>5) {
-
                 timer=0;
-
-
-
                 if(c.equals(CardDeck.getCardArray().get(18)) || c.equals(CardDeck.getCardArray().get(16))){
                     stages=StatustStage.DICE;
-
                 }
-
                 else
                     stages = StatustStage.NEXTPLAYER;
             }
@@ -656,7 +653,6 @@ public class PlayScreen implements Screen {
             if (jumpVariable < 0)
                 isJump = true;
         }
-
         //if (Gdx.input.isTouched())
             //System.out.println("y: " + (Gdx.graphics.getHeight() - Gdx.input.getY()) + " x: " + Gdx.input.getX());
     }
