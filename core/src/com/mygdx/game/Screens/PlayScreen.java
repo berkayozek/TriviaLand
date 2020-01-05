@@ -14,10 +14,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -77,6 +79,9 @@ public class PlayScreen implements Screen {
     private Table upgradeTable = new Table();
     private String citiesName = "";
     private Table table2=new Table();
+    private ArrayList<Table> cityRentTable = new ArrayList<>();
+    private ArrayList<Label> cityRentLabel = new ArrayList<>();
+    private Label.LabelStyle labelStyle = new Label.LabelStyle();
     private Viewport viewport;
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
@@ -248,6 +253,24 @@ public class PlayScreen implements Screen {
             }
         });
 
+        labelStyle.font = new BitmapFont(Gdx.files.internal("text.fnt")); // TODO Fontları Ayarlamamız lazım.
+        labelStyle.fontColor = Color.WHITE;
+        cityRentTable.add(new Table());
+        cityRentTable.get(0).setPosition(205,40);
+        cityRentTable.get(0).setWidth((int)(74*7));
+        cityRentTable.get(0).setHeight(28);
+        for (int i=2;i<=8;i++){
+            if (cities.getCities().get(b1.getBoard(0,i)).getHire()==0 || cities.getCities().get(b1.getBoard(0,i)).getHire()==1000 )
+                cityRentLabel.add(new Label("",labelStyle));
+            else
+                cityRentLabel.add(new Label("" + cities.getCities().get(b1.getBoard(0,i)).getHire(),labelStyle));
+            cityRentLabel.get(i-2).setAlignment(Align.center);
+            cityRentTable.get(0).add(cityRentLabel.get(i-2)).width(74);
+        }
+        //cityRentTable.get(0).debug();
+
+
+
 
         //Board Resmi
         boardImage = new Texture("board.png");
@@ -269,7 +292,7 @@ public class PlayScreen implements Screen {
         diceSprite.get(0).setPosition(240,170);
         diceSprite.get(1).setPosition(380,170);
 //küçük bir degisiklik
-
+        stage.addActor(cityRentTable.get(0));
         stage.addActor(button);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
