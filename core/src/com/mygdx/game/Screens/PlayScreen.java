@@ -263,7 +263,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(b1.getBoard(0,i)).getHire()==0 || cities.getCities().get(b1.getBoard(0,i)).getHire()==1000 )
                 cityRentLabel.add(new Label("",labelStyle));
             else
-                cityRentLabel.add(new Label("" + cities.getCities().get(b1.getBoard(0,i)).getHire(),labelStyle));
+                cityRentLabel.add(new Label(cities.getCities().get(b1.getBoard(0,i)).getHire() + " M",labelStyle));
             cityRentLabel.get(i-2).setAlignment(Align.center);
             cityRentTable.get(0).add(cityRentLabel.get(i-2)).width(74);
         }
