@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
     private ShapeRenderer shape = new ShapeRenderer();
     private float jumpVariable = 0;
     private boolean isJump = true;
-    private BitmapFont font;
+    private BitmapFont font,cityfont;
     private boolean isDie = false;
     private TextButton button;
     private TextButton buyButton,dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
@@ -97,6 +97,9 @@ public class PlayScreen implements Screen {
         batch = new SpriteBatch();
         die = new Die();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        cityfont = new BitmapFont(Gdx.files.internal("text.fnt"));
+        cityfont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         gameOverUsers = new ArrayList<>();
         userImage = new ArrayList<>();
         diceImage = new ArrayList<>();
@@ -253,7 +256,7 @@ public class PlayScreen implements Screen {
             }
         });
 
-        labelStyle.font = new BitmapFont(Gdx.files.internal("text.fnt")); // TODO Fontları Ayarlamamız lazım.
+        labelStyle.font = cityfont;
         labelStyle.fontColor = Color.WHITE;
         for (int i=0;i<4;i++)
             cityRentTable.add(new Table());
