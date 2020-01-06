@@ -80,7 +80,7 @@ public class PlayScreen implements Screen {
     private String citiesName = "";
     private Table table2=new Table();
     private ArrayList<Table> cityRentTable = new ArrayList<>();
-    private ArrayList<Label> cityRentLabel = new ArrayList<>();
+    private ArrayList<Label> cityRentLabel= new ArrayList<>(),cityRentLabel1 = new ArrayList<>(), cityRentLabel2 = new ArrayList<>(), cityRentLabel3 = new ArrayList<>();
     private Label.LabelStyle labelStyle = new Label.LabelStyle();
     private Viewport viewport;
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
@@ -118,11 +118,11 @@ public class PlayScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (userCanBuy && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())) {
-                    cities.getCities().get(usersArray.get(whoIsRound).getMove()).setUser(usersArray.get(whoIsRound));
+                    cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
 
-                    usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(usersArray.get(whoIsRound).getMove()).getPrice());
+                    usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
                     userCanBuy = false;
-                    usersArray.get(whoIsRound).buy(cities.getCities().get(usersArray.get(whoIsRound).getMove()));
+                    usersArray.get(whoIsRound).buy(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1));
                     citiesName = usersArray.get(whoIsRound).toStringCities();
                     stages = StatustStage.NEXTPLAYER;
                 }
@@ -233,7 +233,7 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 16);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
                     //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
@@ -255,7 +255,8 @@ public class PlayScreen implements Screen {
 
         labelStyle.font = new BitmapFont(Gdx.files.internal("text.fnt")); // TODO Fontları Ayarlamamız lazım.
         labelStyle.fontColor = Color.WHITE;
-        cityRentTable.add(new Table());
+        for (int i=0;i<4;i++)
+            cityRentTable.add(new Table());
         cityRentTable.get(0).setPosition(205,40);
         cityRentTable.get(0).setWidth((int)(74*7));
         cityRentTable.get(0).setHeight(28);
@@ -267,10 +268,42 @@ public class PlayScreen implements Screen {
             cityRentLabel.get(i-2).setAlignment(Align.center);
             cityRentTable.get(0).add(cityRentLabel.get(i-2)).width(74);
         }
-        //cityRentTable.get(0).debug();
 
+        cityRentTable.get(1).setPosition(104,143);
+        cityRentTable.get(1).setHeight(74*7);
+        cityRentTable.get(1).setWidth(99);
+        for (int i=6;i>=0;i--){
+            if (cities.getCities().get(b1.getBoard(i,0)).getHire()==0 || cities.getCities().get(b1.getBoard(i,0)).getHire()==1000 )
+                cityRentLabel1.add(new Label("",labelStyle));
+            else
+                cityRentLabel1.add(new Label(cities.getCities().get(b1.getBoard(i,0)).getHire() + " M",labelStyle));
+            cityRentLabel1.get(6-i).setAlignment(Align.bottom);
+            cityRentTable.get(1).add(cityRentLabel1.get(6-i)).height(74).row();
+        }
 
+        cityRentTable.get(2).setPosition(205,143+(74*7));
+        cityRentTable.get(2).setHeight(28);
+        cityRentTable.get(2).setWidth(74*7);
+        for (int i=0;i<=6;i++){
+            if (cities.getCities().get(b1.getBoard(8,i)).getHire()==0 || cities.getCities().get(b1.getBoard(8,i)).getHire()==1000 )
+                cityRentLabel2.add(new Label(" ",labelStyle));
+            else
+                cityRentLabel2.add(new Label(cities.getCities().get(b1.getBoard(8,i)).getHire() + " M",labelStyle));
+            cityRentLabel2.get(i).setAlignment(Align.center);
+            cityRentTable.get(2).add(cityRentLabel2.get(i)).width(74);
+        }
 
+        cityRentTable.get(3).setPosition(206+(74*7),143);
+        cityRentTable.get(3).setHeight(74*7);
+        cityRentTable.get(3).setWidth(99);
+        for (int i=8;i>=2;i--){
+            if (cities.getCities().get(b1.getBoard(i,8)).getHire()==0 || cities.getCities().get(b1.getBoard(i,8)).getHire()==1000 )
+                cityRentLabel3.add(new Label("",labelStyle));
+            else
+                cityRentLabel3.add(new Label(cities.getCities().get(b1.getBoard(i,8)).getHire() + " M",labelStyle));
+            cityRentLabel3.get(8-i).setAlignment(Align.bottom);
+            cityRentTable.get(3).add(cityRentLabel3.get(8-i)).height(74).row();
+        }
 
         //Board Resmi
         boardImage = new Texture("board.png");
@@ -292,7 +325,8 @@ public class PlayScreen implements Screen {
         diceSprite.get(0).setPosition(240,170);
         diceSprite.get(1).setPosition(380,170);
 //küçük bir degisiklik
-        stage.addActor(cityRentTable.get(0));
+        for (Table s : cityRentTable)
+            stage.addActor(s);
         stage.addActor(button);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
@@ -329,6 +363,24 @@ public class PlayScreen implements Screen {
         //Zar butonu
         shape.setColor(Color.RED);
 
+        //Upgradelendiyse Rent Rakamını Değiştir
+
+        //System.out.println(cityRentLabel.get(5).getText());//TODO Buralara bak berkay
+        if (stages == StatustStage.NEXTPLAYER) {
+            for (int i = 2; i <= 8; i++)
+                if (cities.getCities().get(b1.getBoard(0, i)).getHire() != 1000 && cities.getCities().get(b1.getBoard(0, i)).getHire() != 0)
+                    cityRentLabel.get(i - 2).setText(cities.getCities().get(b1.getBoard(0, i)).getHire() + " M");
+            for (int i=6;i>=0;i--)
+                if (cities.getCities().get(b1.getBoard(i,0)).getHire()!=0 && cities.getCities().get(b1.getBoard(i,0)).getHire()!=1000 )
+                    cityRentLabel1.get(6 - i).setText(cities.getCities().get(b1.getBoard(i,0)).getHire() + " M");
+            for (int i=0;i<=6;i++)
+                if (cities.getCities().get(b1.getBoard(8,i)).getHire()!=0 && cities.getCities().get(b1.getBoard(8,i)).getHire()!=1000 )
+                    cityRentLabel2.get(i).setText(cities.getCities().get(b1.getBoard(8, i)).getHire() + " M");
+            for (int i=8;i>=2;i--)
+                if (cities.getCities().get(b1.getBoard(i,8)).getHire()!=0 && cities.getCities().get(b1.getBoard(i,8)).getHire()!=1000 )
+                    cityRentLabel3.get(8 - i).setText(cities.getCities().get(b1.getBoard(i, 8)).getHire() + " M");
+        }
+
         //Zarın Değişmesi
         diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
         diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
@@ -351,10 +403,9 @@ public class PlayScreen implements Screen {
 
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
+
         for (int i=0;i<userSprite.size();i++)
             userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y + jumpVariable);
-
-        stage.draw();
         stage.setViewport(viewport);
         camera.update();
         batch.begin();
@@ -362,8 +413,6 @@ public class PlayScreen implements Screen {
         boardSprite.draw(batch);
         diceSprite.get(0).draw(batch);
         diceSprite.get(1).draw(batch);
-        for (int i = 0 ; i < userSprite.size() ; i++)
-            userSprite.get(i).draw(batch);
 
 
         font.setColor(Color.BLACK);
@@ -469,9 +518,12 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         }
-
         batch.end();
         stage.draw();
+        batch.begin();
+        for (int i = 0 ; i < userSprite.size() ; i++)
+            userSprite.get(i).draw(batch);
+        batch.end();
 
         if (stages == StatustStage.CARD && cardx<200)
             cardx += delta*100;
@@ -677,7 +729,7 @@ public class PlayScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize (int width, int height) {
         viewport.update(width, height);
     }
 

@@ -45,7 +45,7 @@ public class Cities {
 		cities.add(new City("Kırıkkale", tempUser, 19, 1800, 150));
 		cities.add(new City("Izmir", tempUser, 20, 3200, 300));
 		cities.add(new City("Tax",new User("admin3",false),21,0,1000));//tax
-		cities.add(new City("Denizl	i", tempUser, 22, 800, 100));
+		cities.add(new City("Denizli", tempUser, 22, 800, 100));
 		cities.add(new City("Mugla", tempUser, 23, 1200, 150));
 		cities.add(new City("Go to Jail",new User("admin9",false),24,0,0));//Go to jail
 		cities.add(new City("Adana", tempUser, 25, 2800, 250));
