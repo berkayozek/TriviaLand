@@ -63,7 +63,7 @@ public class PlayScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
     private ArrayList<User> userArrayList=new ArrayList<User>();
-    private ImageButton buyButton,rollButton,yesButton,noButton;
+    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2;
     private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
@@ -124,6 +124,8 @@ public class PlayScreen implements Screen {
         textures.add(new Texture("buttons/rollButton.png"));
         textures.add(new Texture("buttons/yesButton (2).png"));
         textures.add(new Texture("buttons/noButton.png"));
+        textures.add(new Texture("buttons/endturnButton (2).png"));
+        textures.add(new Texture("buttons/endturnButton (2).png"));
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             texturesRegions.add(new TextureRegion(textures.get(i)));
@@ -134,6 +136,8 @@ public class PlayScreen implements Screen {
         rollButton = buttons.get(1);
         yesButton=buttons.get(2);
         noButton=buttons.get(3);
+        endTurn=buttons.get(4);
+        endTurn2=buttons.get(5);
 
         buyButton.addListener(new ClickListener(){
             @Override
@@ -148,9 +152,8 @@ public class PlayScreen implements Screen {
                 }
             }
         });
-        dontBuyButton = new TextButton(" End Turn",style);
-        dontBuyButton.getLabel().setColor(Color.BLACK);
-        dontBuyButton.addListener(new ClickListener(){
+
+        endTurn.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (stages == StatustStage.BUY) {
@@ -166,8 +169,10 @@ public class PlayScreen implements Screen {
         buyTable.setPosition(1100,400);
         buyTable.setVisible(false);
         buyTable.add(buyButton);
+
         buyTable.row();
-        buyTable.add(dontBuyButton).padBottom(10);
+
+        buyTable.add(endTurn);
         upgrade1 = new TextButton("1",style);
         upgrade1.getLabel().setColor(Color.BLACK);
         upgrade1.addListener(new ClickListener(){
@@ -200,7 +205,7 @@ public class PlayScreen implements Screen {
         });
         exitUpgrade = new TextButton("End Turn",style);
         exitUpgrade.getLabel().setColor(Color.BLACK);
-        exitUpgrade.addListener(new ClickListener(){
+        endTurn2.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 upgradeTable.setVisible(false);
@@ -214,7 +219,7 @@ public class PlayScreen implements Screen {
         upgradeTable.add(upgrade2).width(100);
         upgradeTable.add(upgrade3).width(100);
         upgradeTable.row();
-        upgradeTable.add(exitUpgrade).colspan(3);
+        upgradeTable.add(endTurn2).colspan(3);
 
         yesButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x, float y){
@@ -241,7 +246,7 @@ public class PlayScreen implements Screen {
         table2.setPosition(1100,350);
 
         table2.add(yesButton);
-        table2.add(noButton).padRight(100);
+        table2.add(noButton);
         table2.setVisible(false);
         rollButton.setPosition(1008, 400);
         rollButton.setTransform(true);
@@ -250,7 +255,7 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 3);
                     //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
