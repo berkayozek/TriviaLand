@@ -64,7 +64,7 @@ public class PlayScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
     private ArrayList<User> userArrayList=new ArrayList<User>();
-    private ImageButton buyButton,rollButton;
+    private ImageButton buyButton,rollButton,yesButton,noButton;
     private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
@@ -124,6 +124,8 @@ public class PlayScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         textures.add(new Texture("buttons/buyButton.png"));
         textures.add(new Texture("buttons/rollButton.png"));
+        textures.add(new Texture("buttons/yesButton (2).png"));
+        textures.add(new Texture("buttons/noButton.png"));
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             texturesRegions.add(new TextureRegion(textures.get(i)));
@@ -132,6 +134,9 @@ public class PlayScreen implements Screen {
         }
         buyButton = buttons.get(0);
         rollButton = buttons.get(1);
+        yesButton=buttons.get(2);
+        noButton=buttons.get(3);
+
         buyButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -212,9 +217,8 @@ public class PlayScreen implements Screen {
         upgradeTable.add(upgrade3).width(100);
         upgradeTable.row();
         upgradeTable.add(exitUpgrade).colspan(3);
-        wantExtremeCard=new TextButton("YES",style);
-        wantExtremeCard.getLabel().setColor(Color.BLACK);
-        wantExtremeCard.addListener(new ClickListener(){
+
+        yesButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x, float y){
                 usersArray.get(whoIsRound).setActiveExtremeCard(true);
                 if(stages==StatustStage.EXTREMECARD &&usersArray.get(whoIsRound).getActiveExtremeCard()==true){
@@ -225,9 +229,8 @@ public class PlayScreen implements Screen {
                 }
             }
         });
-        dontWantExtremeCard= new TextButton("NO",style);
-        dontWantExtremeCard.getLabel().setColor(Color.BLACK);
-        dontWantExtremeCard.addListener(new ClickListener(){
+
+        noButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x, float y){
                 usersArray.get(whoIsRound).isDrawableExtreme = false;
                 usersArray.get(whoIsRound).setExtremeCardCount(1);
@@ -237,9 +240,10 @@ public class PlayScreen implements Screen {
             }
         });
 
-        table2.setPosition(1100,400);
-        table2.add(wantExtremeCard);
-        table2.add(dontWantExtremeCard).padRight(100);
+        table2.setPosition(1100,350);
+
+        table2.add(yesButton);
+        table2.add(noButton).padRight(100);
         table2.setVisible(false);
         rollButton.setPosition(1008, 400);
         rollButton.setTransform(true);
@@ -248,8 +252,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 13);
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                  //  usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 13);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -462,12 +466,12 @@ public class PlayScreen implements Screen {
             font.getData().setScale(0.25f);
             font.setColor(Color.BLACK);
             font.draw(batch,"Do you want to draw Xtreme Card?\n(Attention:It is game changer.Be careful to decide.)",850,450);
-            wantExtremeCard.setVisible(true);
-            dontWantExtremeCard.setVisible(true);
+            yesButton.setVisible(true);
+            noButton.setVisible(true);
         }
         else{
-            wantExtremeCard.setVisible(false);
-            dontWantExtremeCard.setVisible(false); //TODO Bunlar Düzenlenecek
+            yesButton.setVisible(false);
+            noButton.setVisible(false); //TODO Bunlar Düzenlenecek
         }
 
         font.getData().setScale(1f);
