@@ -26,7 +26,7 @@ public class CardDeck {
 	Card card11 = new Card("card11", false, "You can  increase rent\n charge of one city (+100TL) randomly."); ////////YAPILDI
 	Card card12 = new Card("card12", false, "New Investor!A investor will build \na house one of your city."); ////////YAPILDI
 	Card card13 = new Card("card13", false, "Go to Start.");							////////YAPILDI
-	Card card14 = new Card("card14", false, "Distraint! You can take a \nproperty that is bought \nlast from random player");
+	Card card14 = new Card("card14", false, "Distraint! You can take a \nproperty that is bought \nlast from random player");///YAPILDI
 	Card card15 = new Card("card15", false, "You can take extra 200 TL ");				////YAPILDI
 	Card card16 = new Card("card16", false, "Go to Teleport");				             ////YAPILDI
 	Card card17 = new Card("card17", false, "Roll dice again.");						///YAPILDI
@@ -176,9 +176,11 @@ public class CardDeck {
 
 	public void c9(User user, ArrayList<User> users) {
 
-		int a= (int) (Math.random()*4+1);
-		int b= (int) (users.get(a).getCities().size()*Math.random()+1);
-		users.get(a).getCities().get(b).built(users.get(a).getCities().get(b).getHireCount()-1);
+		int a = (int) (Math.random() * users.size() + 1);
+		int b = (int) (users.get(a).getCities().size() * Math.random() + 1);
+		if (users.get(a).getCities().size() > 0) {
+			users.get(a).getCities().get(b).built(users.get(a).getCities().get(b).getHireCount() - 1);
+		}
 	}
 
 	public void c10(User user1, ArrayList<User> users) {
@@ -193,15 +195,18 @@ public class CardDeck {
 	}
 
 	public void c11(User user) {
-		int b= (int) (Math.random()*user.getCities().size()+1);
-
-		user.getCities().get(b).setHire(user.getCities().get(b).getHire()+100);
-		user.getCities().get(b).built(user.getCities().get(b).getHireCount()+1);
+		int b = (int) (Math.random() * user.getCities().size() + 1);
+		if (user.getCities().size() > 0) {
+			user.getCities().get(b).setHire(user.getCities().get(b).getHire() + 100);
+			user.getCities().get(b).built(user.getCities().get(b).getHireCount() + 1);
+		}
 	}
 
 	public void c12(User user) {
-		int b= (int) (user.getCities().size()*Math.random()+1);
-
+		if(user.getCities().size()>0) {
+			int b = (int) (user.getCities().size() * Math.random() + 1);
+			user.getCities().get(b).built(user.getCities().get(b).getHireCount() + 1);
+		}
 	}
 
 	public void c13(User user) {
@@ -219,10 +224,10 @@ public class CardDeck {
 		while(users.get(random).equals(user)){
 			random=(int) (Math.random()*users.size()+1);
 		}
-
-		user.getCities().add(users.get(random).getCities().get(users.get(random).getCities().size()-1));
-		users.get(random).getCities().remove(users.get(random).getCities().get(users.get(random).getCities().size()-1));
-
+		if(user.getCities().size()>0 && users.get(random).getCities().size()>0) {
+			user.getCities().add(users.get(random).getCities().get(users.get(random).getCities().size() - 1));
+			users.get(random).getCities().remove(users.get(random).getCities().get(users.get(random).getCities().size() - 1));
+		}
 	}
 
 	public void c15(User user) {
