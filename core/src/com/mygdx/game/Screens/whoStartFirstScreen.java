@@ -47,8 +47,6 @@ public class whoStartFirstScreen implements Screen {
     private Die die = new Die();
     private Boolean isClickEarly;
     private TextButtonStyle textButtonStyle;
-    private TextButton Roll;
-    private TextButton letsPlay;
     private int playerCount = 0,PlayerNumber = 0,d = 0;
     private Label label;
     private Label.LabelStyle labelStyle;
@@ -111,8 +109,8 @@ public class whoStartFirstScreen implements Screen {
         label.setPosition(0,800);
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
-        Roll=new TextButton("Roll",textButtonStyle);
-        letsPlay=new TextButton("Let's Play",textButtonStyle);
+
+
         textures.add(new Texture("buttons/roll.png"));
         textures.add(new Texture("buttons/letsplay.png"));
         textures.add(new Texture("Tokens/Hat.png"));
@@ -122,8 +120,7 @@ public class whoStartFirstScreen implements Screen {
         textures.add(new Texture("Tokens/Shoes.png"));
         textures.add(new Texture("Tokens/Something.png"));
         textures.add(new Texture("Tokens/Something2.png"));
-        Roll.setPosition(420,360);
-        letsPlay.setPosition(420,160);
+
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             texturesRegions.add(new TextureRegion(textures.get(i)));

@@ -9,16 +9,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -57,7 +57,14 @@ public class PlayScreen implements Screen {
     private boolean isJump = true;
     private BitmapFont font,cityfont;
     private boolean isDie = false;
-    private TextButton buyButton,dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade,button;
+    private ArrayList<Texture> textures = new ArrayList<>();
+    private TextButtonStyle buyButtonStyle;
+    private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
+    private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
+    private ArrayList<ImageButton> buttons= new ArrayList<>();
+    private ArrayList<User> userArrayList=new ArrayList<User>();
+    private ImageButton buyButton,rollButton;
+    private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
     private Stage stage;
@@ -114,14 +121,21 @@ public class PlayScreen implements Screen {
         style.font = font;
         stage = new Stage(new ExtendViewport(TriviaLand.WIDTH, TriviaLand.HEIGHT));
         Gdx.input.setInputProcessor(stage);
-        buyButton = new TextButton("Buy",style);
-        buyButton.getLabel().setColor(Color.BLACK);
+        textures.add(new Texture("buttons/buyButton.png"));
+        textures.add(new Texture("buttons/rollButton.png"));
+        for (int i=0;i<textures.size();i++){
+            textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            texturesRegions.add(new TextureRegion(textures.get(i)));
+            texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
+            buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
+        }
+        buyButton = buttons.get(0);
+        rollButton = buttons.get(1);
         buyButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (userCanBuy && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())) {
                     cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
-
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
                     userCanBuy = false;
                     usersArray.get(whoIsRound).buy(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1));
@@ -226,11 +240,9 @@ public class PlayScreen implements Screen {
         table2.add(wantExtremeCard);
         table2.add(dontWantExtremeCard).padRight(100);
         table2.setVisible(false);
-        button = new TextButton("ROLL", style);
-        button.setPosition(1100, 550);
-        button.setTransform(true);
-        button.getLabel().setColor(Color.BLACK);
-        button.addListener(new ClickListener() {
+        rollButton.setPosition(1008, 400);
+        rollButton.setTransform(true);
+        rollButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y) {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
@@ -240,18 +252,6 @@ public class PlayScreen implements Screen {
                     isMoving = true;
 
                }
-            }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                isHoover = true;
-                button.getLabel().setColor(Color.SALMON);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                isHoover = false;
-                button.getLabel().setColor(Color.BLACK);
             }
         });
 
@@ -338,7 +338,7 @@ public class PlayScreen implements Screen {
 
         for (Table s : cityRentTable)
             stage.addActor(s);
-        stage.addActor(button);
+        stage.addActor(rollButton);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
         usersArray.get(0).getCities().add(cities.getCities().get(4));
@@ -716,16 +716,20 @@ public class PlayScreen implements Screen {
             table2.setVisible(false);
             showExtreme = false;
         }
-        if (isHoover) {
+        if (stages == StatustStage.DICE && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount())
+            rollButton.setVisible(true);
+        else
+            rollButton.setVisible(false);
+        if (isHoover) { //TODO bunlar silinecek
             if (fontsize < 1.25f) {
                 fontsize += 0.05f;
             }
-            button.setScale(fontsize);
+            rollButton.setScale(fontsize);
         } else {
             if (fontsize > 1f) {
                 fontsize -= 0.05f;
             }
-            button.setScale(fontsize);
+            rollButton.setScale(fontsize);
         }
 
         //User Zıplama Efekti
