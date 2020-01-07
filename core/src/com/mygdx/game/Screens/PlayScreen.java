@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
-import jdk.net.SocketFlow;
 
 
 import java.util.ArrayList;
@@ -47,10 +46,10 @@ public class PlayScreen implements Screen {
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
-    private Sprite splash,boardSprite,luckySprite,xtreamSprite;
+    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite;
     private ArrayList<Sprite> userSprite,diceSprite;
     private SpriteBatch batch;
-    private Texture boardImage,luckycard,xtreamcard;
+    private Texture boardImage,luckycard,xtreamcard,cardImage;
     private ArrayList<Texture> userImage,diceImage;
     private Die die;
     private ShapeRenderer shape = new ShapeRenderer();
@@ -82,13 +81,12 @@ public class PlayScreen implements Screen {
     private boolean isMoving = false;
     private int whoIsRound = 0;
     private StatustStage stages = StatustStage.DICE;
-    private Table buyTable = new Table();
-    private Table upgradeTable = new Table();
+    private Table upgradeTable = new Table(),buyTable = new Table(),cardTable = new Table();
     private String citiesName = "";
     private Table table2=new Table();
     private ArrayList<Table> cityRentTable = new ArrayList<>();
-    private ArrayList<Label> cityRentLabel= new ArrayList<>(),cityRentLabel1 = new ArrayList<>(), cityRentLabel2 = new ArrayList<>(), cityRentLabel3 = new ArrayList<>();
-    private Label.LabelStyle labelStyle = new Label.LabelStyle();
+    private ArrayList<Label> cityRentLabel= new ArrayList<>(),cityRentLabel1 = new ArrayList<>(), cityRentLabel2 = new ArrayList<>(), cityRentLabel3 = new ArrayList<>(),cityCardLabel = new ArrayList<>();
+    private Label.LabelStyle labelStyle = new Label.LabelStyle(),cardLabelStyle = new Label.LabelStyle();
     private Viewport viewport;
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
@@ -252,8 +250,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                  //  usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 13);
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -341,8 +339,37 @@ public class PlayScreen implements Screen {
         xtreamSprite = new Sprite(xtreamcard);
         xtreamSprite.setPosition(0,400);
 
+        cardImage = new Texture("card.png");
+        cardSprite = new Sprite(cardImage);
+        cardSprite.setScale(0.6f,0.7f);
+        cardSprite.setPosition(210,75);
+
+        cardLabelStyle.font = font;
+        cardLabelStyle.fontColor = Color.BLACK;
+        cityCardLabel.add(new Label("Kirikkale",cardLabelStyle));
+        cityCardLabel.add(new Label("Current Rent: 500",cardLabelStyle));
+        cityCardLabel.add(new Label("1 House: 300",cardLabelStyle));
+        cityCardLabel.add(new Label("2 House: 300",cardLabelStyle));
+        cityCardLabel.add(new Label("3 House: 300",cardLabelStyle));
+        cityCardLabel.add(new Label("Money",cardLabelStyle));
+        cityCardLabel.add(new Label("Owner: Player1",cardLabelStyle));
+        cityCardLabel.get(0).setFontScale(0.8f);
+        for (int i = 1;i<cityCardLabel.size();i++)
+            cityCardLabel.get(i).setFontScale(0.35f);
+        cardTable.add(cityCardLabel.get(0)).height(125).row();
+        cardTable.add(cityCardLabel.get(1)).row();
+        cardTable.add(cityCardLabel.get(2)).row();
+        cardTable.add(cityCardLabel.get(3)).row();
+        cardTable.add(cityCardLabel.get(4)).row();
+        cardTable.add(cityCardLabel.get(5)).row();
+        cardTable.add(cityCardLabel.get(6)).row();
+        cardTable.setPosition(460,465);
+
+
+
         for (Table s : cityRentTable)
             stage.addActor(s);
+        stage.addActor(cardTable);
         stage.addActor(rollButton);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
@@ -363,7 +390,6 @@ public class PlayScreen implements Screen {
             for (int k = 0; k < 9; k++)
                 if (b1.getBoard(k, i) > 1 && b1.getBoard(k, i) < 10 || b1.getBoard(k, i) > 17 && b1.getBoard(k, i) < 25)
                     shape.rect((int) (i * 74 + 129), (int) (k * 77.625 + 40), 70, 99);
-
         // sol ve sağ
         for (int i = 0; i < 9; i++)
             for (int k = 0; k < 9; k++)
@@ -427,8 +453,8 @@ public class PlayScreen implements Screen {
         boardSprite.draw(batch);
         diceSprite.get(0).draw(batch);
         diceSprite.get(1).draw(batch);
-
-
+        if (stages == StatustStage.UPGRADE || stages == StatustStage.BUY)
+            cardSprite.draw(batch);
         font.setColor(Color.BLACK);
         font.getData().setScale(1f,1f);
 
@@ -746,6 +772,26 @@ public class PlayScreen implements Screen {
             }
             rollButton.setScale(fontsize);
         }
+
+        if (stages == StatustStage.BUY || stages == StatustStage.UPGRADE || stages == StatustStage.RENT || stages == StatustStage.DICE){
+            System.out.println("Ses");
+            cityCardLabel.get(0).setText(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getName());
+            cityCardLabel.get(1).setText("Current Rent: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
+            cityCardLabel.get(2).setText("1 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
+            cityCardLabel.get(3).setText("2 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
+            cityCardLabel.get(4).setText("3 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
+            cityCardLabel.get(5).setText("Price: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
+            if (!cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())) {
+                cityCardLabel.get(6).setText("Owner: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().getName());
+            } else
+                cityCardLabel.get(6).setText("Owner: ");
+        }
+
+        if (stages == StatustStage.UPGRADE || stages == StatustStage.BUY)
+            cardTable.setVisible(true);
+        else
+            cardTable.setVisible(false);
+
 
         //User Zıplama Efekti
         if (isJump) {
