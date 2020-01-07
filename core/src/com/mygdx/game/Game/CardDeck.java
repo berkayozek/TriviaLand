@@ -165,7 +165,7 @@ public class CardDeck {
 	}
 
 	public void c8(User user, ArrayList<User> users) {
-	int random=(int) (Math.random()*users.size()+1)-1;
+	int random=(int) (Math.random()*users.size()+1);
 
 	while(users.get(random).equals(user)){
 			random=(int) (Math.random()*users.size()+1);
