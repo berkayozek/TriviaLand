@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
+import jdk.net.SocketFlow;
 
 
 import java.util.ArrayList;
@@ -247,7 +248,7 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 5);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 13);
                     //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
@@ -522,17 +523,27 @@ public class PlayScreen implements Screen {
             xtreamSprite.draw(batch);
             xtreamSprite.setPosition(cardx,300);
             timer += delta;
-            if (timer<5) {
-                font.getData().setScale(0.50f, 0.50f);
-                font.setColor(Color.BLACK);
-                font.draw(batch, ec.toString(), cardx+50, 550);
+            font.getData().setScale(0.50f, 0.50f);
+            font.setColor(Color.BLACK);
+            font.draw(batch, ec.toString(), cardx+50, 550);
+            if (timer>5) {
+
+                if(ec.equals(ExtremeCardDeck.getExtremeCardArray().get(0)) && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8){
+                    showExtreme=false;
+                    timer = 0;
+                    cardx=0;
+                    stages= StatustStage.TELEPORT;
+                }
+                else{
+                    showExtreme=false;
+                    timer = 0;
+                    cardx=0;
+                    stages = StatustStage.NEXTPLAYER;
+
+                }
+
             }
-            else{
-                stages = StatustStage.NEXTPLAYER;
-                showExtreme=false;
-                timer = 0;
-                cardx=0;
-            }
+
         }
         batch.end();
 
@@ -637,7 +648,7 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE){
             if (usersArray.get(whoIsRound).getCities().contains(cities.getCities().get(usersArray.get(whoIsRound).getMove())))
                 stages = StatustStage.UPGRADE;
-            else    if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8)
+            else    if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 )
                 stages = StatustStage.TELEPORT;
             else if(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  )  &&usersArray.get(whoIsRound).isDrawableExtreme){
                 stages = StatustStage.EXTREMECARD;

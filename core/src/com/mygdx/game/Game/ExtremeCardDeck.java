@@ -32,7 +32,7 @@ public class ExtremeCardDeck {
 	}
 
 	public ExtremeCard drawExtremeCard(User user,ArrayList<User> UserArray) {
-		int selectedCard = (int) (Math.random() * 8 + 1);
+		int selectedCard = 1;//(int) (Math.random() * 8 + 1);
 		if (extremeCardArray.get(selectedCard - 1).equals(ecd1)) {
 			ecd1(user);
 		} else if (extremeCardArray.get(selectedCard - 1).equals(ecd2)) {
