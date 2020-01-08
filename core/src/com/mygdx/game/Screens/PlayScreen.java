@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
-import jdk.javadoc.internal.tool.Start;
+//import jdk.javadoc.internal.tool.Start;
 
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class PlayScreen implements Screen {
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
-    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite;
+    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite,winnerSprite;
     private ArrayList<Sprite> userSprite,diceSprite;
     private SpriteBatch batch;
     private Texture boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card,winner;
