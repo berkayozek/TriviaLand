@@ -238,13 +238,13 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-        upgradeTable.setPosition(900,300);
+        upgradeTable.setPosition(900,270);
         upgradeTable.setSize(300,300);
         upgradeTable.setVisible(false);
-        upgradeTable.add(firstButtonUpgrade).width(60);
-        upgradeTable.add(secondButtonUpgrade).width(100);
-        upgradeTable.add(thirdButtonUpgrade).width(100).row();
-        upgradeTable.add(endTurn2).colspan(3).padTop(25);
+        upgradeTable.add(firstButtonUpgrade).width(150).height(210);
+        upgradeTable.add(secondButtonUpgrade).width(150).height(210);
+        upgradeTable.add(thirdButtonUpgrade).width(150).height(210).row();
+        upgradeTable.add(endTurn2).colspan(3).padTop(-10);
 
 
         yesButton.addListener(new ClickListener(){
