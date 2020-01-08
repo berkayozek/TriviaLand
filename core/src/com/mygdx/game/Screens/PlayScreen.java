@@ -522,10 +522,10 @@ public class PlayScreen implements Screen {
             diceSprite.get(1).draw(batch);
         }
 
-        playercardSprite.draw(batch);
-        player2cardSprite.draw(batch);
-        player3cardSprite.draw(batch);
-        player4cardSprite.draw(batch);
+
+
+
+
 
 
         if (stages == StatustStage.UPGRADE || stages == StatustStage.BUY)
@@ -537,15 +537,18 @@ public class PlayScreen implements Screen {
 
 
         if (usersArray.size()>=2){
+            playercardSprite.draw(batch);
                 font.draw(batch, "       Player " + usersArray.get(0).getNumber() + "\n\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
 
+            player2cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(1).getNumber()  + "\n\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "+usersArray.get(1).toStringCities()  ,1100,780);
 
         } if (usersArray.size()>=3){
-            int loc=150;
+            player3cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(2).getNumber()  + "\n\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "+usersArray.get(2).toStringCities()  ,900,200);
 
         } if (usersArray.size()>=4){
+            player4cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(3).getNumber()  + "\n\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "+usersArray.get(3).toStringCities()  ,1100,200);
 
 
