@@ -2,6 +2,7 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -30,6 +31,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 public class StartingScreen implements Screen {
 
     private TriviaLand game;
+    private Music music;
     private SpriteBatch batch;
     private BitmapFont font;
     private TextButtonStyle textButtonStyle;
@@ -62,6 +64,10 @@ public class StartingScreen implements Screen {
     camera.setToOrtho(false, TriviaLand.WIDTH, TriviaLand.HEIGHT);
     viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
     Gdx.input.setInputProcessor(stage);
+    music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+    music.setLooping(true);
+    music.setVolume(0.5f);
+    music.play();
     font = new BitmapFont(Gdx.files.internal("font.fnt"));
     textButtonStyle = new TextButtonStyle();
     textButtonStyle.font = font;

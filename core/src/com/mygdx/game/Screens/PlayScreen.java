@@ -26,8 +26,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
-import jdk.javadoc.internal.tool.Start;
-import jdk.net.SocketFlow;
 
 
 import java.util.ArrayList;
@@ -832,7 +830,7 @@ public class PlayScreen implements Screen {
         if (stages == StatustStage.BOT){
             if (botdieCount==0 && (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount())) {
                 die.roll();
-                usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove()+5);
+                usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove()+4);
                 botdieCount++;
             }
             System.out.println(stages);
@@ -855,7 +853,7 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.CARD;
                 botdieCount=0;
             }
-            if (((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 ){
+            if (!userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()||(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 )){
                 stages = StatustStage.NEXTPLAYER;
                 botdieCount=0;
             }
