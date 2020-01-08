@@ -39,7 +39,6 @@ public class whoStartFirstScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
-    private Texture logoTexture,startImage;
     private ArrayList<Texture> textures = new ArrayList<>();
     private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
@@ -47,13 +46,20 @@ public class whoStartFirstScreen implements Screen {
     private Die die = new Die();
     private Boolean isClickEarly;
     private TextButtonStyle textButtonStyle;
-    private int playerCount = 0,PlayerNumber = 0,d = 0;
+    private StatustStage stages = StatustStage.selectBot;
+    private int playerCount = 0,PlayerNumber = 0,d = 0,botNumber = 0;
+    private ArrayList<String> locationArr = new ArrayList<>();
     private Label label;
     private Label.LabelStyle labelStyle;
     private ArrayList<User> userArrayList=new ArrayList<User>();
     private ArrayList<Integer>dies=new ArrayList<Integer>();
     private OrthographicCamera camera;
     private Viewport viewport;
+
+    enum StatustStage{
+        selectBot,
+        select;
+    };
     public whoStartFirstScreen(TriviaLand game,int i){
         this.game=game;
         int p=1;
@@ -62,7 +68,6 @@ public class whoStartFirstScreen implements Screen {
             userArrayList.add(new User("Player "+Integer.toString(p), false));
             i--;
             p++;
-
         }
     }
 
@@ -104,13 +109,16 @@ public class whoStartFirstScreen implements Screen {
         labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
-        label = new Label("Berkay",labelStyle);
-        label.setAlignment(Align.center);
-        label.setPosition(0,800);
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
 
-
+        locationArr.add("Tokens/Hat.png");
+        locationArr.add("Tokens/Car.png");
+        locationArr.add("Tokens/Dog.png");
+        locationArr.add("Tokens/Ship.png");
+        locationArr.add("Tokens/Shoes.png");
+        locationArr.add("Tokens/Something.png");
+        locationArr.add("Tokens/Something2.png");
         textures.add(new Texture("buttons/roll.png"));
         textures.add(new Texture("buttons/letsplay.png"));
         textures.add(new Texture("Tokens/Hat.png"));
@@ -120,6 +128,9 @@ public class whoStartFirstScreen implements Screen {
         textures.add(new Texture("Tokens/Shoes.png"));
         textures.add(new Texture("Tokens/Something.png"));
         textures.add(new Texture("Tokens/Something2.png"));
+        textures.add(new Texture("buttons/plus.png"));
+        textures.add(new Texture("buttons/minus.png"));
+        textures.add(new Texture("buttons/addbot.png"));
 
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -127,24 +138,32 @@ public class whoStartFirstScreen implements Screen {
             texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
             buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
         }
-        for (int i=2;i<buttons.size();i++){
+        for (int i=2;i<buttons.size()-3;i++){
             buttons.get(i).setSize(100,75);
             buttons.get(i).setPosition(0+(i*125),100);
+            buttons.get(i).setVisible(false);
         }
+        buttons.get(9).setPosition(400,370);
+        buttons.get(10).setPosition(400,160);
+        buttons.get(11).setPosition(550,160);
         buttons.get(0).setPosition(400,370);
+        buttons.get(0).setVisible(false);
         buttons.get(1).setPosition(420,160);
+        buttons.get(1).setVisible(false);
         buttons.get(0).addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!userArrayList.get(playerCount).getLocation().equals("")) {
-                    if (playerCount < PlayerNumber) {
+                    if (playerCount < PlayerNumber-botNumber) {
                         die.roll();
                         d = die.getDie1();
                         // System.out.println(d);
                         dies.add(d);
                         playerCount++;
                     }
-                    if (playerCount == PlayerNumber) {
+                    if (playerCount == PlayerNumber-botNumber) {
+                        for (int i=0;i<botNumber;i++)
+                            dies.add((int)(Math.random()*6)+1);
                         whoStartFirst();
                         buttons.get(1).setVisible(true);
                     }
@@ -165,6 +184,7 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(2).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Hat.png");
+                    locationArr.remove(0);
                 }
             }
         });
@@ -173,6 +193,7 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(3).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Car.png");
+                    locationArr.remove(1);
                 }
             }
         });
@@ -181,6 +202,8 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(4).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Dog.png");
+                    locationArr.remove(2);
+
                 }
             }
         });
@@ -189,6 +212,8 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(5).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Ship.png");
+                    locationArr.remove(3);
+
                 }
             }
         });
@@ -197,6 +222,8 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(6).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Shoes.png");
+                    locationArr.remove(4);
+
                 }
             }
         });
@@ -205,6 +232,7 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(7).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Something.png");
+                    locationArr.remove(5);
                 }
             }
         });
@@ -213,6 +241,41 @@ public class whoStartFirstScreen implements Screen {
                 if (userArrayList.get(playerCount).getLocation().equals("")) {
                     buttons.get(8).setVisible(false);
                     userArrayList.get(playerCount).setLocation("Tokens/Something2.png");
+                    locationArr.remove(6);
+                }
+            }
+        });
+
+        buttons.get(9).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (PlayerNumber!=botNumber)
+                    botNumber++;
+            }
+        });
+
+        buttons.get(10).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (botNumber>=1)
+                    botNumber--;
+            }
+        });
+
+        buttons.get(11).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stages = StatustStage.select;
+                for (int i=0;i<buttons.size()-3;i++)
+                    if (i!=1)
+                        buttons.get(i).setVisible(true);
+                buttons.get(9).setVisible(false);
+                buttons.get(10).setVisible(false);
+                buttons.get(11).setVisible(false);
+                for (int i=PlayerNumber-botNumber;i<PlayerNumber;i++) {
+                    userArrayList.set(i, new User("Player " + Integer.toString(i+1), true));
+                    System.out.println("aa" +i + " ");
+                    userArrayList.get(i).setLocation(locationArr.get((int)(Math.random()*7)));
                 }
             }
         });
@@ -220,7 +283,6 @@ public class whoStartFirstScreen implements Screen {
         for (Button b : buttons)
             stage.addActor(b);
         buttons.get(1).setVisible(false);
-        stage.addActor(label);
         stage.getRoot().getColor().a = 0;
         stage.getRoot().addAction(fadeIn(3f));
 
@@ -238,12 +300,19 @@ public class whoStartFirstScreen implements Screen {
         font.setColor(Color.BLACK);
         batch.end();
         batch.begin();
-        font.draw(batch,"Who Play First?",200,600);
-        if(isClickEarly)
-            font.draw(batch,"Please Select Tokens First",200,500);
-        if(playerCount>0)
-            font.draw(batch,"Player " + playerCount,200,700);
-        font.draw(batch,Integer.toString(d),700,300);
+
+
+        if (stages == StatustStage.selectBot)
+            font.draw(batch,Integer.toString(botNumber),700,300);
+        else if (stages == StatustStage.select){
+            font.draw(batch,"Who Play First?",200,600);
+            if(isClickEarly)
+                font.draw(batch,"Please Select Tokens First",200,500);
+            if(playerCount>0)
+                font.draw(batch,"Player " + playerCount,200,700);
+            font.draw(batch,Integer.toString(d),700,300);
+        }
+
         batch.end();
 
     }

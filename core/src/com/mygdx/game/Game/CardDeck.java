@@ -59,7 +59,7 @@ public class CardDeck {
 	}
 
 	public Card drawCard(User user, ArrayList<User> UserArray) {
-		int selectedCard =(int) (Math.random() * 20 + 1);
+		int selectedCard = (int) (Math.random() * 20 + 1);
 		System.out.println(cardArray.get(selectedCard - 1).toString());
 		if (cardArray.get(selectedCard - 1).equals(card1)) {
 			c1(user);
@@ -195,7 +195,7 @@ public class CardDeck {
 	}
 
 	public void c11(User user) {
-		int b = (int) (Math.random() * user.getCities().size() + 1);
+		int b = (int) (Math.random() * user.getCities().size() );
 		if (user.getCities().size() > 0) {
 			user.getCities().get(b).setHire(user.getCities().get(b).getHire() + 100);
 			user.getCities().get(b).built(user.getCities().get(b).getHireCount() + 1);

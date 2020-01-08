@@ -26,7 +26,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
-//import jdk.javadoc.internal.tool.Start;
+import jdk.javadoc.internal.tool.Start;
+import jdk.net.SocketFlow;
 
 
 import java.util.ArrayList;
@@ -43,7 +44,8 @@ enum StatustStage{
     EXTREMECARD,
     TELEPORT,
     NEXTPLAYER,
-    END;
+    END,
+    BOT;
 }
 
 public class PlayScreen implements Screen {
@@ -85,7 +87,7 @@ public class PlayScreen implements Screen {
     private Card c=(Card) CardDeck.getCardArray().get(0);
     private ExtremeCard ec=(ExtremeCard) ExtremeCardDeck.getExtremeCardArray().get(1);
     private boolean isMoving = false;
-    private int whoIsRound = 0;
+    private int whoIsRound = 0,botdieCount = 0;
     private StatustStage stages = StatustStage.DICE;
     private Table upgradeTable = new Table(),buyTable = new Table(),cardTable = new Table();
     private String citiesName = "";
@@ -264,7 +266,6 @@ public class PlayScreen implements Screen {
         });
 
         table2.setPosition(1100,350);
-
         table2.add(yesButton);
         table2.add(noButton);
         table2.setVisible(false);
@@ -287,6 +288,7 @@ public class PlayScreen implements Screen {
         newGame.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                Gdx.input.setInputProcessor(stage);
                 switchScreen(new StartingScreen(new TriviaLand()));
             }
         });
@@ -443,10 +445,8 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setProjectionMatrix(camera.combined);
-        System.out.println("X = " + usersArray.get(whoIsRound).getUserX() + " Y = " + usersArray.get(whoIsRound).getUserY());
+            //System.out.println(stages + "  " + whoIsRound);
         shape.setColor(Color.WHITE);
-
-
         // Üst ve alt
         for (int i = 0; i < 9; i++)
             for (int k = 0; k < 9; k++)
@@ -490,7 +490,7 @@ public class PlayScreen implements Screen {
         diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
         //Userın Parası Bitirse
         for (User u : usersArray )
-            if (u.getMoney()<=0) {
+            if (u.getMoney()<=0 && !gameOverUsers.contains(u)) {
                 u.getUserPos().x = 2000;
                 u.getUserPos().y = 2000;
                 for (City c: cities.getCities())
@@ -514,20 +514,12 @@ public class PlayScreen implements Screen {
         stage.setViewport(viewport);
         camera.update();
         batch.begin();
-
         batch.setProjectionMatrix(camera.combined);
         boardSprite.draw(batch);
         if (stages != StatustStage.END) {
             diceSprite.get(0).draw(batch);
             diceSprite.get(1).draw(batch);
         }
-
-
-
-
-
-
-
         if (stages == StatustStage.UPGRADE || stages == StatustStage.BUY)
             cardSprite.draw(batch);
         font.setColor(Color.BLACK);
@@ -747,13 +739,10 @@ public class PlayScreen implements Screen {
 
 
         //şehir satın alma
-        if (usersArray.get(whoIsRound).getMove()<32)
+        if (usersArray.get(whoIsRound).getMove()<32 && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMove())
             if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
                 userCanBuy = true;
                 buyButton.setVisible(userCanBuy);
-
-
-                //System.out.println(cities.getCities().get(user.getMove()).getName())
             }
 
         if (usersArray.get(whoIsRound).getMoveCount()==usersArray.get(whoIsRound).getMove() && isMoving && stages == StatustStage.DICE && !c.equals(CardDeck.getCardArray().get(18)) && !c.equals(CardDeck.getCardArray().get(16)) && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser()) ) {
@@ -840,6 +829,37 @@ public class PlayScreen implements Screen {
             endTable.setVisible(true);
             Gdx.input.setInputProcessor(newGameStage);
         }
+        if (stages == StatustStage.BOT){
+            if (botdieCount==0 && (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount())) {
+                die.roll();
+                usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove()+5);
+                botdieCount++;
+            }
+            System.out.println(stages);
+            if (userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+                double probability = Math.random();
+                if (probability<0.5){
+                    cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
+                    usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
+                    usersArray.get(whoIsRound).buy(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1));
+                    citiesName = usersArray.get(whoIsRound).toStringCities();
+                    userCanBuy = false;
+                    stages = StatustStage.NEXTPLAYER;
+                    if (stages == StatustStage.NEXTPLAYER)
+                        botdieCount=0;
+                }
+                else
+                    stages = StatustStage.NEXTPLAYER;
+            }
+            if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
+                stages = StatustStage.CARD;
+                botdieCount=0;
+            }
+            if (((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 ){
+                stages = StatustStage.NEXTPLAYER;
+                botdieCount=0;
+            }
+        }
         if (stages != StatustStage.BUY)
             buyTable.setVisible(false);
         if (stages != StatustStage.EXTREMECARD) {
@@ -850,6 +870,8 @@ public class PlayScreen implements Screen {
             rollButton.setVisible(true);
         else
             rollButton.setVisible(false);
+        if (usersArray.get(whoIsRound).getIsBot() == true && botdieCount==0 && stages == StatustStage.DICE && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMoveCount())
+            stages = StatustStage.BOT;
         if (isHoover) { //TODO bunlar silinecek
             if (fontsize < 1.25f) {
                 fontsize += 0.05f;
@@ -863,7 +885,6 @@ public class PlayScreen implements Screen {
         }
 
         if (stages == StatustStage.BUY || stages == StatustStage.UPGRADE || stages == StatustStage.RENT || stages == StatustStage.DICE){
-            System.out.println("Ses");
             cityCardLabel.get(0).setText(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getName());
             cityCardLabel.get(1).setText("Current Rent: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
             cityCardLabel.get(2).setText("1 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()*2);

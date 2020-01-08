@@ -41,7 +41,7 @@ public class User {
 		userNo = userCounter;
 		this.name = name;
 		this.isBot = isBot;
-		money = 150;
+		money = 15000;
 
 		pos = 1;
 		userPos.x = 769;

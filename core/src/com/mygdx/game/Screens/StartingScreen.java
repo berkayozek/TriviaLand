@@ -159,6 +159,7 @@ public class StartingScreen implements Screen {
         Gdx.gl.glClearColor(1,1,1,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.setProjectionMatrix(camera.combined);
+        Gdx.input.setInputProcessor(stage);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.setViewport(viewport);
         logoSprite.setPosition(350,350);
