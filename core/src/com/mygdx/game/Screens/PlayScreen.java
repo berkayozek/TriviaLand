@@ -46,10 +46,10 @@ public class PlayScreen implements Screen {
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
-    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite;
+    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite;
     private ArrayList<Sprite> userSprite,diceSprite;
     private SpriteBatch batch;
-    private Texture boardImage,luckycard,xtreamcard,cardImage;
+    private Texture boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card;
     private ArrayList<Texture> userImage,diceImage;
     private Die die;
     private ShapeRenderer shape = new ShapeRenderer();
@@ -255,7 +255,7 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 3);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
                     //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
@@ -335,6 +335,28 @@ public class PlayScreen implements Screen {
         diceSprite.get(0).setPosition(240,170);
         diceSprite.get(1).setPosition(380,170);
 
+        //player kartları
+        player1card=new Texture("bloueusercard.png");
+        playercardSprite=new Sprite(player1card);
+        playercardSprite.setScale(0.4f);
+        playercardSprite.setPosition(720,310);
+
+        player2card=new Texture("yesilusercard.png");
+        player2cardSprite=new Sprite(player2card);
+        player2cardSprite.setScale(0.4f);
+        player2cardSprite.setPosition(920,310);
+
+        player3card=new Texture("redusercard.png");
+        player3cardSprite=new Sprite(player3card);
+        player3cardSprite.setScale(0.4f);
+        player3cardSprite.setPosition(720,-270);
+
+        player4card=new Texture("yeloowusercard.png");
+        player4cardSprite=new Sprite(player4card);
+        player4cardSprite.setScale(0.4f);
+        player4cardSprite.setPosition(920,-270);
+
+
         //
         luckycard = new Texture("luckycard.png");
         luckySprite = new Sprite(luckycard);
@@ -390,6 +412,8 @@ public class PlayScreen implements Screen {
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setProjectionMatrix(camera.combined);
         shape.setColor(Color.WHITE);
+
+
         // Üst ve alt
         for (int i = 0; i < 9; i++)
             for (int k = 0; k < 9; k++)
@@ -454,10 +478,17 @@ public class PlayScreen implements Screen {
         stage.setViewport(viewport);
         camera.update();
         batch.begin();
+
         batch.setProjectionMatrix(camera.combined);
         boardSprite.draw(batch);
         diceSprite.get(0).draw(batch);
         diceSprite.get(1).draw(batch);
+        playercardSprite.draw(batch);
+        player2cardSprite.draw(batch);
+        player3cardSprite.draw(batch);
+        player4cardSprite.draw(batch);
+
+
         if (stages == StatustStage.UPGRADE || stages == StatustStage.BUY)
             cardSprite.draw(batch);
         font.setColor(Color.BLACK);
@@ -467,16 +498,16 @@ public class PlayScreen implements Screen {
 
 
         if (usersArray.size()>=2){
-                font.draw(batch, "Player " + usersArray.get(0).getNumber() + "\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
+                font.draw(batch, "       Player " + usersArray.get(0).getNumber() + "\n\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
 
-            font.draw(batch,"Player " + usersArray.get(1).getNumber()  + "\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "+usersArray.get(1).toStringCities()  ,1100,780);
+            font.draw(batch,"       Player " + usersArray.get(1).getNumber()  + "\n\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "+usersArray.get(1).toStringCities()  ,1100,780);
 
         } if (usersArray.size()>=3){
             int loc=150;
-            font.draw(batch,"Player " + usersArray.get(2).getNumber()  + "\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "+usersArray.get(2).toStringCities()  ,900,200);
+            font.draw(batch,"       Player " + usersArray.get(2).getNumber()  + "\n\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "+usersArray.get(2).toStringCities()  ,900,200);
 
         } if (usersArray.size()>=4){
-            font.draw(batch,"Player " + usersArray.get(3).getNumber()  + "\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "+usersArray.get(3).toStringCities()  ,1100,200);
+            font.draw(batch,"       Player " + usersArray.get(3).getNumber()  + "\n\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "+usersArray.get(3).toStringCities()  ,1100,200);
 
 
         }
