@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -25,9 +26,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
+import jdk.javadoc.internal.tool.Start;
 
 
 import java.util.ArrayList;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 
 enum StatustStage{
     DICE,
@@ -37,7 +42,8 @@ enum StatustStage{
     CARD,
     EXTREMECARD,
     TELEPORT,
-    NEXTPLAYER;
+    NEXTPLAYER,
+    END;
 }
 
 public class PlayScreen implements Screen {
@@ -46,10 +52,10 @@ public class PlayScreen implements Screen {
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
-    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite;
+    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite;
     private ArrayList<Sprite> userSprite,diceSprite;
     private SpriteBatch batch;
-    private Texture boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card;
+    private Texture boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card,winner;
     private ArrayList<Texture> userImage,diceImage;
     private Die die;
     private ShapeRenderer shape = new ShapeRenderer();
@@ -63,11 +69,11 @@ public class PlayScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
     private ArrayList<User> userArrayList=new ArrayList<User>();
-    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2;
+    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit;
     private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
-    private Stage stage;
+    private Stage stage,newGameStage;
     private float fontsize = 1f;
     private boolean isHoover = false,showExtreme = false;
     private CardDeck cards=new CardDeck();
@@ -83,7 +89,7 @@ public class PlayScreen implements Screen {
     private StatustStage stages = StatustStage.DICE;
     private Table upgradeTable = new Table(),buyTable = new Table(),cardTable = new Table();
     private String citiesName = "";
-    private Table table2=new Table();
+    private Table table2=new Table(), endTable = new Table();
     private ArrayList<Table> cityRentTable = new ArrayList<>();
     private ArrayList<Label> cityRentLabel= new ArrayList<>(),cityRentLabel1 = new ArrayList<>(), cityRentLabel2 = new ArrayList<>(), cityRentLabel3 = new ArrayList<>(),cityCardLabel = new ArrayList<>();
     private Label.LabelStyle labelStyle = new Label.LabelStyle(),cardLabelStyle = new Label.LabelStyle();
@@ -118,14 +124,22 @@ public class PlayScreen implements Screen {
         }
         style = new TextButtonStyle();
         style.font = font;
+        newGameStage = new Stage(new ExtendViewport(TriviaLand.WIDTH, TriviaLand.HEIGHT));
         stage = new Stage(new ExtendViewport(TriviaLand.WIDTH, TriviaLand.HEIGHT));
         Gdx.input.setInputProcessor(stage);
         textures.add(new Texture("buttons/buyButton.png"));
         textures.add(new Texture("buttons/rollButton.png"));
         textures.add(new Texture("buttons/yesButton (2).png"));
         textures.add(new Texture("buttons/noButton.png"));
+        textures.add(new Texture("buttons/newgame.png"));
+        winner = new Texture("winner.png");
         textures.add(new Texture("buttons/endturnButton (2).png"));
         textures.add(new Texture("buttons/endturnButton (2).png"));
+        textures.add(new Texture("buttons/exit.png"));
+        winner.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        winnerSprite = new Sprite(winner);
+        winnerSprite.setPosition(250,485);
+        winnerSprite.setSize(400,140);
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             texturesRegions.add(new TextureRegion(textures.get(i)));
@@ -136,13 +150,21 @@ public class PlayScreen implements Screen {
         rollButton = buttons.get(1);
         yesButton=buttons.get(2);
         noButton=buttons.get(3);
-        endTurn=buttons.get(4);
-        endTurn2=buttons.get(5);
+        endTurn=buttons.get(5);
+        endTurn2=buttons.get(6);
+        exit = buttons.get(7);
+
+        exit.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.exit(0);
+            }
+        });
 
         buyButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (userCanBuy && cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())) {
+                if (userCanBuy && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())) {
                     cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
                     userCanBuy = false;
@@ -169,9 +191,7 @@ public class PlayScreen implements Screen {
         buyTable.setPosition(1100,400);
         buyTable.setVisible(false);
         buyTable.add(buyButton);
-
         buyTable.row();
-
         buyTable.add(endTurn);
         upgrade1 = new TextButton("1",style);
         upgrade1.getLabel().setColor(Color.BLACK);
@@ -260,6 +280,14 @@ public class PlayScreen implements Screen {
                     isMoving = true;
 
                }
+            }
+        });
+
+        newGame = buttons.get(4);
+        newGame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                switchScreen(new StartingScreen(new TriviaLand()));
             }
         });
 
@@ -392,7 +420,11 @@ public class PlayScreen implements Screen {
         cardTable.add(cityCardLabel.get(6)).row();
         cardTable.setPosition(460,465);
 
-
+        endTable.setPosition(460,240);
+        endTable.setVisible(false);
+        endTable.add(newGame).row();
+        endTable.add(exit).padTop(25);
+        newGameStage.addActor(endTable);
 
         for (Table s : cityRentTable)
             stage.addActor(s);
@@ -411,6 +443,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setProjectionMatrix(camera.combined);
+        System.out.println("X = " + usersArray.get(whoIsRound).getUserX() + " Y = " + usersArray.get(whoIsRound).getUserY());
         shape.setColor(Color.WHITE);
 
 
@@ -469,6 +502,9 @@ public class PlayScreen implements Screen {
                         }
                 gameOverUsers.add(u);
             }
+        if (gameOverUsers.size()==usersArray.size()-1){
+            stages = StatustStage.END;
+        }
 
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
@@ -481,8 +517,11 @@ public class PlayScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         boardSprite.draw(batch);
-        diceSprite.get(0).draw(batch);
-        diceSprite.get(1).draw(batch);
+        if (stages != StatustStage.END) {
+            diceSprite.get(0).draw(batch);
+            diceSprite.get(1).draw(batch);
+        }
+
         playercardSprite.draw(batch);
         player2cardSprite.draw(batch);
         player3cardSprite.draw(batch);
@@ -564,8 +603,8 @@ public class PlayScreen implements Screen {
                 }
                 usersArray.get(whoIsRound).setUserX(x);
                 usersArray.get(whoIsRound).setUserY(y);
-                usersArray.get(whoIsRound).getUserPos().x = (int)77.625*x+169;
-                usersArray.get(whoIsRound).getUserPos().y = (int)77.625*y+129;
+                usersArray.get(whoIsRound).getUserPos().x = (int)74*x+169;
+                usersArray.get(whoIsRound).getUserPos().y = (int)74*y+129;
                 usersArray.get(whoIsRound).setMove(b1.getBoard(y,x));
                 usersArray.get(whoIsRound).setMoveCount(b1.getBoard(y,x));
                 stages = StatustStage.NEXTPLAYER;
@@ -605,11 +644,18 @@ public class PlayScreen implements Screen {
                     timer = 0;
                     cardx=0;
                     stages = StatustStage.NEXTPLAYER;
-
                 }
-
             }
-
+        }
+        if (stages == StatustStage.END){//TODO exit Butonu ekle.
+            User winner = null;
+            for (int i=0;i<usersArray.size();i++)
+                if (!gameOverUsers.contains(usersArray.get(i)))
+                    winner= usersArray.get(i);
+            winnerSprite.draw(batch);
+            font.setColor(Color.BLACK);
+            font.getData().setScale(0.8f);
+            font.draw(batch,winner.getName() + " is Winner.",235,380);
         }
         batch.end();
 
@@ -699,7 +745,7 @@ public class PlayScreen implements Screen {
 
         //şehir satın alma
         if (usersArray.get(whoIsRound).getMove()<32)
-            if (cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().equals(cities.getTempUser())){
+            if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
                 userCanBuy = true;
                 buyButton.setVisible(userCanBuy);
 
@@ -787,6 +833,10 @@ public class PlayScreen implements Screen {
             usersArray.get(whoIsRound).setJailCount(usersArray.get(whoIsRound).getJailCount()-1);
             stages = StatustStage.NEXTPLAYER;
         }
+        if (stages == StatustStage.END){
+            endTable.setVisible(true);
+            Gdx.input.setInputProcessor(newGameStage);
+        }
         if (stages != StatustStage.BUY)
             buyTable.setVisible(false);
         if (stages != StatustStage.EXTREMECARD) {
@@ -827,7 +877,7 @@ public class PlayScreen implements Screen {
             cardTable.setVisible(true);
         else
             cardTable.setVisible(false);
-
+        newGameStage.draw();
 
         //User Zıplama Efekti
         if (isJump) {
@@ -866,5 +916,18 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    public void switchScreen( final Screen newScreen){
+        stage.getRoot().getColor().a = 1;
+        SequenceAction sequenceAction = new SequenceAction();
+        sequenceAction.addAction(fadeOut(0.5f));
+        sequenceAction.addAction(run(new Runnable() {
+            @Override
+            public void run() {
+                game.setScreen(newScreen);
+            }
+        }));
+        stage.getRoot().addAction(sequenceAction);
     }
 }

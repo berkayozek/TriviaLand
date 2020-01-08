@@ -1,5 +1,7 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.TriviaLand;
 
@@ -14,6 +16,11 @@ public class Options implements Screen {
     @Override
     public void show() {
 
+        /*
+        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY ) && !Gdx.graphics.isFullscreen()){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        }
+        Gdx.graphics.setWindowedMode(1300,800);*/
     }
 
     @Override
