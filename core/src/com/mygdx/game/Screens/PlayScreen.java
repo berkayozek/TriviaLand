@@ -302,7 +302,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(b1.getBoard(0,i)).getHire()==0 || cities.getCities().get(b1.getBoard(0,i)).getHire()==1000 )
                 cityRentLabel.add(new Label("",labelStyle));
             else
-                cityRentLabel.add(new Label(cities.getCities().get(b1.getBoard(0,i)).getHire() + " M",labelStyle));
+                cityRentLabel.add(new Label(cities.getCities().get(b1.getBoard(0,i)).getHire() + " TL",labelStyle));
             cityRentLabel.get(i-2).setAlignment(Align.center);
             cityRentTable.get(0).add(cityRentLabel.get(i-2)).width(74);
         }
@@ -314,7 +314,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(b1.getBoard(i,0)).getHire()==0 || cities.getCities().get(b1.getBoard(i,0)).getHire()==1000 )
                 cityRentLabel1.add(new Label("",labelStyle));
             else
-                cityRentLabel1.add(new Label(cities.getCities().get(b1.getBoard(i,0)).getHire() + " M",labelStyle));
+                cityRentLabel1.add(new Label(cities.getCities().get(b1.getBoard(i,0)).getHire() + " TL",labelStyle));
             cityRentLabel1.get(6-i).setAlignment(Align.bottom);
             cityRentTable.get(1).add(cityRentLabel1.get(6-i)).height(74).row();
         }
@@ -326,7 +326,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(b1.getBoard(8,i)).getHire()==0 || cities.getCities().get(b1.getBoard(8,i)).getHire()==1000 )
                 cityRentLabel2.add(new Label(" ",labelStyle));
             else
-                cityRentLabel2.add(new Label(cities.getCities().get(b1.getBoard(8,i)).getHire() + " M",labelStyle));
+                cityRentLabel2.add(new Label(cities.getCities().get(b1.getBoard(8,i)).getHire() + " TL",labelStyle));
             cityRentLabel2.get(i).setAlignment(Align.center);
             cityRentTable.get(2).add(cityRentLabel2.get(i)).width(74);
         }
@@ -338,7 +338,7 @@ public class PlayScreen implements Screen {
             if (cities.getCities().get(b1.getBoard(i,8)).getHire()==0 || cities.getCities().get(b1.getBoard(i,8)).getHire()==1000 )
                 cityRentLabel3.add(new Label("",labelStyle));
             else
-                cityRentLabel3.add(new Label(cities.getCities().get(b1.getBoard(i,8)).getHire() + " M",labelStyle));
+                cityRentLabel3.add(new Label(cities.getCities().get(b1.getBoard(i,8)).getHire() + " TL",labelStyle));
             cityRentLabel3.get(8-i).setAlignment(Align.bottom);
             cityRentTable.get(3).add(cityRentLabel3.get(8-i)).height(74).row();
         }
@@ -473,16 +473,16 @@ public class PlayScreen implements Screen {
         if (stages == StatustStage.NEXTPLAYER) {
             for (int i = 2; i <= 8; i++)
                 if (cities.getCities().get(b1.getBoard(0, i)).getHire() != 1000 && cities.getCities().get(b1.getBoard(0, i)).getHire() != 0)
-                    cityRentLabel.get(i - 2).setText(cities.getCities().get(b1.getBoard(0, i)).getHire() + " M");
+                    cityRentLabel.get(i - 2).setText(cities.getCities().get(b1.getBoard(0, i)).getHire() + " TL");
             for (int i=6;i>=0;i--)
                 if (cities.getCities().get(b1.getBoard(i,0)).getHire()!=0 && cities.getCities().get(b1.getBoard(i,0)).getHire()!=1000 )
-                    cityRentLabel1.get(6 - i).setText(cities.getCities().get(b1.getBoard(i,0)).getHire() + " M");
+                    cityRentLabel1.get(6 - i).setText(cities.getCities().get(b1.getBoard(i,0)).getHire() + " TL");
             for (int i=0;i<=6;i++)
                 if (cities.getCities().get(b1.getBoard(8,i)).getHire()!=0 && cities.getCities().get(b1.getBoard(8,i)).getHire()!=1000 )
-                    cityRentLabel2.get(i).setText(cities.getCities().get(b1.getBoard(8, i)).getHire() + " M");
+                    cityRentLabel2.get(i).setText(cities.getCities().get(b1.getBoard(8, i)).getHire() + " TL");
             for (int i=8;i>=2;i--)
                 if (cities.getCities().get(b1.getBoard(i,8)).getHire()!=0 && cities.getCities().get(b1.getBoard(i,8)).getHire()!=1000 )
-                    cityRentLabel3.get(8 - i).setText(cities.getCities().get(b1.getBoard(i, 8)).getHire() + " M");
+                    cityRentLabel3.get(8 - i).setText(cities.getCities().get(b1.getBoard(i, 8)).getHire() + " TL");
         }
 
         //Zarın Değişmesi
