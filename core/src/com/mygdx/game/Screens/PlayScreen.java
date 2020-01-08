@@ -26,8 +26,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Game.*;
 import com.mygdx.game.TriviaLand;
-import jdk.javadoc.internal.tool.Start;
-import jdk.net.SocketFlow;
 
 
 import java.util.ArrayList;
@@ -57,7 +55,7 @@ public class PlayScreen implements Screen {
     private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite,winnerSprite;
     private ArrayList<Sprite> userSprite,diceSprite;
     private SpriteBatch batch;
-    private Texture boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card,winner;
+    private Texture winner,boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card;
     private ArrayList<Texture> userImage,diceImage;
     private Die die;
     private ShapeRenderer shape = new ShapeRenderer();
@@ -71,7 +69,7 @@ public class PlayScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
     private ArrayList<User> userArrayList=new ArrayList<User>();
-    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit;
+    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit,firstButtonUpgrade,secondButtonUpgrade,thirdButtonUpgrade;
     private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
@@ -138,6 +136,11 @@ public class PlayScreen implements Screen {
         textures.add(new Texture("buttons/endturnButton (2).png"));
         textures.add(new Texture("buttons/endturnButton (2).png"));
         textures.add(new Texture("buttons/exit.png"));
+        textures.add(new Texture("buttons/firstButtonUpgrade.png"));
+        textures.add(new Texture("buttons/secondButtonUpgrade.png"));
+        textures.add(new Texture("buttons/thirdButtonUpgrade.png"));
+
+
         winner.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         winnerSprite = new Sprite(winner);
         winnerSprite.setPosition(250,485);
@@ -152,9 +155,13 @@ public class PlayScreen implements Screen {
         rollButton = buttons.get(1);
         yesButton=buttons.get(2);
         noButton=buttons.get(3);
+        newGame=buttons.get(4);
         endTurn=buttons.get(5);
         endTurn2=buttons.get(6);
         exit = buttons.get(7);
+        firstButtonUpgrade=buttons.get(8);
+        secondButtonUpgrade=buttons.get(9);
+        thirdButtonUpgrade=buttons.get(10);
 
         exit.addListener(new ClickListener(){
             @Override
@@ -195,9 +202,8 @@ public class PlayScreen implements Screen {
         buyTable.add(buyButton);
         buyTable.row();
         buyTable.add(endTurn);
-        upgrade1 = new TextButton("1",style);
-        upgrade1.getLabel().setColor(Color.BLACK);
-        upgrade1.addListener(new ClickListener(){
+
+        firstButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(1);
@@ -205,9 +211,8 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-        upgrade2 = new TextButton("2",style);
-        upgrade2.getLabel().setColor(Color.BLACK);
-        upgrade2.addListener(new ClickListener(){
+
+        secondButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(2);
@@ -215,9 +220,8 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-        upgrade3 = new TextButton("3",style);
-        upgrade3.getLabel().setColor(Color.BLACK);
-        upgrade3.addListener(new ClickListener(){
+
+        thirdButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(3);
@@ -234,14 +238,14 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-        upgradeTable.setPosition(1100,400);
+        upgradeTable.setPosition(900,300);
         upgradeTable.setSize(300,300);
         upgradeTable.setVisible(false);
-        upgradeTable.add(upgrade1).width(100);
-        upgradeTable.add(upgrade2).width(100);
-        upgradeTable.add(upgrade3).width(100);
-        upgradeTable.row();
-        upgradeTable.add(endTurn2).colspan(3);
+        upgradeTable.add(firstButtonUpgrade).width(60);
+        upgradeTable.add(secondButtonUpgrade).width(100);
+        upgradeTable.add(thirdButtonUpgrade).width(100).row();
+        upgradeTable.add(endTurn2).colspan(3).padTop(25);
+
 
         yesButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x, float y){
