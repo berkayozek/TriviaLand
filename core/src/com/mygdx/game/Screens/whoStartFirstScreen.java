@@ -131,6 +131,10 @@ public class whoStartFirstScreen implements Screen {
         textures.add(new Texture("buttons/plus.png"));
         textures.add(new Texture("buttons/minus.png"));
         textures.add(new Texture("buttons/addbot.png"));
+        textures.add(new Texture("buttons/volumeoff.png"));
+        textures.add(new Texture("buttons/volumeon.png"));
+        textures.add(new Texture("buttons/fullscreen.png"));
+        textures.add(new Texture("buttons/exitfullscreen.png"));
 
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -138,11 +142,67 @@ public class whoStartFirstScreen implements Screen {
             texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
             buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
         }
-        for (int i=2;i<buttons.size()-3;i++){
+        for (int i=2;i<buttons.size()-7;i++){
             buttons.get(i).setSize(100,75);
             buttons.get(i).setPosition(0+(i*125),100);
             buttons.get(i).setVisible(false);
         }
+        for (int i=12;i<14;i++) {
+            buttons.get(i).setPosition(1220, 720);
+            buttons.get(i).setSize(50,50);
+            buttons.get(i).setVisible(false);
+        }
+        for (int i=14;i<16;i++){
+            buttons.get(i).setPosition(1170,720);
+            buttons.get(i).setSize(50,50);
+            buttons.get(i).setVisible(false);
+        }
+
+        if (TriviaLand.music.getVolume()==0)
+            buttons.get(13).setVisible(true);
+        else
+            buttons.get(12).setVisible(true);
+        if (Gdx.graphics.isFullscreen())
+            buttons.get(15).setVisible(true);
+        else
+            buttons.get(14).setVisible(true);
+
+        buttons.get(12).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                TriviaLand.music.setVolume(0f);
+                buttons.get(12).setVisible(false);
+                buttons.get(13).setVisible(true);
+            }
+        });
+
+        buttons.get(13).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                TriviaLand.music.setVolume(0.5f);
+                buttons.get(13).setVisible(false);
+                buttons.get(12).setVisible(true);
+            }
+        });
+
+        buttons.get(14).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                buttons.get(14).setVisible(false);
+                buttons.get(15).setVisible(true);
+            }
+        });
+
+        buttons.get(15).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setWindowedMode(1300,800);
+                buttons.get(15).setVisible(false);
+                buttons.get(14).setVisible(true);
+            }
+        });
+
         buttons.get(9).setPosition(400,370);
         buttons.get(10).setPosition(400,160);
         buttons.get(11).setPosition(550,160);

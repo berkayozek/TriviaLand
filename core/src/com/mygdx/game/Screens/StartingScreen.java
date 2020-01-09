@@ -31,12 +31,11 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 public class StartingScreen implements Screen {
 
     private TriviaLand game;
-    private Music music;
     private SpriteBatch batch;
     private BitmapFont font;
     private TextButtonStyle textButtonStyle;
     private Stage stage;
-    private int playerNumber=1;
+    private int playerNumber=2;
     private float fade = 0.7f;
     private Texture logoTexture;
     private ArrayList<Texture> textures = new ArrayList<>();
@@ -64,10 +63,6 @@ public class StartingScreen implements Screen {
     camera.setToOrtho(false, TriviaLand.WIDTH, TriviaLand.HEIGHT);
     viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
     Gdx.input.setInputProcessor(stage);
-    music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-    music.setLooping(true);
-    music.setVolume(0.5f);
-    music.play();
     font = new BitmapFont(Gdx.files.internal("font.fnt"));
     textButtonStyle = new TextButtonStyle();
     textButtonStyle.font = font;
@@ -76,6 +71,10 @@ public class StartingScreen implements Screen {
     textures.add(new Texture("buttons/exitbutton.png"));
     textures.add(new Texture("buttons/minus.png"));
     textures.add(new Texture("buttons/plus.png"));
+    textures.add(new Texture("buttons/volumeoff.png"));
+    textures.add(new Texture("buttons/volumeon.png"));
+    textures.add(new Texture("buttons/fullscreen.png"));
+    textures.add(new Texture("buttons/exitfullscreen.png"));
     for (int i=0;i<textures.size();i++){
         textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         texturesRegions.add(new TextureRegion(textures.get(i)));
@@ -89,8 +88,29 @@ public class StartingScreen implements Screen {
     logoSprite.setPosition(500,200);
     buttons.get(0).setPosition(300,375);
     buttons.get(1).setPosition(300,100);
-    buttons.get(2).setPosition(700,100);
-    buttons.get(3).setPosition(700,375);
+    buttons.get(2).setPosition(920,100);
+    buttons.get(3).setPosition(920,375);
+
+
+    for (int i=4;i<6;i++) {
+        buttons.get(i).setPosition(1220, 720);
+        buttons.get(i).setSize(50,50);
+        buttons.get(i).setVisible(false);
+    }
+    for (int i=6;i<8;i++){
+        buttons.get(i).setPosition(1170,720);
+        buttons.get(i).setSize(50,50);
+        buttons.get(i).setVisible(false);
+    }
+    if (TriviaLand.music.getVolume()==0)
+        buttons.get(5).setVisible(true);
+    else
+        buttons.get(4).setVisible(true);
+    if (Gdx.graphics.isFullscreen())
+        buttons.get(7).setVisible(true);
+    else
+        buttons.get(6).setVisible(true);
+
     buttons.get(0).addListener(new ClickListener(){
         public void clicked(InputEvent event, float x, float y) {
             switchScreen(new whoStartFirstScreen(game,playerNumber));
@@ -124,7 +144,7 @@ public class StartingScreen implements Screen {
     buttons.get(2).addListener(new ClickListener(){
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            if(playerNumber>1 && playerNumber<=4){
+            if(playerNumber>2 && playerNumber<=4){
                 playerNumber--;
             }
         }
@@ -140,7 +160,7 @@ public class StartingScreen implements Screen {
     buttons.get(3).addListener(new ClickListener(){
         @Override
         public void clicked(InputEvent event, float x, float y) {
-            if(playerNumber>0 && playerNumber<4){
+            if(playerNumber>=2 && playerNumber<4){
                 playerNumber++;
             }
         }
@@ -153,6 +173,44 @@ public class StartingScreen implements Screen {
             buttons.get(3).addAction(Actions.alpha(1f,0.3f));
         }
     });
+
+    buttons.get(4).addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            TriviaLand.music.setVolume(0f);
+            buttons.get(4).setVisible(false);
+            buttons.get(5).setVisible(true);
+        }
+    });
+
+    buttons.get(5).addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            TriviaLand.music.setVolume(0.5f);
+            buttons.get(5).setVisible(false);
+            buttons.get(4).setVisible(true);
+        }
+    });
+
+    buttons.get(6).addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                buttons.get(6).setVisible(false);
+                buttons.get(7).setVisible(true);
+        }
+    });
+
+    buttons.get(7).addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            Gdx.graphics.setWindowedMode(1300,800);
+            buttons.get(7).setVisible(false);
+            buttons.get(6).setVisible(true);
+        }
+    });
+
+
 
     for (Button b : buttons)
         stage.addActor(b);
@@ -172,7 +230,7 @@ public class StartingScreen implements Screen {
         logoSprite.setScale(1.25f);
         batch.begin();
             font.setColor(Color.BLACK);
-            font.draw(batch,Integer.toString(playerNumber),700,300);
+            font.draw(batch,Integer.toString(playerNumber),940,300);
             logoSprite.draw(batch);
         batch.end();
         stage.draw();

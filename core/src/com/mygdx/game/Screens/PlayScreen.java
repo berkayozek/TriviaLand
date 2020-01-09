@@ -139,7 +139,11 @@ public class PlayScreen implements Screen {
         textures.add(new Texture("buttons/firstButtonUpgrade.png"));
         textures.add(new Texture("buttons/secondButtonUpgrade.png"));
         textures.add(new Texture("buttons/thirdButtonUpgrade.png"));
-
+        textures.add(new Texture("buttons/volumeoff.png"));
+        textures.add(new Texture("buttons/volumeon.png"));
+        textures.add(new Texture("buttons/fullscreen.png"));
+        textures.add(new Texture("buttons/exitfullscreen.png"));
+        textures.add(new Texture("buttons/close.png"));
 
         winner.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         winnerSprite = new Sprite(winner);
@@ -151,6 +155,66 @@ public class PlayScreen implements Screen {
             texturesRegionsDrawable.add(new TextureRegionDrawable(texturesRegions.get(i)));
             buttons.add(new ImageButton(texturesRegionsDrawable.get(i)));
         }
+
+        for (int i=11;i<13;i++) {
+            buttons.get(i).setPosition(20, 720);
+            buttons.get(i).setSize(50,50);
+            buttons.get(i).setVisible(false);
+        }
+        for (int i=13;i<15;i++){
+            buttons.get(i).setPosition(20,670);
+            buttons.get(i).setSize(50,50);
+            buttons.get(i).setVisible(false);
+        }
+        buttons.get(15).setPosition(25,620);
+        buttons.get(15).setSize(40,40);
+        if (TriviaLand.music.getVolume()==0)
+            buttons.get(12).setVisible(true);
+        else
+            buttons.get(11).setVisible(true);
+        if (Gdx.graphics.isFullscreen())
+            buttons.get(14).setVisible(true);
+        else
+            buttons.get(13).setVisible(true);
+        buttons.get(11).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                TriviaLand.music.setVolume(0f);
+                buttons.get(11).setVisible(false);
+                buttons.get(12).setVisible(true);
+            }
+        });
+        buttons.get(12).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                TriviaLand.music.setVolume(0.5f);
+                buttons.get(12).setVisible(false);
+                buttons.get(11).setVisible(true);
+            }
+        });
+        buttons.get(13).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+                buttons.get(13).setVisible(false);
+                buttons.get(14).setVisible(true);
+            }
+        });
+        buttons.get(14).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.graphics.setWindowedMode(1300,800);
+                buttons.get(14).setVisible(false);
+                buttons.get(13).setVisible(true);
+            }
+        });
+        buttons.get(15).addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.exit(0);
+            }
+        });
+
         buyButton = buttons.get(0);
         rollButton = buttons.get(1);
         yesButton=buttons.get(2);
@@ -170,7 +234,7 @@ public class PlayScreen implements Screen {
             }
         });
 
-        buyButton.addListener(new ClickListener(){
+        buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (userCanBuy && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())) {
@@ -190,9 +254,9 @@ public class PlayScreen implements Screen {
                 if (stages == StatustStage.BUY) {
                     userCanBuy = false;
                     stages = StatustStage.NEXTPLAYER;
-                }else if (stages == StatustStage.CARD){
+                }else if (stages == StatustStage.CARD) {
                     stages = StatustStage.NEXTPLAYER;
-                }else if (stages == StatustStage.EXTREMECARD){
+                }else if (stages == StatustStage.EXTREMECARD) {
                     stages = StatustStage.NEXTPLAYER;
                 }
             }
@@ -293,7 +357,7 @@ public class PlayScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Gdx.input.setInputProcessor(stage);
-                switchScreen(new StartingScreen(new TriviaLand()));
+                switchScreen(new StartingScreen(game));
             }
         });
 
@@ -432,6 +496,8 @@ public class PlayScreen implements Screen {
         endTable.add(exit).padTop(25);
         newGameStage.addActor(endTable);
 
+        for (int i=11;i<=15;i++)
+            stage.addActor(buttons.get(i));
         for (Table s : cityRentTable)
             stage.addActor(s);
         stage.addActor(cardTable);
@@ -744,7 +810,7 @@ public class PlayScreen implements Screen {
 
         //şehir satın alma
         if (usersArray.get(whoIsRound).getMove()<32 && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMove())
-            if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
+            if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser()) && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice()<usersArray.get(whoIsRound).getMoney()){
                 userCanBuy = true;
                 buyButton.setVisible(userCanBuy);
             }
@@ -781,7 +847,6 @@ public class PlayScreen implements Screen {
             }
         }
         else if(stages == StatustStage.BUY){
-            userCanBuy = true;
             buyTable.setVisible(true);
         }
         else if (stages == StatustStage.NEXTPLAYER){
