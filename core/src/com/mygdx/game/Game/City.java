@@ -95,10 +95,7 @@ public class City {
 		}
 	}
 	public void resetCity(){
-		if (hireCount!=0) {
-			hire /= hireCount;
-			hireCount = 0;
-		}
+		hire = firsthire;
 	}
 
 	public void setUser(User user) {

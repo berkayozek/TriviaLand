@@ -94,6 +94,7 @@ public class PlayScreen implements Screen {
     private ArrayList<Label> cityRentLabel= new ArrayList<>(),cityRentLabel1 = new ArrayList<>(), cityRentLabel2 = new ArrayList<>(), cityRentLabel3 = new ArrayList<>(),cityCardLabel = new ArrayList<>();
     private Label.LabelStyle labelStyle = new Label.LabelStyle(),cardLabelStyle = new Label.LabelStyle();
     private Viewport viewport;
+
     public PlayScreen(TriviaLand game,ArrayList<User> users) {
         this.game = game;
         this.usersArray = users;
@@ -568,8 +569,9 @@ public class PlayScreen implements Screen {
                         if (c.getUser().equals(userc)) {
                             c.setUser(cities.getTempUser());
                             c.resetCity();
-                            u.setMoney(0);
                         }
+                u.setMoney(0);
+                u.getCities().clear();
                 gameOverUsers.add(u);
             }
         if (gameOverUsers.size()==usersArray.size()-1){

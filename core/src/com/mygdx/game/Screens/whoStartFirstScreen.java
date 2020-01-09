@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -232,10 +234,24 @@ public class whoStartFirstScreen implements Screen {
                 else
                     isClickEarly = true;
             }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttons.get(0).addAction(Actions.alpha(0.7f, 0.3f));
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttons.get(0).addAction(Actions.alpha(1f, 0.3f));
+            }
         });
         buttons.get(1).addListener(new ClickListener(){
             public void clicked(InputEvent event, float x, float y) {
                     switchScreen(new PlayScreen(game,userArrayList));
+            }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttons.get(1).addAction(Actions.alpha(0.7f, 0.3f));
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttons.get(1).addAction(Actions.alpha(1f, 0.3f));
             }
         });
 
@@ -312,6 +328,13 @@ public class whoStartFirstScreen implements Screen {
                 if (PlayerNumber!=botNumber)
                     botNumber++;
             }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttons.get(9).addAction(Actions.alpha(0.7f, 0.3f));
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttons.get(9).addAction(Actions.alpha(1f, 0.3f));
+            }
         });
 
         buttons.get(10).addListener(new ClickListener(){
@@ -319,6 +342,13 @@ public class whoStartFirstScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (botNumber>=1)
                     botNumber--;
+            }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttons.get(10).addAction(Actions.alpha(0.7f, 0.3f));
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttons.get(10).addAction(Actions.alpha(1f, 0.3f));
             }
         });
 
@@ -338,10 +368,18 @@ public class whoStartFirstScreen implements Screen {
                     userArrayList.get(i).setLocation(locationArr.get((int)(Math.random()*7)));
                 }
             }
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttons.get(11).addAction(Actions.alpha(0.7f, 0.3f));
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttons.get(11).addAction(Actions.alpha(1f, 0.3f));
+            }
         });
 
-        for (Button b : buttons)
+        for (Button b : buttons) {
             stage.addActor(b);
+        }
         buttons.get(1).setVisible(false);
         stage.getRoot().getColor().a = 0;
         stage.getRoot().addAction(fadeIn(3f));
