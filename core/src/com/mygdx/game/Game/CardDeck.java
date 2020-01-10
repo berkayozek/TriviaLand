@@ -1,9 +1,5 @@
 package com.mygdx.game.Game;
 
-import com.badlogic.gdx.Gdx;
-import com.mygdx.game.Screens.PlayScreen;
-import com.sun.tools.javac.util.List;
-
 import java.util.ArrayList;
 
 public class CardDeck {
@@ -149,10 +145,7 @@ public class CardDeck {
 	}
 
 	public void c5(User User) {
-		System.out.println();
-
 		User.setMoney(User.getMoney() + 1000);
-
 	}
 
 	public void c6(User User) {

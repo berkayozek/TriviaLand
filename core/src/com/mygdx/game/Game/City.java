@@ -72,19 +72,19 @@ public class City {
 			if (hireCount == 1) {
 				this.hireCount = 1;
 				hire *= 2;
-				user.setMoney((int) (user.getMoney() - price * hire*2));
+				user.setMoney((int) (user.getMoney() - price * hire));
 				// ev
 
 			} else if (hireCount == 2) {
 				this.hireCount = 2;
 				hire *= 4;
-				user.setMoney((int) (user.getMoney() - hire*4));
+				user.setMoney((int) (user.getMoney() - hire));
 				// ev
 
 			} else if (hireCount == 3) {
 				this.hireCount = 3;
 				hire *= 8;
-				user.setMoney((int) (user.getMoney() - hire*8));
+				user.setMoney((int) (user.getMoney() - hire));
 				// otel
 
 			}
