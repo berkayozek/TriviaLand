@@ -158,10 +158,10 @@ public class CardDeck {
 	}
 
 	public void c8(User user, ArrayList<User> users) {
-	int random=(int) (Math.random()*users.size()+1);
+	int random=(int) (Math.random()*users.size()+1)-1;
 
 	while(users.get(random).equals(user)){
-			random=(int) (Math.random()*users.size()+1);
+			random=(int) (Math.random()*users.size()+1)-1;
 		}
 		user.setMoney(user.getMoney() + 500);
 		users.get(random).setMoney(users.get(random).getMoney()-500);
@@ -169,8 +169,8 @@ public class CardDeck {
 
 	public void c9(User user, ArrayList<User> users) {
 
-		int a = (int) (Math.random() * users.size() + 1);
-		int b = (int) (users.get(a).getCities().size() * Math.random() + 1);
+		int a = (int) (Math.random() * users.size() + 1)-1;
+		int b = (int) (users.get(a).getCities().size() * Math.random() + 1-1);
 		if (users.get(a).getCities().size() > 0) {
 			users.get(a).getCities().get(b).built(users.get(a).getCities().get(b).getHireCount() - 1);
 		}
@@ -215,7 +215,7 @@ public class CardDeck {
 		int random=(int) (Math.random()*users.size()+1)-1;
 
 		while(users.get(random).equals(user)){
-			random=(int) (Math.random()*users.size()+1);
+			random=(int) (Math.random()*users.size()+1)-1;
 		}
 		if(user.getCities().size()>0 && users.get(random).getCities().size()>0) {
 			user.getCities().add(users.get(random).getCities().get(users.get(random).getCities().size() - 1));

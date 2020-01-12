@@ -271,7 +271,7 @@ public class PlayScreen implements Screen {
         firstButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(1);
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).built(1);
                 upgradeTable.setVisible(false);
                 stages = StatustStage.NEXTPLAYER;
             }
@@ -280,7 +280,7 @@ public class PlayScreen implements Screen {
         secondButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(2);
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).built(2);
                 upgradeTable.setVisible(false);
                 stages = StatustStage.NEXTPLAYER;
             }
@@ -289,7 +289,7 @@ public class PlayScreen implements Screen {
         thirdButtonUpgrade.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                cities.getCities().get(usersArray.get(whoIsRound).getMove()).built(3);
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).built(3);
                 upgradeTable.setVisible(false);
                 stages = StatustStage.NEXTPLAYER;
             }
@@ -345,8 +345,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 5);
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -496,7 +496,10 @@ public class PlayScreen implements Screen {
         endTable.add(newGame).row();
         endTable.add(exit).padTop(25);
         newGameStage.addActor(endTable);
-
+        cities.getCities().get(4).setUser(usersArray.get(0));
+        cities.getCities().get(6).setUser(usersArray.get(1));
+        usersArray.get(0).getCities().add(cities.getCities().get(4));
+        usersArray.get(1).getCities().add(cities.getCities().get(6));
         for (int i=11;i<=15;i++)
             stage.addActor(buttons.get(i));
         for (Table s : cityRentTable)
@@ -505,8 +508,6 @@ public class PlayScreen implements Screen {
         stage.addActor(rollButton);
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
-        usersArray.get(0).getCities().add(cities.getCities().get(4));
-        cities.getCities().get(4).setUser(usersArray.get(0));
         stage.addActor(table2);
     }
 
@@ -516,29 +517,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setProjectionMatrix(camera.combined);
-            //System.out.println(stages + "  " + whoIsRound);
-        shape.setColor(Color.WHITE);
-        // Üst ve alt
-        for (int i = 0; i < 9; i++)
-            for (int k = 0; k < 9; k++)
-                if (b1.getBoard(k, i) > 1 && b1.getBoard(k, i) < 10 || b1.getBoard(k, i) > 17 && b1.getBoard(k, i) < 25)
-                    shape.rect((int) (i * 74 + 129), (int) (k * 77.625 + 40), 70, 99);
-        // sol ve sağ
-        for (int i = 0; i < 9; i++)
-            for (int k = 0; k < 9; k++)
-                if (b1.getBoard(k, i) > 25 && b1.getBoard(k, i) <= 32 || b1.getBoard(k, i) > 9 && b1.getBoard(k, i) < 17)
-                    shape.rect((int) (i * 77.625 + 100), (int) (k * 74 + 69), 99, 70);
-
-        for (int i = 0; i < 9; i++)
-            for (int k = 0; k < 9; k++)
-                if (b1.getBoard(k, i) == 1 || b1.getBoard(k, i) == 9 || b1.getBoard(k, i) == 17
-                        || b1.getBoard(k, i) == 25)
-                    shape.rect((int) (i * 77.625 + 100), (int) (k * 77.625 + 40), 99, 99);
-
-        //Zar butonu
-        shape.setColor(Color.RED);
-
-        //Upgradelendiyse Rent Rakamını Değiştir
 
         //System.out.println(cityRentLabel.get(5).getText());//TODO Buralara bak berkay
         if (stages == StatustStage.NEXTPLAYER) {
@@ -560,12 +538,12 @@ public class PlayScreen implements Screen {
         diceSprite.get(0).setTexture(diceImage.get(die.getDie1()-1));
         diceSprite.get(1).setTexture(diceImage.get(die.getDie2()-1));
         //Userın Parası Bitirse
-        for (User u : usersArray )
-            if (u.getMoney()<=0 && !gameOverUsers.contains(u)) {
+        for (User u : usersArray ) {
+            if (u.getMoney() <= 0 && !gameOverUsers.contains(u) && u.getCities().size() == 0) {
                 u.getUserPos().x = 2000;
                 u.getUserPos().y = 2000;
-                for (City c: cities.getCities())
-                    for (City userc: u.getCities())
+                for (City c : cities.getCities())
+                    for (City userc : u.getCities())
                         if (c.getUser().equals(userc)) {
                             c.setUser(cities.getTempUser());
                             c.resetCity();
@@ -574,10 +552,18 @@ public class PlayScreen implements Screen {
                 u.getCities().clear();
                 gameOverUsers.add(u);
             }
+            if (u.getMoney() <= 0 && !gameOverUsers.contains(u) && u.getCities().size() != 0) {
+                int random = (int) (Math.random() * (u.getCities().size()));
+                u.getCities().get(random).resetCity();
+                u.getCities().get(random).setUser(cities.getTempUser());
+                u.setMoney(u.getMoney() + u.getCities().get(random).getPrice());
+                u.getCities().remove(random);
+            }
+        }
         if (gameOverUsers.size()==usersArray.size()-1){
             stages = StatustStage.END;
         }
-
+        System.out.println(stages);
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
         for (int i=0;i<userSprite.size();i++)
@@ -888,8 +874,33 @@ public class PlayScreen implements Screen {
             cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().setMoney(cities.getCities().get(usersArray.get(whoIsRound).getMove()).getUser().getMoney() + cities.getCities().get(usersArray.get(whoIsRound).getMove()).getHire());
             stages = StatustStage.NEXTPLAYER;
         }
-        if(stages == StatustStage.UPGRADE)
+        if(stages == StatustStage.UPGRADE) {
             upgradeTable.setVisible(true);
+                firstButtonUpgrade.setVisible(false);
+                secondButtonUpgrade.setVisible(false);
+                thirdButtonUpgrade.setVisible(false);
+            if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHireCount()==3){
+                firstButtonUpgrade.setVisible(false);
+                secondButtonUpgrade.setVisible(false);
+                thirdButtonUpgrade.setVisible(false);
+            }else if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHireCount()==2 && usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*8){
+                firstButtonUpgrade.setVisible(false);
+                secondButtonUpgrade.setVisible(false);
+                thirdButtonUpgrade.setVisible(true);
+            }else if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHireCount()==1 && usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*4){
+                firstButtonUpgrade.setVisible(false);
+                secondButtonUpgrade.setVisible(true);
+                if(usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*8)
+                    thirdButtonUpgrade.setVisible(true);
+            }else if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHireCount()==0 && usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*2){
+                firstButtonUpgrade.setVisible(true);
+                if(usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*4){
+                    secondButtonUpgrade.setVisible(true);
+                }
+                if(usersArray.get(whoIsRound).getMoney()>cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*8)
+                    thirdButtonUpgrade.setVisible(true);
+            }
+        }
 
         if (stages == StatustStage.DICE && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 0 && usersArray.get(whoIsRound).getJailCount()!=0){
             usersArray.get(whoIsRound).setJailCount(usersArray.get(whoIsRound).getJailCount()-1);
@@ -958,9 +969,9 @@ public class PlayScreen implements Screen {
         if (stages == StatustStage.BUY || stages == StatustStage.UPGRADE || stages == StatustStage.RENT || stages == StatustStage.DICE){
             cityCardLabel.get(0).setText(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getName());
             cityCardLabel.get(1).setText("Current Rent: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());
-            cityCardLabel.get(2).setText("1 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()*2);
-            cityCardLabel.get(3).setText("2 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()*4);
-            cityCardLabel.get(4).setText("3 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()*8);
+            cityCardLabel.get(2).setText("1 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*2);
+            cityCardLabel.get(3).setText("2 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*4);
+            cityCardLabel.get(4).setText("3 House: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getFirsthire()*8);
             cityCardLabel.get(5).setText("Price: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
             if (!cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())) {
                 cityCardLabel.get(6).setText("Owner: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().getName());

@@ -8,16 +8,11 @@ import java.util.Vector;
 
 public class User {
 	private String name;
-
-
-
 	private int number=0;
 	private int money;
 	private ArrayList<City> Ucities = new ArrayList<>();
 	private ArrayList<Card> cards = new ArrayList<>();
 	private int jailCount = 0;
-
-
 	private boolean isInTheJail=false;
 	private int move = 0;
 	private boolean doubleRent=false;

@@ -5,14 +5,8 @@ public class City {
 	private String name;
 	private User user = null;
 	private int price;
-
-
 	private int hire;
 	private int firsthire=0;
-	private int hireCountt=0;
-
-
-
 	private int hireCount;
 
 	public City(String name, User user, int pos, int price, int hire) {
@@ -59,31 +53,24 @@ public class City {
 		}
 	}
 
-	public int getHireCountt() {
-		return hireCountt;
-	}
-
-	public void setHireCountt(int hireCountt) {
-		this.hireCountt = hireCountt;
-	}
 	public void built(int hireCount) {
 		this.hireCount = hireCount;
 		if (hireCount < 4) {
 			if (hireCount == 1) {
 				this.hireCount = 1;
-				hire *= 2;
-				user.setMoney((int) (user.getMoney() - price * hire));
+				hire = firsthire*2;
+				user.setMoney((int) (user.getMoney() - hire));
 				// ev
 
 			} else if (hireCount == 2) {
 				this.hireCount = 2;
-				hire *= 4;
+				hire = firsthire*4;
 				user.setMoney((int) (user.getMoney() - hire));
 				// ev
 
 			} else if (hireCount == 3) {
 				this.hireCount = 3;
-				hire *= 8;
+				hire = firsthire*8;
 				user.setMoney((int) (user.getMoney() - hire));
 				// otel
 
@@ -96,6 +83,7 @@ public class City {
 	}
 	public void resetCity(){
 		hire = firsthire;
+		hireCount=0;
 	}
 
 	public void setUser(User user) {
@@ -125,6 +113,10 @@ public class City {
 		} else {
 			return false;
 		}
+	}
+
+	public int getFirsthire() {
+		return firsthire;
 	}
 
 	public int getHireCount() {
