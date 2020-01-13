@@ -69,7 +69,7 @@ public class PlayScreen implements Screen {
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
     private ArrayList<User> userArrayList=new ArrayList<User>();
-    private ImageButton buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit,firstButtonUpgrade,secondButtonUpgrade,thirdButtonUpgrade;
+    private ImageButton sellButton,buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit,firstButtonUpgrade,secondButtonUpgrade,thirdButtonUpgrade;
     private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
     private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
@@ -145,6 +145,7 @@ public class PlayScreen implements Screen {
         textures.add(new Texture("buttons/fullscreen.png"));
         textures.add(new Texture("buttons/exitfullscreen.png"));
         textures.add(new Texture("buttons/close.png"));
+        textures.add(new Texture("buttons/sellButton.png"));
 
         winner.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         winnerSprite = new Sprite(winner);
@@ -227,6 +228,7 @@ public class PlayScreen implements Screen {
         firstButtonUpgrade=buttons.get(8);
         secondButtonUpgrade=buttons.get(9);
         thirdButtonUpgrade=buttons.get(10);
+        sellButton= buttons.get(11);
 
         exit.addListener(new ClickListener(){
             @Override
@@ -309,7 +311,18 @@ public class PlayScreen implements Screen {
         upgradeTable.add(firstButtonUpgrade).width(150).height(210);
         upgradeTable.add(secondButtonUpgrade).width(150).height(210);
         upgradeTable.add(thirdButtonUpgrade).width(150).height(210).row();
+        upgradeTable.add(sellButton).width(150).height(210).row();
         upgradeTable.add(endTurn2).colspan(3).padTop(-10);
+
+        sellButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).built(1);
+                upgradeTable.setVisible(false);
+                stages = StatustStage.NEXTPLAYER;
+            }
+        });
+
 
 
         yesButton.addListener(new ClickListener(){
@@ -345,8 +358,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                   // usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
