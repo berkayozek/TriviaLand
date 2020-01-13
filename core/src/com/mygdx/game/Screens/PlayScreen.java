@@ -53,7 +53,7 @@ public class PlayScreen implements Screen {
     private Cities cities = new Cities();
     private TriviaLand game;
     private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite,winnerSprite;
-    private ArrayList<Sprite> userSprite,diceSprite;
+    private ArrayList<Sprite> userSprite,userCardSprite,diceSprite;
     private SpriteBatch batch;
     private Texture winner,boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card;
     private ArrayList<Texture> userImage,diceImage;
@@ -116,12 +116,15 @@ public class PlayScreen implements Screen {
         userImage = new ArrayList<>();
         diceImage = new ArrayList<>();
         userSprite = new ArrayList<>();
+        userCardSprite = new ArrayList<>();
         diceSprite = new ArrayList<>();
         for (int i=0;i<usersArray.size();i++) {
             userImage.add(new Texture(usersArray.get(i).getLocation()));
             userImage.get(userImage.size()-1).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             userSprite.add(new Sprite(userImage.get(i)));
             userSprite.get(i).setSize(35,35);
+            userCardSprite.add(new Sprite(userImage.get(i)));
+            userCardSprite.get(i).setSize(50,50);
         }
         style = new TextButtonStyle();
         style.font = font;
@@ -356,8 +359,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -508,8 +511,8 @@ public class PlayScreen implements Screen {
         endTable.add(exit).padTop(25);
         newGameStage.addActor(endTable);
         /*cities.getCities().get(4).setUser(usersArray.get(0));
-        cities.getCities().get(6).setUser(usersArray.get(1));
         usersArray.get(0).getCities().add(cities.getCities().get(4));
+        cities.getCities().get(6).setUser(usersArray.get(1));
         usersArray.get(1).getCities().add(cities.getCities().get(6));*/
         for (int i=11;i<=15;i++)
             stage.addActor(buttons.get(i));
@@ -520,7 +523,10 @@ public class PlayScreen implements Screen {
         stage.addActor(buyTable);
         stage.addActor(upgradeTable);
         stage.addActor(table2);
+        for (int i=0;i<userSprite.size();i++)
+            userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y + jumpVariable);
     }
+
 
     @Override
     public void render(float delta) {
@@ -574,9 +580,14 @@ public class PlayScreen implements Screen {
         }
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
-        for (int i=0;i<userSprite.size();i++)
-            userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y + jumpVariable);
+        userSprite.get(whoIsRound).setCenter(usersArray.get(whoIsRound).getUserPos().x, usersArray.get(whoIsRound).getUserPos().y + jumpVariable);
+        for (int i = 0;i < usersArray.size();i++)
+            if (i != whoIsRound)
+                userSprite.get(i).setAlpha(0.6f);
+            else
+                userSprite.get(i).setAlpha(1f);
         stage.setViewport(viewport);
+        newGameStage.setViewport(viewport);
         camera.update();
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
@@ -595,20 +606,23 @@ public class PlayScreen implements Screen {
 
         if (usersArray.size()>=2){
             playercardSprite.draw(batch);
-                font.draw(batch, "       Player " + usersArray.get(0).getNumber() + "\n\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
-
+            font.draw(batch, "       Player " + usersArray.get(0).getNumber() + "\n\nMoney = " + usersArray.get(0).getMoney() + "\n" + "City:  " +usersArray.get(0).toStringCities(), 900, 780);
+            userCardSprite.get(0).setCenter(900,780);
+            userCardSprite.get(0).draw(batch);
             player2cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(1).getNumber()  + "\n\nMoney = " + usersArray.get(1).getMoney() + "\n" + "City: "+usersArray.get(1).toStringCities()  ,1100,780);
-
+            userCardSprite.get(1).setCenter(1100,780);
+            userCardSprite.get(1).draw(batch);
         } if (usersArray.size()>=3){
             player3cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(2).getNumber()  + "\n\nMoney = " + usersArray.get(2).getMoney() + "\n" + "City: "+usersArray.get(2).toStringCities()  ,900,200);
-
+            userCardSprite.get(2).setCenter(900,200);
+            userCardSprite.get(2).draw(batch);
         } if (usersArray.size()>=4){
             player4cardSprite.draw(batch);
             font.draw(batch,"       Player " + usersArray.get(3).getNumber()  + "\n\nMoney = " + usersArray.get(3).getMoney() + "\n" + "City: "+usersArray.get(3).toStringCities()  ,1100,200);
-
-
+            userCardSprite.get(3).setCenter(1100,200);
+            userCardSprite.get(3).draw(batch);
         }
 
 
@@ -710,15 +724,19 @@ public class PlayScreen implements Screen {
         if (stages == StatustStage.END){//TODO exit Butonu ekle.
             User winner = null;
             for (int i=0;i<usersArray.size();i++)
-                if (!gameOverUsers.contains(usersArray.get(i)))
-                    winner= usersArray.get(i);
+                if (!gameOverUsers.contains(usersArray.get(i)) && winner == null) {
+                    whoIsRound = i;
+                    winner = usersArray.get(i);
+                    userCardSprite.get(i).setCenter(300,500);
+                    userCardSprite.get(i).setSize(50,50);
+                    userCardSprite.get(i).draw(batch);
+                }
             winnerSprite.draw(batch);
             font.setColor(Color.BLACK);
             font.getData().setScale(0.8f);
             font.draw(batch,winner.getName() + " is Winner.",235,380);
         }
         batch.end();
-
         if ((stages == StatustStage.CARD || showExtreme) && cardx<130)
             cardx += delta*100;
 
@@ -1014,7 +1032,7 @@ public class PlayScreen implements Screen {
         //User Zıplama Efekti
         if (isJump) {
             jumpVariable += 5f * delta;
-            if (jumpVariable > 200f * delta)
+            if (jumpVariable > 300f * delta)
                 isJump = false;
         } else {
             jumpVariable -= 5f * delta;
