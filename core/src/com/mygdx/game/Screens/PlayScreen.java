@@ -345,8 +345,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -563,7 +563,6 @@ public class PlayScreen implements Screen {
         if (gameOverUsers.size()==usersArray.size()-1){
             stages = StatustStage.END;
         }
-        System.out.println(stages);
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
         for (int i=0;i<userSprite.size();i++)
@@ -916,10 +915,17 @@ public class PlayScreen implements Screen {
                 usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove()+die.getSum());
                 botdieCount++;
             }
-            System.out.println(stages);
-            if (userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).equals(cities.getTempUser())){
-                double probability = Math.random();
-                if (probability<=0.5){
+            if (userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
+                double probability;
+                if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()>=300)
+                    probability = 1;
+                else if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire()>=220)
+                    probability = 0.75;
+                else
+                    probability = 0.5;
+                double randomprobability = Math.random();
+                System.out.println(randomprobability + " <= " + probability);
+                if (randomprobability<=probability){
                     cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
                     usersArray.get(whoIsRound).buy(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1));
@@ -928,11 +934,16 @@ public class PlayScreen implements Screen {
                     stages = StatustStage.NEXTPLAYER;
                     botdieCount=0;
                 }
-            }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && !cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).equals(cities.getTempUser())){
-                stages = StatustStage.RENT;
-                botdieCount=0;
+                else {
+                    stages = StatustStage.NEXTPLAYER;
+                    botdieCount=0;
+                }
             }else if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
                 stages = StatustStage.CARD;
+                botdieCount=0;
+            }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && !cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
+                System.out.println(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser()));
+                stages = StatustStage.RENT;
                 botdieCount=0;
             }else if (!userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()||(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 )){
                 stages = StatustStage.NEXTPLAYER;
