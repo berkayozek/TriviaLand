@@ -228,7 +228,7 @@ public class PlayScreen implements Screen {
         firstButtonUpgrade=buttons.get(8);
         secondButtonUpgrade=buttons.get(9);
         thirdButtonUpgrade=buttons.get(10);
-        sellButton= buttons.get(11);
+        sellButton= buttons.get(16);
 
         exit.addListener(new ClickListener(){
             @Override
@@ -264,10 +264,9 @@ public class PlayScreen implements Screen {
                 }
             }
         });
-        buyTable.setPosition(1100,400);
+        buyTable.setPosition(1050,400);
         buyTable.setVisible(false);
-        buyTable.add(buyButton);
-        buyTable.row();
+        buyTable.add(buyButton).padBottom(20).row();
         buyTable.add(endTurn);
 
         firstButtonUpgrade.addListener(new ClickListener(){
@@ -306,24 +305,23 @@ public class PlayScreen implements Screen {
             }
         });
         upgradeTable.setPosition(900,270);
-        upgradeTable.setSize(300,300);
+        upgradeTable.setSize(300,250);
         upgradeTable.setVisible(false);
         upgradeTable.add(firstButtonUpgrade).width(150).height(210);
         upgradeTable.add(secondButtonUpgrade).width(150).height(210);
         upgradeTable.add(thirdButtonUpgrade).width(150).height(210).row();
-        upgradeTable.add(sellButton).width(150).height(210).row();
-        upgradeTable.add(endTurn2).colspan(3).padTop(-10);
+        upgradeTable.add(sellButton).colspan(3).padTop(-45).row();
+        upgradeTable.add(endTurn2).colspan(3).padTop(+20);
 
         sellButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).built(1);
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).sellCity();
+                cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(cities.getTempUser());
                 upgradeTable.setVisible(false);
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-
-
 
         yesButton.addListener(new ClickListener(){
             public void clicked(InputEvent event,float x, float y){
@@ -358,8 +356,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                   // usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -509,10 +507,10 @@ public class PlayScreen implements Screen {
         endTable.add(newGame).row();
         endTable.add(exit).padTop(25);
         newGameStage.addActor(endTable);
-        cities.getCities().get(4).setUser(usersArray.get(0));
+        /*cities.getCities().get(4).setUser(usersArray.get(0));
         cities.getCities().get(6).setUser(usersArray.get(1));
         usersArray.get(0).getCities().add(cities.getCities().get(4));
-        usersArray.get(1).getCities().add(cities.getCities().get(6));
+        usersArray.get(1).getCities().add(cities.getCities().get(6));*/
         for (int i=11;i<=15;i++)
             stage.addActor(buttons.get(i));
         for (Table s : cityRentTable)
@@ -530,8 +528,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setProjectionMatrix(camera.combined);
-
-        //System.out.println(cityRentLabel.get(5).getText());//TODO Buralara bak berkay
         if (stages == StatustStage.NEXTPLAYER) {
             for (int i = 2; i <= 8; i++)
                 if (cities.getCities().get(b1.getBoard(0, i)).getHire() != 1000 && cities.getCities().get(b1.getBoard(0, i)).getHire() != 0)

@@ -86,6 +86,15 @@ public class City {
 		hireCount=0;
 	}
 
+	public void sellCity(){
+		if (hireCount == 0){
+			user.setMoney(user.getMoney() + price);
+		}else
+			user.setMoney(user.getMoney() + (price + (hire/2)));
+		user.getCities().remove(this);
+		resetCity();
+	}
+
 	public void setUser(User user) {
 
 		this.user = user;

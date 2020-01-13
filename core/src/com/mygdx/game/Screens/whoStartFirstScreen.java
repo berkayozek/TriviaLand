@@ -228,6 +228,7 @@ public class whoStartFirstScreen implements Screen {
                         for (int i=0;i<botNumber;i++)
                             dies.add((int)(Math.random()*6)+1);
                         whoStartFirst();
+                        buttons.get(0).setVisible(false);
                         buttons.get(1).setVisible(true);
                     }
                     isClickEarly = false;
