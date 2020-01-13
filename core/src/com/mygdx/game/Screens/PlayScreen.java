@@ -924,7 +924,6 @@ public class PlayScreen implements Screen {
                 else
                     probability = 0.5;
                 double randomprobability = Math.random();
-                System.out.println(randomprobability + " <= " + probability);
                 if (randomprobability<=probability){
                     cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).setUser(usersArray.get(whoIsRound));
                     usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() - cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getPrice());
@@ -941,8 +940,27 @@ public class PlayScreen implements Screen {
             }else if ((usersArray.get(whoIsRound).getUserX() == 3 && usersArray.get(whoIsRound).getUserY() == 0 || usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 3||usersArray.get(whoIsRound).getUserX() == 2 && usersArray.get(whoIsRound).getUserY() == 8||usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 6) && usersArray.get(whoIsRound).getCardCount() < 1 && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
                 stages = StatustStage.CARD;
                 botdieCount=0;
+            }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(usersArray.get(whoIsRound))){
+                int hireCount = cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHireCount()+1;
+                double probability = Math.random();
+                if (hireCount<4) {
+                    if (cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(), usersArray.get(whoIsRound).getUserX()) - 1).getHire()>=270)
+                        cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(), usersArray.get(whoIsRound).getUserX()) - 1).built(3);
+                    else {
+                        if (hireCount == 1 && probability <= 0.8) {
+                            cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(), usersArray.get(whoIsRound).getUserX()) - 1).built(hireCount);
+                        }
+                        if (hireCount == 2 && probability <= 0.8) {
+                            cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(), usersArray.get(whoIsRound).getUserX()) - 1).built(hireCount);
+                        }
+                        if (hireCount == 3 && probability <= 0.8) {
+                            cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(), usersArray.get(whoIsRound).getUserX()) - 1).built(hireCount);
+                        }
+                    }
+                }
+                stages = StatustStage.NEXTPLAYER;
+                botdieCount=0;
             }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && !cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
-                System.out.println(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser()));
                 stages = StatustStage.RENT;
                 botdieCount=0;
             }else if (!userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()||(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 )){
@@ -965,18 +983,6 @@ public class PlayScreen implements Screen {
             rollButton.setVisible(false);
         if (usersArray.get(whoIsRound).getIsBot() == true && botdieCount==0 && stages == StatustStage.DICE && usersArray.get(whoIsRound).getMoveCount() == usersArray.get(whoIsRound).getMoveCount())
             stages = StatustStage.BOT;
-        if (isHoover) { //TODO bunlar silinecek
-            if (fontsize < 1.25f) {
-                fontsize += 0.05f;
-            }
-            rollButton.setScale(fontsize);
-        } else {
-            if (fontsize > 1f) {
-                fontsize -= 0.05f;
-            }
-            rollButton.setScale(fontsize);
-        }
-
         if (stages == StatustStage.BUY || stages == StatustStage.UPGRADE || stages == StatustStage.RENT || stages == StatustStage.DICE){
             cityCardLabel.get(0).setText(cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getName());
             cityCardLabel.get(1).setText("Current Rent: " + cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getHire());

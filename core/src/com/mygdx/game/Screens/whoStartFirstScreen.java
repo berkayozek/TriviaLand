@@ -108,6 +108,7 @@ public class whoStartFirstScreen implements Screen {
         isClickEarly = false;
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.fontColor = Color.BLACK;
@@ -210,7 +211,7 @@ public class whoStartFirstScreen implements Screen {
         buttons.get(11).setPosition(550,160);
         buttons.get(0).setPosition(400,370);
         buttons.get(0).setVisible(false);
-        buttons.get(1).setPosition(420,160);
+        buttons.get(1).setPosition(400,200);
         buttons.get(1).setVisible(false);
         buttons.get(0).addListener(new ClickListener(){
             @Override
@@ -408,7 +409,7 @@ public class whoStartFirstScreen implements Screen {
                 font.draw(batch,"Please Select Tokens First",200,500);
             if(playerCount>0)
                 font.draw(batch,"Player " + playerCount,200,700);
-            font.draw(batch,Integer.toString(d),700,300);
+            font.draw(batch,Integer.toString(d),700,340);
         }
 
         batch.end();

@@ -64,6 +64,7 @@ public class StartingScreen implements Screen {
     viewport = new FitViewport(TriviaLand.WIDTH,TriviaLand.HEIGHT,camera);
     Gdx.input.setInputProcessor(stage);
     font = new BitmapFont(Gdx.files.internal("font.fnt"));
+    font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     textButtonStyle = new TextButtonStyle();
     textButtonStyle.font = font;
     buttons = new ArrayList<>();
