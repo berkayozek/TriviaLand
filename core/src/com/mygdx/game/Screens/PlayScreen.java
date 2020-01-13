@@ -49,7 +49,7 @@ public class PlayScreen implements Screen {
     private Board b1 = new Board();
     private Cities cities = new Cities();
     private TriviaLand game;
-    private Sprite splash,boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite,winnerSprite;
+    private Sprite boardSprite,luckySprite,xtreamSprite,cardSprite,playercardSprite, player2cardSprite,player3cardSprite,player4cardSprite,exitSprite,winnerSprite;
     private ArrayList<Sprite> userSprite,userCardSprite,diceSprite;
     private SpriteBatch batch;
     private Texture winner,boardImage,luckycard,xtreamcard,cardImage,player1card,player2card,player3card,player4card;
@@ -61,18 +61,13 @@ public class PlayScreen implements Screen {
     private BitmapFont font,cityfont;
     private boolean isDie = false;
     private ArrayList<Texture> textures = new ArrayList<>();
-    private TextButtonStyle buyButtonStyle;
     private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<ImageButton> buttons= new ArrayList<>();
-    private ArrayList<User> userArrayList=new ArrayList<User>();
     private ImageButton sellButton,buyButton,rollButton,yesButton,noButton,endTurn,endTurn2,newGame,exit,firstButtonUpgrade,secondButtonUpgrade,thirdButtonUpgrade;
-    private TextButton dontBuyButton,upgrade1,upgrade2,upgrade3,exitUpgrade;
-    private TextButton wantExtremeCard,dontWantExtremeCard;
     private TextButtonStyle style;
     private Stage stage,newGameStage;
-    private float fontsize = 1f;
-    private boolean isHoover = false,showExtreme = false;
+    private boolean showExtreme = false;
     private CardDeck cards=new CardDeck();
     private ExtremeCardDeck extremecards=new ExtremeCardDeck();
     private float userPosCouter = 0,timer = 0f,cardx;
@@ -295,8 +290,6 @@ public class PlayScreen implements Screen {
                 stages = StatustStage.NEXTPLAYER;
             }
         });
-        exitUpgrade = new TextButton("End Turn",style);
-        exitUpgrade.getLabel().setColor(Color.BLACK);
         endTurn2.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -356,8 +349,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -467,7 +460,6 @@ public class PlayScreen implements Screen {
         player4cardSprite.setPosition(920,-270);
 
 
-        //
         luckycard = new Texture("luckycard.png");
         luckySprite = new Sprite(luckycard);
         luckySprite.setPosition(0,300);
@@ -575,6 +567,9 @@ public class PlayScreen implements Screen {
         if (gameOverUsers.size()==usersArray.size()-1){
             stages = StatustStage.END;
         }
+
+        for (int i=0;i<userSprite.size();i++)
+            userSprite.get(i).setCenter(usersArray.get(i).getUserPos().x, usersArray.get(i).getUserPos().y);
         shape.end();
         stage.act(Gdx.graphics.getDeltaTime());
         userSprite.get(whoIsRound).setCenter(usersArray.get(whoIsRound).getUserPos().x, usersArray.get(whoIsRound).getUserPos().y + jumpVariable);
@@ -634,7 +629,7 @@ public class PlayScreen implements Screen {
             usersArray.get(whoIsRound).setInTheJail(true);
         }
 
-        if (((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD) {
+        if (((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  ) && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() &&stages == StatustStage.EXTREMECARD && !usersArray.get(whoIsRound).getIsBot()) {
             font.getData().setScale(0.25f);
             font.setColor(Color.BLACK);
             font.draw(batch,"Do you want to draw Xtreme Card?\n(Attention:It is game changer.Be careful to decide.)",850,450);
@@ -984,11 +979,50 @@ public class PlayScreen implements Screen {
                 }
                 stages = StatustStage.NEXTPLAYER;
                 botdieCount=0;
+            }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && ((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5)  )  &&usersArray.get(whoIsRound).isDrawableExtreme){
+                usersArray.get(whoIsRound).setActiveExtremeCard(true);
+                stages=StatustStage.EXTREMECARD;
+                double random = Math.random();
+                if(stages==StatustStage.EXTREMECARD && usersArray.get(whoIsRound).getActiveExtremeCard()==true && random<=0.5){
+                    ec = extremecards.drawExtremeCard(usersArray.get(whoIsRound), usersArray);
+                    usersArray.get(whoIsRound).isDrawableExtreme = false;
+                    usersArray.get(whoIsRound).setExtremeCardCount(1);
+                    showExtreme = true;
+                    botdieCount=0;
+                }else{
+                 stages = StatustStage.NEXTPLAYER;
+                 botdieCount=0;
+                }
+            }else if (usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8){
+                int random =(int)(Math.random()*4+1);
+                int x=0,y=0;
+                if (random==1){
+                    int random2 =(int)(Math.random()*8+1);
+                    x=0;
+                    y=random2;
+                }else if (random==2){
+                    int random2 =(int)(Math.random()*8+1);
+                    x=8;
+                    y=random2;
+                }else if (random==3){
+                    int random2 =(int)(Math.random()*8+1);
+                    x=random2;
+                    y=0;
+                }else if (random==4){
+                    int random2 =(int)(Math.random()*8+1);
+                    x=random2;
+                    y=8;
+                }
+                usersArray.get(whoIsRound).setUserX(x);
+                usersArray.get(whoIsRound).setUserY(y);
+                usersArray.get(whoIsRound).getUserPos().x = (int)74*x+169;
+                usersArray.get(whoIsRound).getUserPos().y = (int)74*y+129;
+                usersArray.get(whoIsRound).setMove(b1.getBoard(y,x)-1);
+                usersArray.get(whoIsRound).setMoveCount(b1.getBoard(y,x)-1);
+                stages = StatustStage.NEXTPLAYER;
+                botdieCount=0;
             }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && !cities.getCities().get(b1.getBoard(usersArray.get(whoIsRound).getUserY(),usersArray.get(whoIsRound).getUserX())-1).getUser().equals(cities.getTempUser())){
                 stages = StatustStage.RENT;
-                botdieCount=0;
-            }else if (!userCanBuy && usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()||(((usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 2 )||(usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 5))  && usersArray.get(whoIsRound).isDrawableExtreme && usersArray.get(whoIsRound).getUserX() == 0 && usersArray.get(whoIsRound).getUserY() == 8 )){
-                stages = StatustStage.NEXTPLAYER;
                 botdieCount=0;
             }else if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount()){
                 stages = StatustStage.NEXTPLAYER;

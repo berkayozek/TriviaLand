@@ -21,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.game.TriviaLand;
-import org.w3c.dom.Text;
 
 
 import java.util.ArrayList;

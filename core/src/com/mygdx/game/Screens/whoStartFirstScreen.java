@@ -248,6 +248,8 @@ public class whoStartFirstScreen implements Screen {
                             dies.add((int)(Math.random()*6)+1);
                         whoStartFirst();
                         buttons.get(0).setVisible(false);
+                        for(int i=0;i<9;i++)
+                            buttons.get(i).setVisible(false);
                     }
                     isClickEarly = false;
                 }
@@ -384,8 +386,9 @@ public class whoStartFirstScreen implements Screen {
                 buttons.get(11).setVisible(false);
                 for (int i=PlayerNumber-botNumber;i<PlayerNumber;i++) {
                     userArrayList.set(i, new User("Player " + Integer.toString(i+1), true));
-                    System.out.println("aa" +i + " ");
-                    userArrayList.get(i).setLocation(locationArr.get((int)(Math.random()*7)));
+                    int random = (int)(Math.random()*locationArr.size());
+                    userArrayList.get(i).setLocation(locationArr.get(random));
+                    locationArr.remove(random);
                 }
             }
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -418,7 +421,6 @@ public class whoStartFirstScreen implements Screen {
         font.setColor(Color.BLACK);
         batch.end();
         batch.begin();
-
 
         if (stages == StatustStage.selectBot)
             font.draw(batch,Integer.toString(botNumber),700,300);

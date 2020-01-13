@@ -1,5 +1,7 @@
 package com.mygdx.game.Game;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Board {
         private int board[][] = new int [9][9];
 
