@@ -76,7 +76,7 @@ public class PlayScreen implements Screen {
     private ArrayList<User> usersArray,gameOverUsers;
     private Card c=(Card) CardDeck.getCardArray().get(0);
     private ExtremeCard ec=(ExtremeCard) ExtremeCardDeck.getExtremeCardArray().get(1);
-    private boolean isMoving = false;
+    private boolean isMoving = false,isPass = true;
     private int whoIsRound = 0,botdieCount = 0;
     private StatustStage stages = StatustStage.DICE;
     private Table upgradeTable = new Table(),buyTable = new Table(),cardTable = new Table();
@@ -349,8 +349,8 @@ public class PlayScreen implements Screen {
                 if (usersArray.get(whoIsRound).getMove() == usersArray.get(whoIsRound).getMoveCount() && stages == StatustStage.DICE) {
                     die.roll();
                     isDie = true;
-                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 4);
-                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
+                    usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + 16);
+                    //usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() + die.getSum());
                     isMoving = true;
 
                }
@@ -808,7 +808,13 @@ public class PlayScreen implements Screen {
         if (usersArray.get(whoIsRound).getMoveCount() > 32 && usersArray.get(whoIsRound).getMove() > 32) {
             usersArray.get(whoIsRound).setMoveCount(usersArray.get(whoIsRound).getMoveCount() - 32);
             usersArray.get(whoIsRound).setMove(usersArray.get(whoIsRound).getMove() - 32);
+        }
+
+        if (usersArray.get(whoIsRound).getMoveCount()>2 && usersArray.get(whoIsRound).getUserX() == 8 && usersArray.get(whoIsRound).getUserY() == 0 && isPass){
             usersArray.get(whoIsRound).setMoney(usersArray.get(whoIsRound).getMoney() + 500);
+            isPass = false;
+        }else if(usersArray.get(whoIsRound).getUserX() != 8 && usersArray.get(whoIsRound).getUserY() != 0) {
+            isPass = true;
         }
 
 
