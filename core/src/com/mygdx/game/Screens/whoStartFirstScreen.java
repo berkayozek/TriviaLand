@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -41,15 +42,17 @@ public class whoStartFirstScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private Stage stage;
-    private ArrayList<Texture> textures = new ArrayList<>();
+    private ArrayList<Texture> textures = new ArrayList<>(), diceTextures = new ArrayList<>();
+    private ArrayList<Sprite> diceSprites = new ArrayList<>();
     private ArrayList<TextureRegion> texturesRegions = new ArrayList<>();
     private ArrayList<TextureRegionDrawable> texturesRegionsDrawable = new ArrayList<>();
     private ArrayList<Button> buttons= new ArrayList<>();
     private Die die = new Die();
-    private Boolean isClickEarly;
+    private Boolean isClickEarly,firstRoll = false,rollClicked = false;
     private TextButtonStyle textButtonStyle;
     private StatustStage stages = StatustStage.selectBot;
-    private int playerCount = 0,PlayerNumber = 0,d = 0,botNumber = 0;
+    private int playerCount = 0,PlayerNumber = 0,d = 1,botNumber = 0;
+    private float alpha = 0,timer =0;
     private ArrayList<String> locationArr = new ArrayList<>();
     private Label label;
     private Label.LabelStyle labelStyle;
@@ -60,7 +63,8 @@ public class whoStartFirstScreen implements Screen {
 
     enum StatustStage{
         selectBot,
-        select;
+        select,
+        letsPlay;
     };
     public whoStartFirstScreen(TriviaLand game,int i){
         this.game=game;
@@ -72,7 +76,6 @@ public class whoStartFirstScreen implements Screen {
             p++;
         }
     }
-
     public ArrayList<User> whoStartFirst(){
         int a=1;
         int n = dies.size();
@@ -138,6 +141,19 @@ public class whoStartFirstScreen implements Screen {
         textures.add(new Texture("buttons/volumeon.png"));
         textures.add(new Texture("buttons/fullscreen.png"));
         textures.add(new Texture("buttons/exitfullscreen.png"));
+
+        diceTextures.add(new Texture("Dice/1.png"));
+        diceTextures.add(new Texture("Dice/2.png"));
+        diceTextures.add(new Texture("Dice/3.png"));
+        diceTextures.add(new Texture("Dice/4.png"));
+        diceTextures.add(new Texture("Dice/5.png"));
+        diceTextures.add(new Texture("Dice/6.png"));
+        for (int i=0;i<diceTextures.size();i++){
+            diceTextures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            diceSprites.add(new Sprite(diceTextures.get(i)));
+            diceSprites.get(i).setCenter(850,370);
+            diceSprites.get(i).setSize(200,200);
+        }
 
         for (int i=0;i<textures.size();i++){
             textures.get(i).setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -223,13 +239,15 @@ public class whoStartFirstScreen implements Screen {
                         // System.out.println(d);
                         dies.add(d);
                         playerCount++;
+                        firstRoll = true;
+                        rollClicked = true;
+                        alpha = 0;
                     }
                     if (playerCount == PlayerNumber-botNumber) {
                         for (int i=0;i<botNumber;i++)
                             dies.add((int)(Math.random()*6)+1);
                         whoStartFirst();
                         buttons.get(0).setVisible(false);
-                        buttons.get(1).setVisible(true);
                     }
                     isClickEarly = false;
                 }
@@ -410,7 +428,27 @@ public class whoStartFirstScreen implements Screen {
                 font.draw(batch,"Please Select Tokens First",200,500);
             if(playerCount>0)
                 font.draw(batch,"Player " + playerCount,200,700);
-            font.draw(batch,Integer.toString(d),700,340);
+
+            if (firstRoll && alpha!=0)
+                diceSprites.get(d-1).draw(batch);
+
+            if (rollClicked && alpha<1) {
+                diceSprites.get(d - 1).setAlpha(alpha);
+                alpha += 0.8*delta;
+            }
+            if (alpha>=1)
+                rollClicked = false;
+            //font.draw(batch,Integer.toString(d),700,340);
+            if (timer<2 && !buttons.get(0).isVisible() )
+                timer+=delta;
+        }
+        if (timer>=2){
+            stages = StatustStage.letsPlay;
+        }
+
+        if (stages == StatustStage.letsPlay){
+            font.draw(batch,userArrayList.get(0).getName() + " starts first.",200,700);
+            buttons.get(1).setVisible(true);
         }
 
         batch.end();
