@@ -499,10 +499,10 @@ public class PlayScreen implements Screen {
         endTable.add(newGame).row();
         endTable.add(exit).padTop(25);
         newGameStage.addActor(endTable);
-        cities.getCities().get(4).setUser(usersArray.get(0));
+        /*cities.getCities().get(4).setUser(usersArray.get(0));
         usersArray.get(0).getCities().add(cities.getCities().get(4));
         cities.getCities().get(6).setUser(usersArray.get(1));
-        usersArray.get(1).getCities().add(cities.getCities().get(6));
+        usersArray.get(1).getCities().add(cities.getCities().get(6));*/
         for (int i=11;i<=15;i++)
             stage.addActor(buttons.get(i));
         for (Table s : cityRentTable)
