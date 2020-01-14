@@ -10,12 +10,12 @@ public class ExtremeCardDeck {
 		private static ArrayList extremeCardArray = new ArrayList<ExtremeCard>();
 
 	ExtremeCard ecd1 = new ExtremeCard("Card1", false, " You will go to jail or teleport randomly. ");///////////DEĞİŞTİ!!!!!!!!   YAPILDI İYİ YA DA KÖTÜ
-	ExtremeCard ecd2 = new ExtremeCard("Card2", true, "You  increase rent of all properties of that you have  fifty percent ");////YAPILDI   İYİ
+	ExtremeCard ecd2 = new ExtremeCard("Card2", true, "You  increase rent of all properties\nof that you have  fifty percent ");////YAPILDI   İYİ
 	ExtremeCard ecd3 = new ExtremeCard("Card3", false, "You win fifty percent of your money");        /////YAPILDI    İYİ
-	ExtremeCard ecd4 = new ExtremeCard("Card4", false, " You swap your money with the person randomly.");////////////DEĞİŞTİ!!!!!!!!!   BUNU RANDOM BİRİSİYLE DEĞİŞTİRME YAPTIM  OYUNCUNUN SEÇMESİNE GEREK YOK
-	ExtremeCard ecd5 = new ExtremeCard("Card5", false, "You win lottery.Get your money from bank.(10.000TL)"); ////YAPILDI İYİ
+	ExtremeCard ecd4 = new ExtremeCard("Card4", false, " You swap your money with \nthe person randomly.");////////////DEĞİŞTİ!!!!!!!!!   BUNU RANDOM BİRİSİYLE DEĞİŞTİRME YAPTIM  OYUNCUNUN SEÇMESİNE GEREK YOK
+	ExtremeCard ecd5 = new ExtremeCard("Card5", false, "You win lottery.Get your money\nfrom bank.(10.000TL)"); ////YAPILDI İYİ
 	ExtremeCard ecd6 = new ExtremeCard("Card6", false, "You lost fifty percent of money.");    /////////YAPILDI KÖTÜ
-	ExtremeCard ecd7 = new ExtremeCard("Card7", true, "Decrease rent of all properties that you have fifty percent.");		////////YAPILDI KÖTÜ
+	ExtremeCard ecd7 = new ExtremeCard("Card7", true, "Decrease rent of all properties \nthat you have fifty percent.");		////////YAPILDI KÖTÜ
 	ExtremeCard ecd8 = new ExtremeCard("Card8", false, "You lost fifty percent of money.");				///////// YAPILDI    KÖTÜ
 
 	public ExtremeCardDeck() {
