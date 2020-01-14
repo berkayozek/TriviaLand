@@ -17,7 +17,7 @@ public class CardDeck {
 	Card card6 = new Card("Card6", false, "You have to pay bills.\n(200TL)");   ////YAPILDI
 	Card card7 = new Card("Card7", false, "You can get out of jail ");			///////YAPILDI
 	Card card8 = new Card("card8", false, "Random player give you \n500 TL");   ///YAPILDI
-	Card card9 = new Card("card9", false, "The earthquake occurs in one of the cities. "); //////////////YAPILDI
+	Card card9 = new Card("card9", false, "The earthquake occurs in \none of the cities. "); //////////////YAPILDI
 	Card card10 = new Card("card10", false, "It's your birthday,all\n players give you (250TL)");    ///YAPILDI
 	Card card11 = new Card("card11", false, "You can  increase rent\n charge of one city (+100TL) randomly."); ////////YAPILDI
 	Card card12 = new Card("card12", false, "New Investor!A investor will build \na house one of your city."); ////////YAPILDI
@@ -197,8 +197,8 @@ public class CardDeck {
 
 	public void c12(User user) {
 		if(user.getCities().size()>0) {
-			int b = (int) (user.getCities().size() * Math.random() + 1);
-			user.getCities().get(b).built(user.getCities().get(b).getHireCount() + 1);
+			int b = (int) (user.getCities().size() * Math.random() );
+			user.getCities().get(b).built(user.getCities().get(b).getHireCount()+1);
 		}
 	}
 
